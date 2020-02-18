@@ -16,27 +16,28 @@ class Verification extends CI_Controller{
         
         
     }
+    // validiation if the user will be able to login or not 
     public function login(){
         
         $data['title'] = 'Login';
 
         if ( $this->session->has_userdata('userid') ){
-            
+            //if session is set lets go to the dashboard 
             redirect('dashboard');
 
         }else{
-
             // if login button was clicked
             
-            if($this->input->post('action') === 'login'){
+            if(($this->input->post('action')) === 'login'){
                 
-                $email = $this->input->post('email');
-                $pass = $this->input->post('pass');
+                $email = $this->input->post('email', TRUE);//second parameter enables XSS Protection
+                $pass = $this->input->post('pass', TRUE);
+                
+                // checking user cridentials
                 $result = $this->validation_model->get_user($email, $pass);
-
-                echo $result;
+                
                 if($result === FALSE){
-
+                    // if password and email do not match then we simply print out an error 
                     $data['message'] = '<div class="alert alert-danger" role="alert">
                     Please make sure email and password are correct
                     </div>';
@@ -46,16 +47,29 @@ class Verification extends CI_Controller{
                     $this->load->view('templates/footer');
                    
                 }else{
+                    //passwords matched so we will create a session and assign to it some values
+                    $name = $result['fname'].' '.$result['lname'];
+                    // $action = $result['action'];
 
-                    $this->session->set_userdata('userid', $result['user_id']);
-                    $this->session->set_userdata('name', $result['name']);
+                    $this->session->set_userdata('userid', $result['id']);
+                    $this->session->set_userdata('name', $name);
                     $this->session->set_userdata('email', $result['email']);
+                    
+                    $actions = array();
+                    foreach ($result[0] as $key => $arr){
+                        foreach ($arr as $key => $val){
+                           array_push($actions, $val);
+                        }
+                    }
 
+                    $this->session->set_userdata('action', $actions);//setting user actions/privileges as a session
+                    
+                    
                     redirect('dashboard');
                 }
             }
             else{
-                // loading the login
+                // // loading the login
                 $this->load->view('templates/header', $data);
                 $this->load->view('pageContent/login', $data);
                 $this->load->view('templates/footer');
@@ -65,9 +79,10 @@ class Verification extends CI_Controller{
 
         }
     }
+    // function destroys all session 
     public function logout(){
 
-
+        // checks if there is a session in order to clear the session
         if($this->session->userdata('userid')){
            
             $session = $this->session->all_userdata();
@@ -85,9 +100,8 @@ class Verification extends CI_Controller{
         $this->load->view('pageContent/login', $data);
         $this->load->view('templates/footer');
 
-
-
     }
+    // Will send an email to change change password once user email is in th system
     public function change_password($token = NULL){
         
         $data['title'] = 'Change Password';

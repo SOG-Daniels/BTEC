@@ -1,18 +1,22 @@
+<?php 
+    echo (isset($message))? $message : '';
+?>
 <div class="card shadow mb-3">
     <div class="card-header py-3">
         <?php echo isset($name)? '<h3 class="d-inline ">'.$name.'</h3>' : 'Profile'; ?>
-        <span class="float-right d-inline">
-            <button id="editProfile" class="btn btn-sm btn-primary " type="submit"><i class=" fa fa-edit"></i> Edit</button>
-            <button id="saveProfileInfo" style="display:none;" class="btn btn-sm btn-success " type="hidden"><i class=" fa fa-check"></i> Save</button>
-        </span>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="col col-md-4"><!--left col-->
                 <div class="text-center">
                     <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar rounded-circle img-thumbnail" alt="avatar">
-                    <h6>Upload a Photo</h6>
-                    <input type="file" class="text-center center-block file-upload ml-3 pl-5">
+                    <div class="p-image">
+                        <a href="#" id="upload-img">
+                        <i class="fa fa-camera "></i> Upload Image
+                        </a>
+                        <input class="file-upload" type="file" accept="image/*" style="display: none;"/>
+                        
+                    </div>
                 </div>
                 <br>
 
@@ -45,59 +49,73 @@
                         
                         <div class="row mb-3">
                             <div class="col col-md-6">
-                                <label for="first_name">First name</label>
-                                <input type="text" class="form-control" name="fname" id="fname" placeholder="John..." title="enter your first name if any.">
+                                <label for="first_name">First Name:</label>
+                                <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="<?php echo (isset($profileData['fname']))? $profileData['fname'] : ''; ?>">
                             </div>
                             <div class="col col-md-6">
-                                <label for="last_name">Last name</label>
-                                <input type="text" class="form-control" name="lname" id="lname" placeholder="Doe..." title="enter your last name if any.">
+                                <label for="last_name">Last Name:</label>
+                                <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo (isset($profileData['lname']))? $profileData['lname'] : ''; ?>">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col col-md-6">
-                                <label for="first_name">Address</label>
-                                <input type="text" class="form-control" name="first_name" id="address" placeholder="56 Quilter Avenue..." title="enter your address if any.">
+                                <label for="first_name">Username:</label>
+                                <input type="text" class="form-control" name="username" id="address" value="<?php echo (isset($profileData['username']))? $profileData['username'] : ''; ?>">
                             </div>
                             <div class="col col-md-6">
                                 <label for="last_name">Email:</label>
-                                <p>SOmeEmail@somemail.com</p>
+                                <p><?php echo(isset($profileData['email'])? $profileData['email']: '');?></p>
                                 <!-- <input type="text" class="form-control" name="email" id="last_name" placeholder="someEmail@sog.com..." title="enter your email if any."> -->
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col col-md-6">
-                                <label for="first_name">Phone #</label>
-                                <input type="text" class="form-control" name="first_name" id="first_name" placeholder="668 7434..." title="enter your first name if any.">
+                                <label for="first_name">Phone #:</label>
+                                <input type="text" class="form-control" name="phone" id="phone" value="<?php echo (isset($profileData['phone']))? $profileData['phone'] : ''; ?>">
                             </div>
-                            </form>
                             
                         </div>
+                        </form>
+
+                        <span class="float-right d-inline">
+                            <button id="editProfile" class="btn btn-sm btn-primary " type="submit"><i class=" fa fa-edit"></i> Edit</button>
+                            <button id="saveProfileInfo" style="display:none;" class="btn btn-sm btn-success " type="hidden"><i class=" fa fa-check"></i> Save</button>
+                        </span>
+
                     <!-- </form> -->
-                
-                <hr>
                 
                 </div><!--/tab-pane-->
                 
                 <div class="tab-pane fade" role="tabpanel" aria-labelledby="profile-tab" id="changePass">
                     <br>
-                    <form class="form" action="##" method="post" id="registrationForm">
+                    <form class="form" action="<?php echo base_url()?>change-my-password" method="post" id="registrationForm">
+                    <input class="form-control" type="hidden" name="change-pass" value="1">
+                       <div class="alert alert-warning" role="alert">
+                           <i class="fa fa-exclamation-triangle"></i>
+                           New password length must be 8 characters including a upper, lower case letter and a number
+                           
+                       </div>
                         <div class="row col col-md-6 offset-1">
                             <label for="password">Old Password:</label>
-                            <input type="password" class="form-control" name="oldPass" id="password" placeholder="*******" title="enter your password.">
+                            <input type="password" class="form-control" name="oldPass" id="oldPass" placeholder="*******" title="enter your password." required>
                         </div>
                         <br>                        
                         <div class="row col col-md-6 offset-1">
                             <label for="password2">New Password:</label>
-                            <input type="password" class="form-control" name="newPass" id="password2" placeholder="*******" title="enter your password2.">
+                            <input type="password" class="form-control" name="newPass" id="newPass" placeholder="*******" title="enter your password2." required>
                         </div>
+                        <div id="passRequirement" class=" row col col-md-6 ml-md-5"></div>
                         <br>
                         <div class="row col col-md-6 offset-1">
                             <label for="password2">Confirm New Password:</label>
-                            <input type="password" class="form-control" name="confirmPass" id="password2" placeholder="*******" title="enter your password2.">
+                            <input type="password" class="form-control" name="confirmPass" id="confirmPass" placeholder="*******" title="enter your password2." required>
+                        </div>
+                        <div class="registrationFormAlert row col col-md-6 ml-md-5" id="divCheckPasswordMatch">
+
                         </div>
                         <br>
                         <div class="row col offset-1">
-                            <button class="btn btn-md btn-primary " type="submit"><i class=""></i> Change Password</button>
+                            <button class="btn btn-md btn-primary " id="change-pass-btn" type="submit" disabled><i class=""></i> Change Password</button>
                         </div>
                             
                     </form>

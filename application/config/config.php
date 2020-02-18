@@ -525,4 +525,16 @@ $config['proxy_ips'] = '';
 
 // Email configuration below
 
+// change hostname
+// $config['smtp_host'] = 'smtp.gmail.com';
+
+// // change stmp port number
+// $config['smtp_port'] = '587';
+
+// // add smtp_crypto
+// $config['smtp_crypto'] = 'ssl';
+
+
+// // Change charset
+// $config['charset'] = 'iso-8859-1';
 // $this->email->initialize($config);

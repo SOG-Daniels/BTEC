@@ -1,3 +1,4 @@
+<?php echo (isset($userListMessage))? $userListMessage : ' '; ?>
 <h1 class="h3 mb-2 text-gray-800">User List</h1>
 
           <!-- DataTales Example -->
@@ -17,28 +18,49 @@
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered table-striped" id="dataTableUsers" width="100%" cellspacing="0">
       
                   <thead class="thead-dark">
                     <tr>
-                      <th>Name</th>
-                      <th>Address</th>
+                      <th>#</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>User Name</th>
+                      <th>Email </th>
                       <th>Phone #</th>
-                      <th>Age</th>
-                      <th>Email</th>
                       <th>Profile</th>
                     </tr>
                   </thead>
                   
                   <tbody>
-                    <tr>
-                      <td>Tiger Nixon</td>
-                      <td>56 Quilter</td>
-                      <td>665-6565</td>
-                      <td>77</td>
-                      <td>test@someemail</td>
-                      <td><a href="<?php echo site_url().'user-info/1'; ?>" > View </a></td>
-                    </tr>
+                  <?php 
+
+                    if (isset($userList)){
+
+                      
+                      foreach($userList as $key => $array){
+
+                        echo '
+                        
+                          <tr>
+                          <td>'.$array->id.'</td>
+                          <td>'.$array->fname.'</td>
+                          <td>'.$array->lname.'</td>
+                          <td>'.$array->username.'</td>
+                          <td>'.$array->email.'</td>
+                          <td>'.$array->phone.'</td>
+                          <td><a href="'.site_url().'user-info/'.$array->id.'" > View </a></td>
+                          </tr>
+                        
+                        ';
+
+                      }
+                      
+
+                    }
+
+                  ?>
+                   
                   
                   
                   </tbody>

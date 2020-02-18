@@ -15,12 +15,43 @@
                 </div>
               </div>
             </div>
+<style>
+        td.details-control {
+            text-align:center;
+            color:forestgreen;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    text-align:center; 
+    color:red;
+}
+</style>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered table-striped" id="dataTable" width="100%" cellspacing="0">
-      
+              <table class="table table-striped" width="100%" class="display" id="dataTable" cellspacing="0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Salary</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Office</th>
+                        <th>Salary</th>
+                    </tr>
+                </tfoot>
+            <!-- </table>
+                <table class="table table-bordered table-striped display" id="dataTable" width="100%" cellspacing="0">
                   <thead class="thead-dark">
                     <tr>
+                      <th></th>
                       <th>Name</th>
                       <th>Address</th>
                       <th>Phone #</th>
@@ -32,17 +63,18 @@
                   
                   <tbody>
                     <tr>
+                      <td></td>
                       <td>Tiger Nixon</td>
                       <td>56 Quilter</td>
                       <td>665-6565</td>
                       <td>77</td>
                       <td>test@someemail</td>
-                      <td><a href="<?php echo site_url().'client-info/1'; ?>" > View </a></td>
+                      <td><a href="<?php //echo site_url().'client-info/1'; ?>" > View </a></td>
                     </tr>
                   
                   
                   </tbody>
-                </table>
+                </table> -->
               </div>
             </div>
           </div>

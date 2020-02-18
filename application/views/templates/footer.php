@@ -40,40 +40,40 @@
             <div class="col col-md-6">
               <div class="form-group">
                 <label for="fname">First Name:</label>
-                <input type="text" class="form-control" name="fname" id="fname" placeholder="John...">
+                <input type="text" class="form-control" name="fname" id="fname" placeholder="John..." required>
               </div>
 
               <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" name="email" id="email" placeholder="johndoe@...">
+                <input type="email" class="form-control" name="email" id="email" placeholder="johndoe@..." required>
               </div>
               
               <div class="form-group">
                 <label for="fname">Username:</label>
-                <input type="text" class="form-control" name="uname" id="uname" placeholder="Pudge...">
+                <input type="text" class="form-control" name="uname" id="uname" placeholder="Pudge..." required>
               </div>
             </div>
             <div class="col col-md-6">
               <div class="form-group">
                 <label for="lname">Last Name:</label>
-                <input type="email" class="form-control" name="lname" id="lname" placeholder="Doe...">
+                <input type="text" class="form-control" name="lname" id="lname" placeholder="Doe..." required>
               </div>
 
               <div class="form-group">
                 <label for="phone">Phone Number:</label>
-                <input type="tel" class="form-control" name="phone" id="phone" placeholder="668-74...">
+                <input type="tel" class="form-control" name="phone" id="phone" placeholder="668-74..." required>
               </div>
               <div class="form-group" >
                                 <label class="" for="last_name">Priviledge:</label>
                                 <div class="row offset-md-1">
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" type="checkbox" value="viewClients" id="viewClients">
+                                        <input class="form-check-input" type="checkbox" value="2" name="privileges[]" id="" checked >
                                         <label class="form-check-label" for="viewClients">
                                             View Clients
                                         </label>
                                     </div>
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" type="checkbox" value="viewUsers" id="viewUsers">
+                                        <input class="form-check-input" type="checkbox" value="4" name="privileges[]" id="">
                                         <label class="form-check-label" for="viewUsers">
                                             View Users
                                         </label>
@@ -82,13 +82,13 @@
                                 
                                 <div class="row offset-md-1">
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" type="checkbox" value="addClient" id="addClient">
+                                        <input class="form-check-input" type="checkbox" value="1" name="privileges[]" id="" checked>
                                         <label class="form-check-label" for="addClient">
                                             Add Client
                                         </label>
                                     </div>
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" type="checkbox" value="addClient" id="addClient">
+                                        <input class="form-check-input" type="checkbox" value="3" name="privileges[]" id="">
                                         <label class="form-check-label" for="addClient">
                                             Add User
                                         </label>
@@ -110,7 +110,7 @@
 
 
 <!-- Register a Client  -->
- <div class="modal fade" id="registerClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ <!-- <div class="modal fade" id="registerClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -119,7 +119,7 @@
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <form role="form" action="<?php echo base_url()?>register-client" method="POST">
+        <form role="form" action="<?php //echo base_url()?>register-client" method="POST">
         <div class="modal-body">
           <div class="row">
             <div class="col col-md-6">
@@ -160,7 +160,7 @@
         </form>
       </div>
     </div>
-  </div>
+  </div> -->
 
 
 <!-- Logout Modal-->

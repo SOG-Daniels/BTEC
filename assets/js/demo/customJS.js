@@ -1,8 +1,47 @@
 // my jquery code for all pages
+
+// function for validation if passwords match before submission and checks if requirements for 
+// new password are met
+function checkPasswordMatch() {
+    
+    //$('#submit-button').prop('disabled', true);
+    var decimal =  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;//rules that govern what is required of a password
+    var password = $("#newPass").val();
+    var confirmPassword = $("#confirmPass").val();
+
+    if (password != confirmPassword && confirmPassword != ''){
+     
+        $('#change-pass-btn').prop('disabled', true);
+        $("#divCheckPasswordMatch").html("<span class='text-danger ml-4'>Passwords do not match!</span>");
+    
+    }else if(password == '' || confirmPassword == ''){
+
+        $("#divCheckPasswordMatch").html(" ");
+        $("#passRequirement").html(" ");
+        $('#change-pass-btn').prop('disabled', true);
+    
+    }else{
+        
+        $("#divCheckPasswordMatch").html("<span class='text-success ml-4'> Passwords match.</span>");
+        
+        if (password.match(decimal)){
+
+            $("#passRequirement").html(" ");
+            $('#change-pass-btn').prop('disabled', false);
+
+        }else{
+
+            $("#passRequirement").html("<span class='text-danger ml-4'>Please meet the requirement stated above!</span>");
+
+        }
+    }
+}
 $(document).ready(function() {
 
+    $("#newPass, #confirmPass").keyup(checkPasswordMatch);
+
     //Make all inputs in the clientinfoform readonly
-    $("#clientInfoForm :input").attr("readOnly", true);
+    // $("#clientInfoForm :input").attr("readOnly", true);
     $("#profileForm :input").attr("readOnly", true);
     $("#userForm :input").attr("readOnly", true);
     
@@ -44,6 +83,7 @@ $(document).ready(function() {
     $('#editProfile').click(function(e){
         
         e.preventDefault();//if the button is to submit it will not do it //
+        
         $("#profileForm :input").attr("readOnly", false);
         $("#editProfile").css("display", "none");
         $("#saveProfileInfo").css("display", "block");
@@ -52,10 +92,21 @@ $(document).ready(function() {
     $('#saveProfileInfo').click(function(e){
 
         e.preventDefault();//if the button is to submit it will not do it //
-        $("#profileForm :input").attr("readOnly", true);
-        $("#editProfile").css("display", "block");
-        $("#saveProfileInfo").css("display", "none");
 
+        
+        var formData = $("#profileForm").serialize();
+        //send out the input feilds that were modified and update the database 
+        
+        $.post("update-profile", formData, function(data){
+           
+            console.log(data);
+            alert(data);
+            $("#profileForm :input").attr("readOnly", true);
+            $("#editProfile").css("display", "block");
+            $("#saveProfileInfo").css("display", "none");
+        
+        });
+        
         //send out the input feilds that were modified and update the database 
         
 
@@ -66,18 +117,33 @@ $(document).ready(function() {
         $("#userForm :input").attr("readOnly", false);
         $("#editUser").css("display", "none");
         $("#saveUserInfo").css("display", "block");
+        $("input.action").attr("disabled", false);
 
     });
     $('#saveUserInfo').click(function(e){
 
         e.preventDefault();//if the button is to submit it will not do it //
+        
+        
         $("#userForm :input").attr("readOnly", true);
         $("#editUser").css("display", "block");
         $("#saveUserInfo").css("display", "none");
+        $("input.action").attr("disabled", true);
 
-        //send out the input feilds that were modified and update the database 
+
         
 
     });
+    // $('#addClient').click(function (e){
 
+    //     e.preventDefault();
+    //     $('#clientInfoForm').submit();
+
+    // });
+    $('#upload-img').click(function (e){
+        alert('test');
+        //e.preventDefault();
+        $('.file-upload').click();
+
+    });
 });

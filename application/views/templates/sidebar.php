@@ -1,4 +1,5 @@
-<?php  $active = (isset($active))? $active : ' '; ?>
+<?php  $active = (isset($active))? $active : ' '; 
+?>
 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
@@ -26,12 +27,12 @@
       <div class="sidebar-heading">
         Clients
       </div>
-      <li class="nav-item">
+      <li class="nav-item <?php echo ($active === 'test')? 'active' : ' ';?>">
       
-        <button class="btn btn-link nav-link <?php echo ($active === 'addClient')? 'active' : ' ';?>" data-target="#registerClientModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
+        <a class="btn btn-link nav-link " href="<?php echo site_url('register-client') ?>" >
           <i class="fas fa-fw fa-user-plus "></i>
           <span>Add Client</span>
-        </button>
+        </a>
       </li>
 
       <!-- Nav Item - Tables -->

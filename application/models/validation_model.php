@@ -8,18 +8,32 @@ class Validation_model extends CI_Model{
     }
     public function get_user($email, $pass){
 
-        $sql = $this->db->query('SELECT user_id, name, email FROM user u WHERE u.email = "'.$email.'" and u.password = "'.$pass.'" ');
+        $sql = $this->db->query('SELECT id, fname, lname, email FROM users u WHERE u.email = "'.$email.'" and u.password = "'.md5($pass).'"');
         $row = $sql->num_rows();
         if ($row === 1){
-            return $sql->row_array();
-        }
+            
+            $userData = $sql->row_array();
+
+            //starting to get the privileges/action the user has in the system
+            $this->db->trans_start();
+            $sql2 = $this->db->query('SELECT a.privilege_id as actions FROM action a WHERE a.user_id = '.$userData['id'].' and a.status = 1');
+            $this->db->trans_complete();
+
+            if($this->db->trans_status() === FALSE){
+                return FALSE;
+            }
+                $action = $sql2->result_array();
+                array_push($userData, $action);//pushing the privileges array to the userdata
+
+                return $userData;
+            }
         
         return FALSE;
 
     }
     public function get_user_by_email($email = NULL){
 
-        $sql = $this->db->query('SELECT user_id FROM user u WHERE u.email = "'.$email.'"');
+        $sql = $this->db->query('SELECT id FROM users u WHERE u.email = "'.$email.'"');
         $row = $sql->num_rows();
         
         if ($row > 0){
@@ -34,7 +48,7 @@ class Validation_model extends CI_Model{
 
         if(isset($email) && isset($token) && isset($expires)){
 
-            $sql = $this->db->query('SELECT user_id, email FROM user u WHERE u.email = "'.$email.'"');
+            $sql = $this->db->query('SELECT id, email FROM users u WHERE u.email = "'.$email.'"');
             $result = $sql->row();
             $rowCount = $sql->num_rows();
 
@@ -69,10 +83,22 @@ class Validation_model extends CI_Model{
         }
 
     }
+    
+    public function set_new_pass($userid = NULL, $newPass = NULL){
 
-    public function set_new_pass($pass){
+        if ($userid !== NULL and $newPass !== NULL){
 
+            $this->db->trans_start();
+            $query = $this->db->query('UPDATE users SET password = "'.md5($newPass).'" WHERE id = '.$userid.'');
+            $this->db->trans_complete();
+            
+            if ($this->db->trans_status() === FALSE){
+                return FALSE;
+            }
 
+            return TRUE;
+
+        }
 
     }
     public function check_valid_token($token = NULL){
