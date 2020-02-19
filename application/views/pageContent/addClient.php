@@ -5,8 +5,9 @@
     <?php
         //@param 1 action location one form is submitted
         //@param 2 attributes for the form tag
-        echo form_open('register-client', 'id="clientInfoForm"');
+        echo form_open_multipart('register-client');
     ?>    
+    <input type="hidden" name="action" value="addClient">
     <span class="float-right ">
         <button  id="addClient" class="btn btn-sm btn-primary " type="submit"><i class=" fa fa-user-plus"></i> Add Client</button>
     </span>
@@ -16,14 +17,14 @@
         <div class="row">
             <div class="col col-md-6"><!--left col-->
                 <div class="text-center">
-                    <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar rounded-circle img-thumbnail" alt="avatar">
+                    <img src="<?php echo base_url()?>upload/default_profile_img.png" class="avatar rounded img-thumbnail" alt="avatar">
                     <br>
                     <?php //echo isset($clientName)? '<h3 class=" ">'.$clientName.'</h3>' : 'Client Image'; ?>
                     <div class="p-image">
-                        <a href="#" id="upload-img">
+                        <a href="#" id="upload-client-img">
                         <i class="fa fa-camera "></i> Upload Image
                         </a>
-                        <input class="file-upload" type="file" accept="image/*" style="display: none;"/>
+                        <input class="client-img-upload" name="clientImg" type="file" accept="image/*" style="display: none;"/>
                         
                     </div>
                 </div>
@@ -58,12 +59,12 @@
                             <label for="maritalStatus">Gender:</label>
                             <div class="form-group pl-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gender" id="" value="M" checked>
-                                    <label class="form-check-label" for="single">Male</label>
+                                    <input class="form-check-input" type="radio" name="gender" id="male" value="M" checked>
+                                    <label class="form-check-label" for="male">Male</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="gender" id="" value="F">
-                                    <label class="form-check-label" for="married">Female</label>
+                                    <input class="form-check-input" type="radio" name="gender" id="male" value="F">
+                                    <label class="form-check-label" for="female">Female</label>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +93,7 @@
                     <div class="row">
                         <div class="col col-md-6 form-group">
                                 <label for="country">Country:</label>
-                                <input type="text" class="form-control" name="country" id="country" placeholder="" title="enter your first name if any." required>
+                                <input type="text" class="form-control" name="country" id="country" placeholder=""  required>
                         </div>
                         <div class="col col-md-6 form-group">
                             <label for="exampleFormControlSelect1">District</label>
@@ -109,28 +110,33 @@
                     <div class=" row form-group">
                         <div class="col col-md-6">
                             <label for="first_name">City/Town/Village:</label>
-                            <input type="text" class="form-control" name="ctv" id="ctv" placeholder="" title="enter your first name if any." required>
+                            <input type="text" class="form-control" name="ctv" id="ctv" placeholder="" required>
                         </div>
                         <div class="col col-md-6">
                                 <label for="first_name">SSN:</label>
-                                <input type="text" class="form-control" name="ssn" id="ssn" placeholder="" title="enter your first name if any." required>
+                                <input type="text" class="form-control" name="ssn" id="ssn" placeholder=""  required>
                         </div> 
                     </div>
                     <div class="row form-group">
                         <div class="col col-md-6">
                             <label for="first_name">Home Phone #:</label>
-                            <input type="number" class="form-control" name="homePhone" id="" placeholder="" title="enter your first name if any." >
+                            <input type="number" class="form-control" name="homePhone" id="" placeholder="" >
                         </div>
                         <div class="col col-md-6">
                             <label for="first_name">Mobile Phone #:</label>
-                            <input type="number" class="form-control" name="mobilePhone" id="" placeholder="" title="enter your first name if any." required>
+                            <input type="number" class="form-control" name="mobilePhone" id="" placeholder=""  required>
                         </div>
                     </div> 
-                        <label for="street">Street Address:</label>
-                        <input type="text" class="form-control" name="street" id="" placeholder="" title="enter your first name if any." required>
-                        <label for="first_name">Email:</label>
-                        <input type="text" class="form-control" name="email" id="" placeholder="" title="enter your first name if any." required>
-                    
+                    <div class="row form-group">
+                        <div class="col col-md-6">
+                            <label for="street">Street Address:</label>
+                            <input type="text" class="form-control" name="street" id="" placeholder=""  required>
+                        </div>
+                        <div class="col col-md-6">
+                            <label for="first_name">Email:</label>
+                            <input type="text" class="form-control" name="email" id="" placeholder=""  required>
+                        </div>
+                   </div> 
             <!--End of personal information col -->
             </div><!--/col-4-->
             <div class="col col-md-6 mt-5">
@@ -149,7 +155,7 @@
                         </div>
                         <div class="col col-md-6">
                             <label for="ecNumber">Emergency Contact Number:</label>
-                            <input type="text" class="form-control" name="ecNumber" id="" placeholder="" required>
+                            <input type="number" class="form-control" name="ecNumber" id="" placeholder=""  required>
                         </div>
                         <div class="col">
                             <label for="ecRelation">Emergency Contact Relationship:</label>
@@ -178,7 +184,7 @@
                         </div>
                         <div class="col col-md-6">
                             <label for="last_name">Phone Number <small class="font-weight-bold">Ref#1:</small></label>
-                            <input type="text" class="form-control" name="refPhone1" id="" placeholder="" required>
+                            <input type="number" class="form-control" name="refPhone1" id="" placeholder=""  required>
                         </div>
                     </div>
                     <hr>
@@ -197,7 +203,7 @@
                         </div>
                         <div class="col col-md-6">
                             <label for="last_name">Phone Number <small class="font-weight-bold">Ref#2:</small></label>
-                            <input type="text" class="form-control" name="refPhone2" id="" placeholder="">
+                            <input type="number" class="form-control" name="refPhone2" id="" placeholder="" >
                         </div>
                     </div>
                     <hr>
@@ -216,7 +222,7 @@
                         </div>
                         <div class="col col-md-6">
                             <label for="last_name">Phone Number <small class="font-weight-bold">Ref#3:</small></label>
-                            <input type="text" class="form-control" name="refPhone3" id="" placeholder="">
+                            <input type="number" class="form-control" name="refPhone3" id="" placeholder="" >
                         </div>
                     </div>
                     <!-- <hr>

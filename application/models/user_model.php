@@ -42,7 +42,10 @@ class User_model extends CI_Model{
      */    
     public function get_user_info($userId){
 
-        $sql = $this->db->query('SELECT id, fname, lname, email, username, phone FROM users u WHERE id = '.$userId.'');
+        $sql = $this->db->query(
+        'SELECT u.id, fname, lname, email, username, phone, p.path as imgPath
+        FROM users u, profile_img p WHERE u.id = '.$userId.' and u.profile_img_id = p.id and p.status = 1'
+        );
         $row = $sql->num_rows();
         if ($row === 1){
 
@@ -205,7 +208,7 @@ class User_model extends CI_Model{
                     'home_phone'  => $data['homePhone'],
                     'mobile_phone'  => $data['mobilePhone'],
                     'ec_name'  => $data['ecName'],
-                    'ec_number'  => $data['evNumber'],
+                    'ec_number'  => $data['ecNumber'],
                     'ec_relation'  => $data['ecRelation'],
                     'gender'  => $data['gender'],
                     'dob'  => $data['dob'],
@@ -226,7 +229,15 @@ class User_model extends CI_Model{
                 );
 
                 $this->db->trans_start();//starting transaction
+                // checking if client is already in through email and SSN (social security number)
+                $result = $this->db->query(
+                'SELECT id FROM clients WHERE ssn = "'.$input['ssn'].'" 
+                ');
+                if ($result->num_rows() > 0){
+                    return -1;//returning -1 so we can identify that the client is already in the system.
+                }
                 $this->db->insert('clients', $input);
+                $clientId = $this->db->insert_id();
                 $this->db->trans_complete();//ending transaction
 
                 if($this->db->trans_status() === FALSE){//checking to see if an error occured during transaction
@@ -235,7 +246,7 @@ class User_model extends CI_Model{
 
                 }else{
 
-                    return TRUE;
+                    return $clientId;
 
                 }
             
@@ -249,7 +260,116 @@ class User_model extends CI_Model{
     }
 
 
+    /**
+     * Sets the profile pic in the database's profile_img table
+     *
+     * @access    public
+     * @param     userid the id of the users in which the profile image belongs to
+     * @param     filename the name of the image file
+     * 
+     * @return    Boolean true/false if the query was successful
+     */    
+    public function set_profile_pic($userid = NULL, $filename = NULL){
 
+            //Checking to see if user has an existing profile image other than the default
+            $this->db->trans_start(); 
+           
+            $sql = $this->db->query(
+            'SELECT u.id, profile_img_id as p_id FROM users u WHERE u.id = '.$userid.''
+            );
+            $result = $sql->row_array();
+
+            if ($result['p_id'] === 1){
+
+                $input = array(
+                    'path' => 'upload/'.$filename ,
+                    'status' => 1
+                );
+                $this->db->insert('profile_img', $input);
+                $pId = $this->db->insert_id();//getting last inserted ID i.e. id of profile_image 
+
+                $this->db->update('users',array('profile_img_id'=>$pId), 'id= '.$userid.'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
+
+            }else{
+                //it's not the default img we'll set that p_id status to zero an insert a new image or the user
+               
+                // creating a new profile_image 
+                $input = array(
+                    'path' => 'upload/'.$filename ,
+                    'status' => 1
+                );
+                $this->db->insert('profile_img', $input);
+                $pId = $this->db->insert_id();//getting last inserted ID i.e. id of profile_image 
+
+                $this->db->update('users',array('profile_img_id'=>$pId), 'id= '.$userid.'');
+                
+                //deleting the old image by setting old image status to 0 meaning false 
+                $this->db->update('profile_img',array('status'=>0), 'id= '.$result['p_id'].'');
+            }
+
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE){
+                return FALSE;
+            }else{
+                return TRUE;
+            }
+
+
+    }
+
+    /**
+     * Sets the profile pic of a client in the database
+     *
+     * @access    public
+     * @param     clientid the id of the client in which the profile image belongs to
+     * @param     filename the name of the image file
+     * 
+     * @return    Boolean true/false if the query was successful
+     */    
+    public function set_client_profile_pic($clientid = NULL, $filename = NULL){
+
+        if ($filename !== NULL){
+            //Checking to see if user has an existing profile image other than the default
+            $this->db->trans_start(); 
+
+            $input = array(
+                'path' => 'upload/'.$filename ,
+                'status' => 1
+            );
+
+            $this->db->insert('profile_img', $input);
+            $pId = $this->db->insert_id();//getting last inserted ID i.e. id of profile_image 
+
+            $this->db->update('clients',array('profile_img_id'=>$pId), 'id= '.$clientid.'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
+
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE){
+                return FALSE;
+            }else{
+                return TRUE;
+            }
+        }else{
+            $input = array(
+                'path' => 'upload/'.$filename ,
+                'status' => 1
+            );
+            $this->trans_start();
+            //setting user a default profile image
+            $this->db->update('clients',array('profile_img_id'=>1), 'id= '.$clientid.'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
+            $this->trans_complete();
+            
+            if ($this->trans_status() === FALSE){
+                return FALSE;
+            }else{
+                return TRUE;
+            }
+
+        }
+
+
+    }
 
 
 

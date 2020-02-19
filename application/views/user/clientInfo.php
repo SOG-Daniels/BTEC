@@ -56,7 +56,7 @@
                     <div class="row mb-3">
                         <div class="col col-md-6">
                             <label for="first_name">Phone #</label>
-                            <input type="text" class="form-control" name="first_name" id="first_name" placeholder="668 7434..." title="enter your first name if any.">
+                            <input type="number" class="form-control" name="first_name" id="first_name" placeholder="668 7434..." title="enter your first name if any.">
                         </div>
                         <div class="col col-md-6" >
                             <label for="last_name">Email:</label>

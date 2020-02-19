@@ -57,9 +57,32 @@ $(document).ready(function() {
         }
     }
     
-
+    // When uploading a profile picture this code is triggered
     $(".file-upload").on('change', function(){
         readURL(this);
+        var data = new FormData(document.getElementById("upload-img-form"));
+        // sending a ajax request to update the profile image of the user
+        $.ajax({
+            url: 'update-profile-picture',  
+            type: 'POST',
+            data: data,
+            success:function(data){
+                console.log(data);
+                alert(data);
+                location.reload(true);//reloading the current webpage we are in
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+        
+        
+
+    });
+    // when uploading a profile picture of a client
+    $(".client-img-upload").on('change', function(){
+        readURL(this);
+
     });
 
     $('#editClient').click(function(e){
@@ -68,6 +91,7 @@ $(document).ready(function() {
         $("#clientInfoForm :input").attr("readOnly", false);
         $("#editClient").css("display", "none");
         $("#saveClientInfo").css("display", "block");
+        $("#upload-img").css("display", "block");
 
     });
     $('#saveClientInfo').click(function(e){
@@ -76,6 +100,7 @@ $(document).ready(function() {
         $("#clientInfoForm :input").attr("readOnly", true);
         $("#editClient").css("display", "block");
         $("#saveClientInfo").css("display", "none");
+        $("#upload-img").css("display", "none");
 
         //send out the input feilds that were modified and update the database 
 
@@ -134,6 +159,8 @@ $(document).ready(function() {
         
 
     });
+   
+   
     // $('#addClient').click(function (e){
 
     //     e.preventDefault();
@@ -141,9 +168,13 @@ $(document).ready(function() {
 
     // });
     $('#upload-img').click(function (e){
-        alert('test');
         //e.preventDefault();
         $('.file-upload').click();
+
+    });
+    $('#upload-client-img').click(function (e){
+        //e.preventDefault();
+        $('.client-img-upload').click();
 
     });
 });

@@ -78,14 +78,6 @@ class User extends CI_Controller{
 
                 $this->data['message'] = $this->session->flashdata('message');
                 
-                // display the data on the view     
-                // $this->load->view('templates/header', $this->data);
-                // $this->load->view('templates/sidebar', $this->data);
-                // $this->load->view('templates/topbar', $this->data);
-                // $this->load->view('pageContent/profile', $this->data);
-                // $this->load->view('templates/footer', $this->data);
-
-
             }
             $this->data['title'] = 'profile';
             
@@ -144,7 +136,7 @@ class User extends CI_Controller{
             $this->form_validation->set_rules('fname', 'First Name:', 'required|trim');
             $this->form_validation->set_rules('lname', 'Last Name:', 'required|trim');
             $this->form_validation->set_rules('mname', 'Middle Name:', 'trim');
-            $this->form_validation->set_rules('mname', '', 'trim');
+            // $this->form_validation->set_rules('mname', '', 'trim');
             $this->form_validation->set_rules('country', 'Country:', 'required|trim');
             $this->form_validation->set_rules('ctv', 'City/Town/Village:', 'required|trim');
             $this->form_validation->set_rules('ssn', 'SSN:', 'required|trim');
@@ -175,29 +167,92 @@ class User extends CI_Controller{
                 // process the data given in the form
 
                 
-                $post = $this->input->post();
-                $result = $this->user->enter_client($post);//Calling the user's modal method enter_client to add client to the system
-                
-
-                if ($result === TRUE ){
-
+                $post = $this->input->post(NULL, TRUE);
+                $clientId = $this->user_model->enter_client($post);//Calling the user's modal method enter_client to add client to the system
+               
+                if ( $clientId === -1){
+                    
                     $this->data['addClientMessage'] = '
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h5><strong><i class="fa fa-2x fa-smile"></i> Success</strong>, Client has be registers!<h5>
+                    <h5><strong><i class="fa fa-2x fa-frown"></i>Notice:</strong>
+                    Client has already been entered into the system, refer to the clients table please.<h5>
                     </div>
                     ';
+
+
+                }else if ( $clientId ){
+                //checking if a valid id was returned (positive value)
+
+                $this->data['addClientMessage'] = '
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5><strong><i class="fa fa-2x fa-smile"></i> Success</strong>, Client has be registers!<h5>
+                </div>
+                ';
+                
+                //Checking if an image was uploaded to insert it to the database. 
+                
+                    
+                    $newFileName = $post['fname'].'_'.$post['lname'].'_'.time();
+                    
+                    $config['upload_path'] = './upload/';
+                    $config['allowed_types'] = 'jpg|png';
+                    $config['file_name'] = $newFileName;
+                    // $config['max_size'] = 2000;
+                    // $config['max_width'] = 1500;
+                    // $config['max_height'] = 1500;
+            
+                    $this->load->library('upload', $config);
+
+                    if($this->upload->do_upload('clientImg')){
+                        
+                        $uploadInfo = $this->upload->data();
+                        $filename = $uploadInfo['file_name'];
+
+                        $result = $this->user_model->set_client_profile_pic($clientId, $filename);
+
+                        if ($result === FALSE){
+                            
+                            $this->data['addClientMessage'] = '
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h5><strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong>
+                            Client was added but was unable to upload image!<h5>
+                            </div>
+                            ';
+
+                        }
+
+                    }else{
+                            $this->data['addClientMessage'] = '
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h5><strong><i class="fa fa-2x fa-frown"></i> We\'re sorry!</strong>
+                            Client was added but was unable to upload image!<h5>
+                            </div>
+                            ';
+                    //    echo $this->upload->display_errors();
+                    }
+
 
                 }else{
 
                     $this->data['addClientMessage'] = '
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h5><strong><i class="fa fa-2x fa-smile"></i> Success!</strong>  The user was added to the System and has been notified via email!<h5>
+                    <h5><strong><i class="fa fa-2x fa-frown"></i> Opps!</strong>
+                      Unable to add the client at the moment!<h5>
                     </div>
                     ';
                     
@@ -503,7 +558,7 @@ class User extends CI_Controller{
             $postData = $this->input->post(NULL, TRUE);
 
             $result = $this->user_model->update_user_profile($userid, $postData);
-            
+
             if ($result === FALSE){
 
                 return "Failed to make changes";
@@ -517,7 +572,58 @@ class User extends CI_Controller{
             // session not set call login page 
             redirect('login');
         }
+    }
+    public function change_profile_pic(){
+        
+        if ($this->is_session_set()){
 
+            if(!empty($_FILES['profileImg']['name'])){
+                
+                $newFileName = trim($this->session->userdata('name'), ' ').'_'.time();
+                
+                $config['upload_path'] = './upload/';
+                $config['allowed_types'] = 'gif|jpg|png';
+                $config['file_name'] = $newFileName;
+                // $config['max_size'] = 2000;
+                // $config['max_width'] = 1500;
+                // $config['max_height'] = 1500;
+        
+                $this->load->library('upload', $config);
+
+                if($this->upload->do_upload('profileImg')){
+                    
+                    $uploadInfo = $this->upload->data();
+
+                    $filename = $uploadInfo['file_name'];
+                    $userId = $this->session->userdata('userid');
+
+                    $result = $this->user_model->set_profile_pic($userId, $filename);
+
+                    if ($result === FALSE){
+
+                        echo "Profile Image was not updated";
+                        
+                    }else{
+
+                        $this->session->set_userdata('imgPath', 'upload/'.$filename);
+                        echo "Profile Image was updated!";
+
+                    }
+
+                }else{
+                    echo $this->upload->display_errors();
+                }
+
+
+
+            }else{
+                 print_r($_FILES);
+            }
+
+        }else{
+
+            redirect('login');
+        }
 
     }
 

@@ -56,7 +56,7 @@
                         <div class="row mb-3">
                             <div class="col col-md-6">
                                 <label for="first_name">Phone #</label>
-                                <input type="text" class="form-control" name="first_name" id="first_name" value = "<?php echo (isset($userData['phone']))? $userData['phone'] : ' ';?>">
+                                <input type="number" class="form-control" name="first_name" id="first_name" value = "<?php echo (isset($userData['phone']))? $userData['phone'] : ' ';?>">
                             </div>
                             <?php 
                                 $action = array();

@@ -65,6 +65,7 @@ $route['client-info/(:num)'] = 'user/view_client_profile/$1';
 $route['update-profile'] = 'user/update_my_profile';
 $route['user-info/(:num)'] = 'user/view_user_profile/$1';
 $route['change-my-password'] = 'user/change_pass';
+$route['update-profile-picture'] = 'user/change_profile_pic';
 
 
 //verification routes

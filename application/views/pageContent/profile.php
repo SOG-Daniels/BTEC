@@ -1,4 +1,5 @@
 <?php 
+    $imgPath = $this->session->userdata('imgPath');
     echo (isset($message))? $message : '';
 ?>
 <div class="card shadow mb-3">
@@ -8,15 +9,17 @@
     <div class="card-body">
         <div class="row">
             <div class="col col-md-4"><!--left col-->
-                <div class="text-center">
-                    <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar rounded-circle img-thumbnail" alt="avatar">
+                <form id="upload-img-form">
+                    <div class="text-center">
+                    <img src="<?php echo isset($imgPath)? $imgPath: "upload/default_profile_img.png";?>" class="avatar rounded-circle img-thumbnail">
                     <div class="p-image">
-                        <a href="#" id="upload-img">
+                        <a href="#" id="upload-img" >
                         <i class="fa fa-camera "></i> Upload Image
                         </a>
-                        <input class="file-upload" type="file" accept="image/*" style="display: none;"/>
+                        <input class="file-upload" name="profileImg" type="file" accept="image/*" style="display: none;"/>
                         
                     </div>
+                </form>
                 </div>
                 <br>
 
@@ -45,7 +48,7 @@
             <div class="tab-content" id="profileTabContent">
                 <div class="tab-pane fade show active" id="profile">
                     <br>
-                    <form class="form" action="<?php echo base_url()?>update-profile" method="post" id="profileForm">
+            <form class="form" action="<?php echo base_url()?>update-profile" method="post" id="profileForm">
                         
                         <div class="row mb-3">
                             <div class="col col-md-6">
