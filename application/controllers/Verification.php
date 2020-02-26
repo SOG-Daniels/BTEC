@@ -20,6 +20,7 @@ class Verification extends CI_Controller{
     public function login(){
         
         $data['title'] = 'Login';
+        $data['isLogin'] = 1;
 
         if ( $this->session->has_userdata('userid') ){
             //if session is set lets go to the dashboard 
@@ -47,14 +48,16 @@ class Verification extends CI_Controller{
                     $this->load->view('templates/footer');
                    
                 }else{
+
                     //passwords matched so we will create a session and assign to it some values
                     $name = $result['fname'].' '.$result['lname'];
-                    // $action = $result['action'];
 
                     $this->session->set_userdata('userid', $result['id']);
                     $this->session->set_userdata('name', $name);
                     $this->session->set_userdata('email', $result['email']);
                     $this->session->set_userdata('imgPath', $result['path']);
+                   
+                    // print_r($result);
                     
                     $actions = array();
                     foreach ($result[0] as $key => $arr){
@@ -65,7 +68,7 @@ class Verification extends CI_Controller{
 
                     $this->session->set_userdata('action', $actions);//setting user actions/privileges as a session
                     
-                    
+                    // print_r($this->session->userdata());
                     redirect('dashboard');
                 }
             }
@@ -73,7 +76,7 @@ class Verification extends CI_Controller{
                 // // loading the login
                 $this->load->view('templates/header', $data);
                 $this->load->view('pageContent/login', $data);
-                $this->load->view('templates/footer');
+                $this->load->view('templates/footer',$data);
                
 
             }

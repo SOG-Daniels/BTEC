@@ -7,7 +7,7 @@ class Validation_model extends CI_Model{
 
     }
     public function get_user($email, $pass){
-
+        
         $sql = $this->db->query('SELECT u.id, fname, lname, email, p.path FROM users u, profile_img p WHERE u.email = "'.$email.'" and u.password = "'.md5($pass).'" and u.profile_img_id = p.id');
         $row = $sql->num_rows();
         if ($row === 1){
@@ -15,9 +15,7 @@ class Validation_model extends CI_Model{
             $userData = $sql->row_array();
 
             //starting to get the privileges/action the user has in the system
-            $this->db->trans_start();
             $sql2 = $this->db->query('SELECT a.privilege_id as actions FROM action a WHERE a.user_id = '.$userData['id'].' and a.status = 1');
-            $this->db->trans_complete();
 
             if($this->db->trans_status() === FALSE){
                 return FALSE;

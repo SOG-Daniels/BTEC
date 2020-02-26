@@ -1,4 +1,9 @@
-<?php  $active = (isset($active))? $active : ' '; 
+
+<?php  
+$actions = $this->session->userdata('action');
+// print_r($actions);
+$active = (isset($active))? $active : ' '; 
+
 ?>
 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
@@ -19,6 +24,39 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Applicants
+      </div>
+      <?php 
+        if (in_array(1, $actions)){
+          echo '
+          <li class="nav-item '.(($active === 'addClient')? 'active' : ' ').'">
+          
+            <a class="btn btn-link nav-link " href="'.site_url('register-applicant').'" >
+              <i class="fas fa-fw fa-user-plus "></i>
+              <span>Add Applicant</span>
+            </a>
+          </li>
+          ';
+        }
+      ?>
+      <?php 
+        if (in_array(1, $actions)){
+          echo '
+          <li class="nav-item '.(($active === 'applicants')? 'active' : ' ').'">
+          
+            <a class="btn btn-link nav-link " href="'.site_url('applicant-list').'" >
+              <i class="fas fa-fw fa-users "></i>
+              <span>Applicant List</span>
+            </a>
+          </li>
+          ';
+        }
+      ?>
 
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -27,22 +65,21 @@
       <div class="sidebar-heading">
         Clients
       </div>
-      <li class="nav-item <?php echo ($active === 'test')? 'active' : ' ';?>">
-      
-        <a class="btn btn-link nav-link " href="<?php echo site_url('register-client') ?>" >
-          <i class="fas fa-fw fa-user-plus "></i>
-          <span>Add Client</span>
-        </a>
-      </li>
 
       <!-- Nav Item - Tables -->
-      <li class="nav-item <?php echo ($active === 'clientList')? 'active' : ' ';?>">
-        <a class="nav-link" href="<?php echo site_url('client-list'); ?>">
-          <i class="fas fa-fw fa-table "></i>
-          <span>Client List</span></a>
-      </li>
+      <?php 
+        if (in_array(2, $actions)){
+          echo '
+              <li class="nav-item '.(($active === "clientList")? "active" : " ").'">
+                <a class="nav-link" href="'.site_url('client-list').'">
+                  <i class="fas fa-fw fa-table "></i>
+                  <span>Client List</span></a>
+              </li>
+              ';
+        }
+      ?>
       <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <i class="fas fa-fw fa-cog"></i>
           <span>Components</span>
@@ -54,7 +91,7 @@
             <a class="collapse-item" href="cards.html">Cards</a>
           </div>
         </div>
-      </li>
+      </li> -->
 
       <!-- Divider -->
       <hr class="sidebar-divider">
@@ -63,21 +100,34 @@
       <div class="sidebar-heading">
         System Users
       </div>
-      <li class="nav-item">
       <!-- Nav Item - Tables -->
-        <li class="nav-item">
-        <button class="btn btn-link nav-link <?php echo ($active === 'addUser')? 'active' : ' ';?>" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
-          <i class="fas fa-fw fa-user-plus "></i>
-          <span>Add User</span>
-        </button>
-        </li>
-      </li>
-      <!-- Nav Item - Tables -->
-      <li class="nav-item <?php echo ($active === 'userList')? 'active' : ' ';?>">
-        <a class="nav-link" href="<?php echo site_url('user-list'); ?>">
-          <i class="fas fa-fw fa-table "></i>
-          <span>User List</span></a>
-      </li>
+       <?php 
+        if (in_array(3, $actions)){
+          echo '
+            <li class="nav-item">
+            <button class="btn btn-link nav-link '.(($active === 'addUser')? 'active' : ' ').'" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
+              <i class="fas fa-fw fa-user-plus "></i>
+              <span>Add User</span>
+            </button>
+            </li>';
+        }
+          ?>
+        <?php
+
+        if (in_array(4, $actions)){
+
+          echo '
+          <!-- Nav Item - Tables -->
+          <li class="nav-item '.(($active === 'userList')? 'active' : ' ').'">
+            <a class="nav-link" href="'.site_url('user-list').'">
+              <i class="fas fa-fw fa-table "></i>
+              <span>User List</span></a>
+          </li>
+            
+            ';
+
+        }
+        ?>
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">

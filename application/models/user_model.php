@@ -6,19 +6,20 @@ class User_model extends CI_Model{
 
         $this->load->database();
     }
-/**
+    /**
      * 
-     * get_user_action() will return all users actions/privilhe/she has within the system.
+     * Function will return privileges if status is set to 1 by default if checkstatus is not set.
      *
      * @access    public
-     * @param     $userID is the ID of the user in the system
+     * @param     userId is the ID of the user in the system
+     * @param     checkStatus requires a 1 or 0, 1 checks status, 0 does not
      *
      * @return    Array that contains a list of all the privileges by id
      */    
-    public function get_user_action($userId){
-
+    public function get_user_action($userId = NULL, $checkStatus = 1){
+        
         $this->db->trans_start();
-        $sql = $this->db->query('SELECT privilege_id FROM action  WHERE user_id = '.$userId.'');
+        $sql = $this->db->query('SELECT privilege_id '.(($checkStatus === 0)? ', status' : ' ').' FROM action  WHERE user_id = '.$userId.' '.(($checkStatus === 1)? 'and status = 1': '').'');
         $this->db->trans_complete();
 
         if($this->db->trans_status() === FALSE){
@@ -61,6 +62,102 @@ class User_model extends CI_Model{
         return FALSE;
 
     }
+   
+    /**
+     * updates the current users profile by updating what he/she has in the system 
+     *
+     * @access    public
+     * @param     DATA  the data that is to be updated.(data within the POST)
+     *
+     * @return    BOOLEAN true/flase if upate was successful or not
+     */    
+    public function update_user_info($data = NULL){
+        
+        $result = $this->update_user_profile($data['userId'], $data);
+        if (!$result){//if result is false then return false
+            return FALSE;
+        }
+        if ($data !== NULL){
+            
+            $currentPrivi = $this->get_user_action($data['userId'], 0);
+            //print_r($data['privilege']);
+
+            $tempPrivi = array();
+            $selectedPriv = (isset($data['privilege']))? $data['privilege'] : array();
+            //print_r($selectedPriv);
+            $this->db->trans_start();
+            
+            foreach ($currentPrivi as $arr){
+                if (in_array($arr['privilege_id'], $selectedPriv)){
+                    if ($arr['status'] == 0){
+                        // update action table set status to 1
+                        $input = array (
+                            'status' => 1
+
+                        );
+                        $where = array(
+                            'user_id' => $data['userId'],
+                            'privilege_id' => $arr['privilege_id']
+                        );
+                        $this->db->update('action',$input, $where );//arguments- table, set values, where
+
+                    }
+
+                    // echo $arr['privilege_id']."\n";
+                    $key = array_search($arr['privilege_id'], $selectedPriv);//needle, haystack - arguments
+                    unset($selectedPriv[$key]);
+
+                }else{
+                    if ($arr['status'] ==  1){
+
+                        //update and set status to 0
+                        $input = array (
+                            'status' => 0
+
+                        );
+                        $where = array(
+                            'user_id' => $data['userId'],
+                            'privilege_id' => $arr['privilege_id']
+                        );
+                        $this->db->update('action',$input, $where );//arguments- table, set values, where
+                        // $key = array_search($arr['privilege_id'], $selectedPriv);//needle, haystack - arguments
+                        // unset($selectedPriv[$key]);
+
+                    }
+                }
+
+            }
+            if (!empty($selectedPriv)){
+                // insert the new privilege
+                foreach ($selectedPriv as $key){
+                    
+                    //insert new privilege
+                    // echo $key." this key need to be inserted\n";
+                    $input = array(
+
+                        'user_id' => $data['userId'],
+                        'privilege_id' => $key,
+                        'status' => 1
+
+                    );
+                    $this->db->insert('action', $input);
+                }
+
+            }
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE){
+                return FALSE;
+            }
+
+            return TRUE;
+
+        }else{
+
+            return FALSE;
+        }
+
+    }
     /**
      * updates the current users profile by updating what he/she has in the system 
      *
@@ -82,6 +179,7 @@ class User_model extends CI_Model{
             username = "'.$data['username'].'", 
             phone = "'.$data['phone'].'" 
             WHERE id = '.$userid.'');
+           
             $this->db->trans_complete();
             
             if ($this->db->trans_status() === FALSE){
@@ -189,77 +287,6 @@ class User_model extends CI_Model{
         }
     }
 
-    public function enter_client($data = array()){
-        
-        if (isset($data)){
-                
-                // loading array with all the data from post
-                $input = array(
-                    
-                    'first_name'  => $data['fname'],
-                    'last_name'  => $data['lname'],
-                    'middle_name'  => $data['mname'],
-                    'ssn'  => $data['ssn'],
-                    'street'  => $data['street'],
-                    'ctv'  => $data['ctv'],
-                    'district'  => $data['district'],
-                    'country'  => $data['country'],
-                    'email'  => $data['email'],
-                    'home_phone'  => $data['homePhone'],
-                    'mobile_phone'  => $data['mobilePhone'],
-                    'ec_name'  => $data['ecName'],
-                    'ec_number'  => $data['ecNumber'],
-                    'ec_relation'  => $data['ecRelation'],
-                    'gender'  => $data['gender'],
-                    'dob'  => $data['dob'],
-                    'marital_status'  => $data['maritalStatus'],
-                    'ref_name1'  => $data['refName1'],
-                    'ref_address1'  => $data['refAddress1'],
-                    'ref_city1'  => $data['refCity1'],
-                    'ref_phone1'  => $data['refPhone1'],
-                    'ref_name2'  => $data['refName2'],
-                    'ref_address2'  => $data['refAddress2'],
-                    'ref_city2'  => $data['refCity2'],
-                    'ref_phone2'  => $data['refPhone2'],
-                    'ref_name3'  => $data['refName3'],
-                    'ref_address3'  => $data['refAddress3'],
-                    'ref_city3'  => $data['refCity3'],
-                    'ref_phone3'  => $data['refPhone3']              
-                                    
-                );
-
-                $this->db->trans_start();//starting transaction
-                // checking if client is already in through email and SSN (social security number)
-                $result = $this->db->query(
-                'SELECT id FROM clients WHERE ssn = "'.$input['ssn'].'" 
-                ');
-                if ($result->num_rows() > 0){
-                    return -1;//returning -1 so we can identify that the client is already in the system.
-                }
-                $this->db->insert('clients', $input);
-                $clientId = $this->db->insert_id();
-                $this->db->trans_complete();//ending transaction
-
-                if($this->db->trans_status() === FALSE){//checking to see if an error occured during transaction
-
-                    return FALSE;
-
-                }else{
-
-                    return $clientId;
-
-                }
-            
-        }else{
-
-            return FALSE;
-
-        }
-
-
-    }
-
-
     /**
      * Sets the profile pic in the database's profile_img table
      *
@@ -318,58 +345,6 @@ class User_model extends CI_Model{
 
     }
 
-    /**
-     * Sets the profile pic of a client in the database
-     *
-     * @access    public
-     * @param     clientid the id of the client in which the profile image belongs to
-     * @param     filename the name of the image file
-     * 
-     * @return    Boolean true/false if the query was successful
-     */    
-    public function set_client_profile_pic($clientid = NULL, $filename = NULL){
-
-        if ($filename !== NULL){
-            //Checking to see if user has an existing profile image other than the default
-            $this->db->trans_start(); 
-
-            $input = array(
-                'path' => 'upload/'.$filename ,
-                'status' => 1
-            );
-
-            $this->db->insert('profile_img', $input);
-            $pId = $this->db->insert_id();//getting last inserted ID i.e. id of profile_image 
-
-            $this->db->update('clients',array('profile_img_id'=>$pId), 'id= '.$clientid.'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
-
-            $this->db->trans_complete();
-
-            if ($this->db->trans_status() === FALSE){
-                return FALSE;
-            }else{
-                return TRUE;
-            }
-        }else{
-            $input = array(
-                'path' => 'upload/'.$filename ,
-                'status' => 1
-            );
-            $this->trans_start();
-            //setting user a default profile image
-            $this->db->update('clients',array('profile_img_id'=>1), 'id= '.$clientid.'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
-            $this->trans_complete();
-            
-            if ($this->trans_status() === FALSE){
-                return FALSE;
-            }else{
-                return TRUE;
-            }
-
-        }
-
-
-    }
 
 
 

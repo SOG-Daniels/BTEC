@@ -4,14 +4,27 @@
 </div>
 
 <!-- END OF MAIN CONTENT-->
+<?php 
 
-<footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright &copy; ci_miniproject 2020</span>
-          </div>
-        </div>
-</footer>
+  $isLogin = (isset($isLogin))? $isLogin : 0;
+
+  // lets not display the footer when  the login page is displayed 
+  if (!$isLogin){
+
+    echo '
+      <footer class="sticky-footer bg-white">
+              <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                  <span>Copyright &copy; ci_miniproject 2020</span>
+                </div>
+              </div>
+      </footer>
+    
+    ';
+
+  }
+
+?>
     </div>
     <!-- End of Content Wrapper -->
 </div>

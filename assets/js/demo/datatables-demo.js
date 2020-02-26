@@ -4,11 +4,10 @@
 // });
 
 
-$(document).ready(function () {
-  
 
+$(document).ready(function(){
   var table = $('#dataTable').DataTable({
-      "data": testdata.data,
+      "data": clist.data,
       select:"single",
       "columns": [
           {
@@ -21,10 +20,14 @@ $(document).ready(function () {
               },
               width:"15px"
           },
-          { "data": "name" },
-          { "data": "position" },
-          { "data": "office" },
-          { "data": "salary" }
+          { "data": "id" },
+          { "data": "first_name" },
+          { "data": "last_name" },
+          { "data": "programs"},
+          { "data": "email" },
+          { "data": "mobile_phone" },
+          { "data": "view" }
+          
       ],
       "order": [[1, 'asc']]
   });
@@ -65,19 +68,153 @@ function format(d){
   // `d` is the original data object for the row
   return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
       '<tr>' +
-          '<td>Full name:</td>' +
-          '<td>' + d.name + '</td>' +
+          '<td class="font-weight-bold">Emergency Contact Name:</td>' +
+          '<td>' + ((d.ec_name === null)? 'NONE' : d.ec_name) + '</td>' +
       '</tr>' +
       '<tr>' +
-          '<td>Extension number:</td>' +
-          '<td>' + d.extn + '</td>' +
+          '<td class="font-weight-bold">Emergency Contact #</td>' +
+          '<td>'+  ((d.ec_number === null)?  'NONE' : d.ec_number) +'</td>' +
       '</tr>' +
       '<tr>' +
-          '<td>Extra info:</td>' +
-          '<td>And any further details here (images etc)...</td>' +
+          '<td class="font-weight-bold">Emergency Contact Relation:</td>' +
+          '<td>' +  ((d.ec_relation === null)? 'NONE' : d.ec_relation) + '</td>' +
+      '</tr>' +
+      '<tr>' +
+          '<td class="font-weight-bold">Specialized Training:</td>' +
+          '<td>' + ((d.specialized_trainings === null )? 'NONE': d.specialized_trainings )+ '</td>' +
       '</tr>' +
   '</table>';  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// $(document).ready(function () {
+  
+
+//   var table = $('#dataTable').DataTable({
+//       "data": testdata.data,
+//       select:"single",
+//       "columns": [
+//           {
+//               "className": 'details-control',
+//               "orderable": false,
+//               "data": null,
+//               "defaultContent": '',
+//               "render": function () {
+//                   return '<i class="fa fa-plus-square" aria-hidden="true"></i>';
+//               },
+//               width:"15px"
+//           },
+//           { "data": "name" },
+//           { "data": "position" },
+//           { "data": "office" },
+//           { "data": "salary" }
+//       ],
+//       "order": [[1, 'asc']]
+//   });
+
+// // Call the dataTables jQuery plugin
+//   $('#dataTableUsers').DataTable();
+//   // Add event listener for opening and closing details
+//   $('#dataTable tbody').on('click', 'td.details-control', function () {
+//       var tr = $(this).closest('tr');
+//       var tdi = tr.find("i.fa");
+//       var row = table.row(tr);
+
+//       if (row.child.isShown()) {
+//           // This row is already open - close it
+//           row.child.hide();
+//           tr.removeClass('shown');
+//           tdi.first().removeClass('fa-minus-square');
+//           tdi.first().addClass('fa-plus-square');
+//       }
+//       else {
+//           // Open this row
+//           row.child(format(row.data())).show();
+//           tr.addClass('shown');
+//           tdi.first().removeClass('fa-plus-square');
+//           tdi.first().addClass('fa-minus-square');
+//       }
+//   });
+
+//   table.on("user-select", function (e, dt, type, cell, originalEvent) {
+//       if ($(cell.node()).hasClass("details-control")) {
+//           e.preventDefault();
+//       }
+//   });
+// });
+
+// function format(d){
+ 
+//   // `d` is the original data object for the row
+//   return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+//       '<tr>' +
+//           '<td class="font-weight-bold">Emergency Contact Name:</td>' +
+//           '<td>' + d.name + '</td>' +
+//       '</tr>' +
+//       '<tr>' +
+//           '<td class="font-weight-bold">Emergency Contact #</td>' +
+//           '<td>668734</td>' +
+//       '</tr>' +
+//       '<tr>' +
+//           '<td class="font-weight-bold">Emergency Contact Relation:</td>' +
+//           '<td>Cousin</td>' +
+//       '</tr>' +
+//       '<tr>' +
+//           '<td class="font-weight-bold">Specialized Training:</td>' +
+//           '<td>Organization Name</td>' +
+//       '</tr>' +
+//   '</table>';  
+// }
 
 var testdata = {
 "data": [

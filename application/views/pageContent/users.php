@@ -9,7 +9,7 @@
                   <h6 class="m-0 font-weight-bold text-primary">Users</h6>
                 </div>
                 <div class="col col-md-2">
-                <button class="btn btn-primary btn-sm nav-link" data-target="#radUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
+                <button class="btn btn-primary btn-sm nav-link float-right" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
                   <i class="fas fa-fw fa-user-plus"></i>
                   <span>Add User</span>
                 </button>

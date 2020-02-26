@@ -5,13 +5,13 @@
     <?php
         //@param 1 action location one form is submitted
         //@param 2 attributes for the form tag
-        echo form_open_multipart('register-client');
+        echo form_open_multipart('register-applicant');
     ?>    
     <input type="hidden" name="action" value="addClient">
     <span class="float-right ">
-        <button  id="addClient" class="btn btn-sm btn-primary " type="submit"><i class=" fa fa-user-plus"></i> Add Client</button>
+        <button  id="addClient" class="btn btn-sm btn-primary " type="submit"><i class=" fa fa-user-plus"></i> Add Applicant</button>
     </span>
-    <h1 class="h4 mb-2 text-gray-800">Client Information</h1>
+    <h1 class="h4 mb-2 text-gray-800">Application Form</h1>
     </div>
     <div class="card-body">
         <div class="row">
@@ -40,15 +40,15 @@
                     </h6>
                     <!--Start of personal information form   -->
                     <div class="row">
-                        <div class="col col-md-6 form-group">
+                        <div class="col-12 col-md-6 form-group">
                             <label for="first_name">First Name:</label>
                             <input type="text" class="form-control" name="fname" id="fname" placeholder="John..."  required>
                         </div>
-                        <div class="col col-md-6 form-group">
+                        <div class="col-12 col-md-6 form-group">
                             <label for="last_name">Last Name:</label>
                             <input type="text" class="form-control" name="lname" id="lname" placeholder="Doe..."  required>
                         </div>
-                        <div class="col form-group">
+                        <div class="col-12 form-group">
                             <label for="last_name">Middle Name:</label>
                             <input type="text" class="form-control" name="mname" id="mname" placeholder="Dutch..." >
                         </div>
@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <label for="maritalStatus">Marital Status:</label>
-                    <div class="col col-mb-6">
+                    <div class="col-12 col-mb-6">
                            <div class="form-group">
                                 <div class="form-check form-check-inline ">
                                     <input class="form-check-input" type="radio" name="maritalStatus" id="single" value="Single" checked>
@@ -91,11 +91,11 @@
                            </div>
                     </div>
                     <div class="row">
-                        <div class="col col-md-6 form-group">
+                        <div class="col-12 col-md-6 form-group">
                                 <label for="country">Country:</label>
                                 <input type="text" class="form-control" name="country" id="country" placeholder=""  required>
                         </div>
-                        <div class="col col-md-6 form-group">
+                        <div class="col-12 col-md-6 form-group">
                             <label for="exampleFormControlSelect1">District</label>
                             <select class="form-control" name="district" id="">
                                 <option>Corozal</option>
@@ -108,31 +108,31 @@
                         </div>
                     </div>
                     <div class=" row form-group">
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="first_name">City/Town/Village:</label>
                             <input type="text" class="form-control" name="ctv" id="ctv" placeholder="" required>
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                                 <label for="first_name">SSN:</label>
                                 <input type="text" class="form-control" name="ssn" id="ssn" placeholder=""  required>
                         </div> 
                     </div>
                     <div class="row form-group">
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="first_name">Home Phone #:</label>
                             <input type="number" class="form-control" name="homePhone" id="" placeholder="" >
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="first_name">Mobile Phone #:</label>
                             <input type="number" class="form-control" name="mobilePhone" id="" placeholder=""  required>
                         </div>
                     </div> 
                     <div class="row form-group">
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="street">Street Address:</label>
                             <input type="text" class="form-control" name="street" id="" placeholder=""  required>
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="first_name">Email:</label>
                             <input type="text" class="form-control" name="email" id="" placeholder=""  required>
                         </div>
@@ -149,15 +149,15 @@
                     </h6>
                     
                     <div class="row mb-1">
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="ecName">Emergency Contact Name:</label>
                             <input type="text" class="form-control" name="ecName" id="" placeholder="" required>
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="ecNumber">Emergency Contact Number:</label>
                             <input type="number" class="form-control" name="ecNumber" id="" placeholder=""  required>
                         </div>
-                        <div class="col">
+                        <div class="col-12">
                             <label for="ecRelation">Emergency Contact Relationship:</label>
                             <input type="text" class="form-control" name="ecRelation" id="" placeholder="" required>
                         </div>
@@ -170,60 +170,102 @@
                         </small>        
                     </h6>
                     <div class="row">
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="first_name">Name <small class="font-weight-bold">Ref#1:</small></label>
                             <input type="text" class="form-control" name="refName1" id="" placeholder="" required>
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="last_name">Address <small class="font-weight-bold">Ref#1:</small></label>
                             <input type="text" class="form-control" name="refAddress1" id="" placeholder="" required>
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="first_name">City <small class="font-weight-bold">Ref#1:</small></label>
                             <input type="text" class="form-control" name="refCity1" id="" placeholder="" required>
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="last_name">Phone Number <small class="font-weight-bold">Ref#1:</small></label>
                             <input type="number" class="form-control" name="refPhone1" id="" placeholder=""  required>
                         </div>
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="first_name">Name <small class="font-weight-bold">Ref#2:</small></label>
                             <input type="text" class="form-control" name="refName2" id="" placeholder="">
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="last_name">Address <small class="font-weight-bold">Ref#2:</small></label>
                             <input type="text" class="form-control" name="refAddress2" id="" placeholder="">
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="first_name">City <small class="font-weight-bold">Ref#2:</small></label>
                             <input type="text" class="form-control" name="refCity2" id="" placeholder="">
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="last_name">Phone Number <small class="font-weight-bold">Ref#2:</small></label>
                             <input type="number" class="form-control" name="refPhone2" id="" placeholder="" >
                         </div>
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="first_name">Name <small class="font-weight-bold">Ref#3:</small></label>
                             <input type="text" class="form-control" name="refName3" id="" placeholder="" >
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="last_name">Address <small class="font-weight-bold">Ref#3:</small></label>
                             <input type="text" class="form-control" name="refAddress3" id="" placeholder="">
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="first_name">City <small class="font-weight-bold">Ref#3:</small></label>
                             <input type="text" class="form-control" name="refCity3" id="" placeholder="">
                         </div>
-                        <div class="col col-md-6">
+                        <div class="col-12 col-md-6">
                             <label for="last_name">Phone Number <small class="font-weight-bold">Ref#3:</small></label>
                             <input type="number" class="form-control" name="refPhone3" id="" placeholder="" >
                         </div>
+                    </div>
+                    <br>
+                    <h6>
+                        <small class="font-weight-bold">
+                        TRAINING PROGRAM
+                        <hr>
+                        </small>        
+                    </h6>
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label for="trainings">Trainings:</label>
+                                <select class="form-control" name="program" id="trainings">
+                                <option  value="barbering">Introduction to Barbering</option>
+                                <option  value="bartending">Bartending</option>
+                                <option  value="bpo">Business Process Outsourcing</option>
+                                <option  value="child_care">Child Care Training</option>
+                                <option  value="computer_basics">Computer's For Everyday Use</option>
+                                <option  value="event_planning">Event Planning</option>
+                                <option  value="front_desk">Front Desk Training</option>
+                                <option  value="home_health">Home Health Training</option>
+                                <option  value="house_keeping">House Keeping</option>
+                                <option  value="landscaping">Landscaping</option>
+                                <option  value="life_guard">Life Guard Training</option>
+                                <option  value="nail_tech">Nail Tech</option>
+                                <option  value="wait_staff">Wait Staff Training</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <label for="PreTest">Pre-Test Avg:</label>
+                            <input type="number" class="form-control" name="preTestAvg" id="preTestAvg" placeholder="" required>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <label for="PreTest">Year Enrolled:</label>
+                            <input type="number" class="form-control" name="enrolled_in" id="enrolledIn" value="<?php echo date('Y'); ?>" required>
+                        </div>
+                        <div class="col col-md-12">
+                            <label for="comment">Comment:</label>
+                            <textarea class="form-control" name="comment" placeholder="You can type something about the individual" rows="3"></textarea>
+                        </div>
+                        
                     </div>
                     <!-- <hr>
                     <h6>

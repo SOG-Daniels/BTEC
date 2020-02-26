@@ -8,6 +8,7 @@ class User extends CI_Controller{
         protected $data;
         protected $userId;
         protected $username;
+        protected $user_actions;
 
     // protected $data = array();
     // protected $session = array();
@@ -23,10 +24,11 @@ class User extends CI_Controller{
        // $this->session = array($this->session->all_userdata());
         //$this->data['name'] = $this->session['userid'];
         $this->load->model('user_model'); 
+        $this->load->model('client_model'); 
 
         $this->userId = $this->session->userdata('userid');
         $this->data['name'] = $this->session->userdata('name');
-        
+        $this->user_actions = $this->session->userdata('action');
 
         
 
@@ -51,7 +53,7 @@ class User extends CI_Controller{
         }else{
             //if there is no session direct them back to the login 
             //print_r($this->session->all_userdata());
-            // redirect('login');
+            redirect('login');
         }
 
         
@@ -97,18 +99,49 @@ class User extends CI_Controller{
         }
 
     }
+     /**
+     * 
+     * Will call and populate the view that displays all the applicants in the system
+     * 
+     * @access    public
+     * @param     NONE
+     *
+     * @return    NONE 
+     */ 
+    public function view_applicants(){
+        
+        if($this->is_session_set()){
+            $this->data['title'] = 'Applicants List';
+            $this->data['active'] = 'applicants';
+        
+            $this->load->view('templates/header', $this->data);
+            $this->load->view('templates/sidebar', $this->data);
+            $this->load->view('templates/topbar', $this->data);
+            $this->load->view('pageContent/applicants', $this->data);
+            $this->load->view('templates/footer', $this->data);
+        }else{
+            // session not set call login page 
+            redirect('login');
+        }
+
+    }
+
     // displays the list of clients registered into the system.
     public function view_clients(){
         
-        if($this->is_session_set()){
+        if($this->is_session_set() && in_array(2, $this->user_actions)){
+
+
             $this->data['title'] = 'Client List';
             $this->data['active'] = 'clientList';
+            $this->data['cList'] = $this->client_model->get_client_list();
         
             $this->load->view('templates/header', $this->data);
             $this->load->view('templates/sidebar', $this->data);
             $this->load->view('templates/topbar', $this->data);
             $this->load->view('pageContent/clients', $this->data);
             $this->load->view('templates/footer', $this->data);
+
         }else{
             // session not set call login page 
             redirect('login');
@@ -128,7 +161,7 @@ class User extends CI_Controller{
     public function add_client(){
 
 
-        if($this->is_session_set()){
+        if($this->is_session_set() && in_array(1, $this->user_actions)){
             // session is set allow access to add clients
             $this->data['active'] = 'test';//setting menu option addclient to be highlighted on the sidebar
 
@@ -163,13 +196,21 @@ class User extends CI_Controller{
             $this->form_validation->set_rules('refCity3', 'City Ref#3:', 'trim');
             $this->form_validation->set_rules('refPhone3', 'Phone Ref#3:', 'trim');
 
+            $this->form_validation->set_rules('preTestAvg', 'Address Ref#3:', 'trim');
+            $this->form_validation->set_rules('enrolled_on', 'Year Enrolled:', 'trim');
+            // Data that will be passed to the view 
+            $this->data['title'] = 'Add Client';
+            $this->data['active'] = 'addClient';
+
             if($this->input->post('action') === 'addClient' && $this->form_validation->run() === TRUE){
                 // process the data given in the form
+                // print_r($this->input->post());
 
+                $hasImgFile = (!empty($_FILES['clientImg']['name']))? 1 : 0;
                 
                 $post = $this->input->post(NULL, TRUE);
-                $clientId = $this->user_model->enter_client($post);//Calling the user's modal method enter_client to add client to the system
-               
+                $clientId = $this->client_model->enter_client($post, $hasImgFile);//Calling the user's modal method enter_client to add client to the system
+
                 if ( $clientId === -1){
                     
                     $this->data['addClientMessage'] = '
@@ -196,52 +237,56 @@ class User extends CI_Controller{
                 ';
                 
                 //Checking if an image was uploaded to insert it to the database. 
-                
-                    
-                    $newFileName = $post['fname'].'_'.$post['lname'].'_'.time();
-                    
-                    $config['upload_path'] = './upload/';
-                    $config['allowed_types'] = 'jpg|png';
-                    $config['file_name'] = $newFileName;
-                    // $config['max_size'] = 2000;
-                    // $config['max_width'] = 1500;
-                    // $config['max_height'] = 1500;
-            
-                    $this->load->library('upload', $config);
+                    if ($hasImgFile){
 
-                    if($this->upload->do_upload('clientImg')){
+
+                        $newFileName = $post['fname'].'_'.$post['lname'].'_'.time();
                         
-                        $uploadInfo = $this->upload->data();
-                        $filename = $uploadInfo['file_name'];
+                        $config['upload_path'] = './upload/';
+                        $config['allowed_types'] = 'jpg|png';
+                        $config['file_name'] = $newFileName;
+                        // $config['max_size'] = 2000;
+                        // $config['max_width'] = 1500;
+                        // $config['max_height'] = 1500;
+                
+                        $this->load->library('upload', $config);
 
-                        $result = $this->user_model->set_client_profile_pic($clientId, $filename);
-
-                        if ($result === FALSE){
+                        if($this->upload->do_upload('clientImg')){
                             
-                            $this->data['addClientMessage'] = '
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h5><strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong>
-                            Client was added but was unable to upload image!<h5>
-                            </div>
-                            ';
+                            $uploadInfo = $this->upload->data();
+                            $filename = $uploadInfo['file_name'];
 
+                            $result = $this->client_model->set_client_profile_pic($clientId, $filename);
+
+                            if ($result === FALSE){
+                                
+                                $this->data['addClientMessage'] = '
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h5><strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong>
+                                Client was added but was unable to upload image!<h5>
+                                </div>
+                                ';
+
+                            }
+
+                        }else{
+                                $this->data['addClientMessage'] = '
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h5><strong><i class="fa fa-2x fa-frown"></i> We\'re sorry!</strong>
+                                Client was added but was unable to upload image!<h5>
+                                </div>
+                                ';
+                        //    echo $this->upload->display_errors();
                         }
 
-                    }else{
-                            $this->data['addClientMessage'] = '
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h5><strong><i class="fa fa-2x fa-frown"></i> We\'re sorry!</strong>
-                            Client was added but was unable to upload image!<h5>
-                            </div>
-                            ';
-                    //    echo $this->upload->display_errors();
                     }
+                    
 
 
                 }else{
@@ -259,7 +304,6 @@ class User extends CI_Controller{
 
                 }
                 
-                $this->data['title'] = 'Add Client';
                 // calling views to structure the addClient form  
                 $this->load->view('templates/header', $this->data);
                 $this->load->view('templates/sidebar', $this->data);
@@ -270,7 +314,6 @@ class User extends CI_Controller{
             }else{
 
 
-                $this->data['title'] = 'Add Client';
                 // Display the form 
                 $this->load->view('templates/header', $this->data);
                 $this->load->view('templates/sidebar', $this->data);
@@ -318,7 +361,7 @@ class User extends CI_Controller{
     public function add_user(){
 
         
-        if($this->is_session_set()){
+        if($this->is_session_set() && in_array(3, $this->user_actions)){
             // session is set allow access to add clients
 
             $post = $this->input->post(NULL, TRUE);//returns all post items with XSS filter
@@ -430,7 +473,7 @@ class User extends CI_Controller{
     public function view_users(){
 
         
-        if($this->is_session_set()){
+        if($this->is_session_set() && in_array(4, $this->user_actions)){
             // session is set allow access to view users 
 
             $this->data['title'] = 'User List';
@@ -475,7 +518,7 @@ class User extends CI_Controller{
     // Functions displays information the system has on the user
     public function view_user_profile($userId = NULL){
         
-        if($this->is_session_set()){
+        if($this->is_session_set() && in_array(4, $this->user_actions) ){
             //Session is set user can view_user_profile
 
             if ($userId !== NULL){
@@ -518,14 +561,48 @@ class User extends CI_Controller{
 
 
     }
+    /**
+     * Will add user based on the id the hidden input value had
+     *
+     * @access    public
+     * @param     NONE
+     *
+     * @return    NONE 
+     */    
+    public function update_user_profile(){
+        if( $this->is_session_set() && in_array(4, $this->user_actions)){
+            
+            //going to update the user profile
+            if ($this->input->post('action') === 'saveUserInfo' && $this->input->post('userid') !== ' '){
+            
+                $postData = $this->input->post(NULL, TRUE);
+                $result = $this->user_model->update_user_info($postData);
+
+                if ($result === FALSE){
+                    echo 'Opps! some of modifications have not been saved!';
+                }else{
+                    echo 'Success! Profile is updated.';
+                }
+                
+
+            }
+
+        }else{
+            echo 'didnt work';
+        }
+
+    }
     // shows a more detailed description of what the system has on the user
     public function view_client_profile($clientId = NULL){
 
-        if( $this->is_session_set()){
+        if( $this->is_session_set() && in_array(2, $this->user_actions)){
             //Session is set user can view client profile 
             $this->data['title'] = 'Client Details';
             // getting client data to pass to view 
             $this->data['name'] = $this->session->userdata('name');
+
+            //requesting data from model
+            $this->data['clientData'] = $this->client_model->get_client_profile($clientId);
 
             // display the data on the view     
             $this->load->view('templates/header', $this->data);
@@ -561,10 +638,12 @@ class User extends CI_Controller{
 
             if ($result === FALSE){
 
-                return "Failed to make changes";
+                echo "Failed to make changes";
 
+            }else{
+
+                echo "Success! Changes were made.";
             }
-            return "Success! Changes were made.";
 
             
 
@@ -576,6 +655,7 @@ class User extends CI_Controller{
     public function change_profile_pic(){
         
         if ($this->is_session_set()){
+
 
             if(!empty($_FILES['profileImg']['name'])){
                 

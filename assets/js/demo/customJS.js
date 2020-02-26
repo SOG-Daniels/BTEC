@@ -43,7 +43,9 @@ $(document).ready(function() {
     //Make all inputs in the clientinfoform readonly
     // $("#clientInfoForm :input").attr("readOnly", true);
     $("#profileForm :input").attr("readOnly", true);
-    $("#userForm :input").attr("readOnly", true);
+    
+    //form for modifying a user profile
+    $("#userInfoForm :input").attr("readOnly", true);
     
     var readURL = function(input) {
         if (input.files && input.files[0]) {
@@ -139,7 +141,7 @@ $(document).ready(function() {
     $('#editUser').click(function(e){
         
         e.preventDefault();//if the button is to submit it will not do it //
-        $("#userForm :input").attr("readOnly", false);
+        $("#userInfoForm :input").attr("readOnly", false);
         $("#editUser").css("display", "none");
         $("#saveUserInfo").css("display", "block");
         $("input.action").attr("disabled", false);
@@ -148,12 +150,20 @@ $(document).ready(function() {
     $('#saveUserInfo').click(function(e){
 
         e.preventDefault();//if the button is to submit it will not do it //
-        
-        
-        $("#userForm :input").attr("readOnly", true);
-        $("#editUser").css("display", "block");
-        $("#saveUserInfo").css("display", "none");
-        $("input.action").attr("disabled", true);
+        var formData = $("#userInfoForm").serialize();
+        var base_url = $("#userInfoForm").attr('action');
+        $.post(base_url, formData, function(data){
+           
+            console.log(data);
+            alert(data);
+
+            $("#userInfoForm :input").attr("readOnly", true);
+            $("#editUser").css("display", "block");
+            $("#saveUserInfo").css("display", "none");
+            $("input.action").attr("disabled", true);
+
+
+        });
 
 
         
