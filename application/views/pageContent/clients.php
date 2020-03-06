@@ -1,5 +1,5 @@
 <?php 
-
+  echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : '');
   // echo json_encode($cList);
 ?>
 <h1 class="h3 mb-2 text-gray-800">Client List</h1>
@@ -22,10 +22,16 @@
         <h6 class="m-0 font-weight-bold text-primary">Clients</h6>
       </div>
       <div  class="col-12 col-md-2 pl-5 ">
-        <a class="btn btn-primary btn-sm" href="<?php echo base_url()?>register-applicant" >
-          <i class="fas fa-fw fa-user-plus"></i>
-          Add Client
-        </a>
+        <?php 
+          echo (in_array(1, $this->session->userdata('action'))?' 
+          <a class="btn btn-primary btn-sm" href="<?php echo base_url()?>register-applicant" >
+            <i class="fas fa-fw fa-user-plus"></i>
+            Add Client
+          </a>
+          
+          ' : '');
+
+        ?>
       </div>
     </div>
   </div>
@@ -38,7 +44,7 @@
               <th>#</th>
               <th>First Name</th>
               <th>Last Name</th>
-              <th>Completed Programs</th>
+              <th>DOB</th>
               <th>Email</th>
               <th>Phone #</th>
               <th>Profile</th>
@@ -50,7 +56,7 @@
               <th>#</th>
               <th>First Name</th>
               <th>Last Name</th>
-              <th>Completed Programs</th>
+              <th>DOB</th>
               <th>Email</th>
               <th>Phone #</th>
               <th>Profile</th>
@@ -63,7 +69,9 @@
 <script>
 
 var clist = { "data" : <?php echo json_encode($cList, JSON_HEX_TAG); ?> };
-console.log(clist.data);
+// console.log(clist.data);
+var hasView = <?php echo (in_array(2,$this->session->userdata('action')))? 1 : 0;?>;
+var hasEdit = <?php echo (in_array(7,$this->session->userdata('action')))? 1 : 0; ?>;
 var i;
 for (i = 0; i < clist.data.length; i++) {
 
@@ -82,14 +90,16 @@ for (i = 0; i < clist.data.length; i++) {
     proList += (clist.data[i].wait_staff === null)? '': ', '+clist.data[i].wait_staff;
 
     var merge = {
-    view : '<a href ="<?php echo base_url()?>'+'client-info/'+clist.data[i].id+'">View</a>',
-    programs: proList
-  };
-    clist.data[i].view = merge.view;
+    profile : ((hasView == 1)? '<a href ="<?php echo base_url()?>'+'client-info/'+clist.data[i].id+'">View</a>' : "")+
+     ((hasEdit == 1)?'&nbsp&nbsp'+'<a href ="<?php echo base_url()?>'+'edit-client-info/'+clist.data[i].id+'">Edit</a>': "")
+    ,
+    programs: proList,
+    };
+    clist.data[i].profile = merge.profile;  
     clist.data[i].programs  = merge.programs;
 
   
 }
- console.log(clist.data);
+//  console.log(clist.data);
 </script>
           

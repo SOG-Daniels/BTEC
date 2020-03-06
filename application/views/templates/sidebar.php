@@ -5,7 +5,7 @@ $actions = $this->session->userdata('action');
 $active = (isset($active))? $active : ' '; 
 
 ?>
-<ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion " id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo site_url('dashboard'); ?>">
@@ -24,17 +24,17 @@ $active = (isset($active))? $active : ' ';
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
       </li>
-      <!-- Divider -->
+     
+      <?php 
+        if (in_array(1, $actions)){
+          echo '
+         <!-- Divider -->
       <hr class="sidebar-divider">
 
       <!-- Heading -->
       <div class="sidebar-heading">
         Applicants
-      </div>
-      <?php 
-        if (in_array(1, $actions)){
-          echo '
-          <li class="nav-item '.(($active === 'addClient')? 'active' : ' ').'">
+      </div>  <li class="nav-item '.(($active === 'addClient')? 'active' : ' ').'">
           
             <a class="btn btn-link nav-link " href="'.site_url('register-applicant').'" >
               <i class="fas fa-fw fa-user-plus "></i>
@@ -45,31 +45,32 @@ $active = (isset($active))? $active : ' ';
         }
       ?>
       <?php 
-        if (in_array(1, $actions)){
+        if (in_array(5, $actions)){
           echo '
           <li class="nav-item '.(($active === 'applicants')? 'active' : ' ').'">
           
-            <a class="btn btn-link nav-link " href="'.site_url('applicant-list').'" >
+            <a class="btn btn-link nav-link " href="'.site_url('enrolled-list').'" >
               <i class="fas fa-fw fa-users "></i>
-              <span>Applicant List</span>
+              <span>Enrolled List</span>
             </a>
           </li>
           ';
         }
       ?>
 
-      <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        Clients
-      </div>
 
       <!-- Nav Item - Tables -->
       <?php 
+        
         if (in_array(2, $actions)){
           echo '
+          <!-- Divider -->
+          <hr class="sidebar-divider">
+
+          <!-- Heading -->
+          <div class="sidebar-heading">
+            Clients
+          </div>
               <li class="nav-item '.(($active === "clientList")? "active" : " ").'">
                 <a class="nav-link" href="'.site_url('client-list').'">
                   <i class="fas fa-fw fa-table "></i>
@@ -94,14 +95,19 @@ $active = (isset($active))? $active : ' ';
       </li> -->
 
       <!-- Divider -->
-      <hr class="sidebar-divider">
-
-      <!-- Heading -->
-      <div class="sidebar-heading">
-        System Users
-      </div>
-      <!-- Nav Item - Tables -->
        <?php 
+        if (in_array(3, $actions) || in_array(4, $actions)){
+          echo '
+          <hr class="sidebar-divider">
+            <!-- Heading -->
+            <div class="sidebar-heading">
+            System Users
+            </div>
+            <!-- Nav Item - Tables --> 
+          ';
+        }
+
+     
         if (in_array(3, $actions)){
           echo '
             <li class="nav-item">
@@ -123,14 +129,14 @@ $active = (isset($active))? $active : ' ';
               <i class="fas fa-fw fa-table "></i>
               <span>User List</span></a>
           </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
             
             ';
 
         }
         ?>
 
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
 
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">

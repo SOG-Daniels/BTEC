@@ -9,6 +9,8 @@ class User extends CI_Controller{
         protected $userId;
         protected $username;
         protected $user_actions;
+        protected $message;
+        protected $programTables;
 
     // protected $data = array();
     // protected $session = array();
@@ -30,6 +32,21 @@ class User extends CI_Controller{
         $this->data['name'] = $this->session->userdata('name');
         $this->user_actions = $this->session->userdata('action');
 
+        $this->programTables = array(
+            'Introduction-to-Barbering' => 'barbering',
+            'Bartending' => 'bartending',
+            'Business-Process-Outsourcing' => 'bpo',
+            'Child-Care-Training' => 'child_care',
+            'Computers-For-Everyday-Use' => 'computer_basics',
+            'Event-Planning' => 'event_planning',
+            'Front-Desk-Training' => 'front_desk',
+            'Home-Health-Training' => 'home_health',
+            'House-Keeping' => 'house_keeping',
+            'Landscaping' => 'landscaping',
+            'Life-Guard-Training' => 'life_guard',
+            'Nail-Tech' => 'nail_tech',
+            'Wait-Staff-Training' => 'wait_staff'
+        );
         
 
     }
@@ -108,17 +125,41 @@ class User extends CI_Controller{
      *
      * @return    NONE 
      */ 
-    public function view_applicants(){
+    public function view_enrolled_list(){
         
         if($this->is_session_set()){
-            $this->data['title'] = 'Applicants List';
+           
+            $this->data['title'] = 'Enrolled List';
             $this->data['active'] = 'applicants';
+
+            $this->data['selected'] = '1';
+          
+            if (!empty($this->input->post('program'))){
+                //echo "<pre>";
+                //echo jason_encode($this->input->post());
+                //echo "</pre>";
+                // // Passing the post values with xxs filterig to the get_enrolled_list model
+                $this->data['enrolledList'] = array($this->client_model->get_enrolled_list($this->input->post('program', TRUE)));
+                //$this->data['enrolledList']['selected'] = $this->input->post('program');
+
+                echo json_encode($this->data['enrolledList'],JSON_HEX_TAG);//providing the data to the ajax request;
+                // $data['selected'] = $this->input->post('program');
+                
+            }else{
+
+                $this->data['enrolledList'] = $this->client_model->get_enrolled_list();
+                
+                $this->load->view('templates/header', $this->data);
+                $this->load->view('templates/sidebar', $this->data);
+                $this->load->view('templates/topbar', $this->data);
+                $this->load->view('pageContent/enrollList', $this->data);
+                $this->load->view('templates/footer', $this->data);
+                
+            }
         
-            $this->load->view('templates/header', $this->data);
-            $this->load->view('templates/sidebar', $this->data);
-            $this->load->view('templates/topbar', $this->data);
-            $this->load->view('pageContent/applicants', $this->data);
-            $this->load->view('templates/footer', $this->data);
+                
+
+
         }else{
             // session not set call login page 
             redirect('login');
@@ -331,20 +372,167 @@ class User extends CI_Controller{
         
         
     }
+    public function set_client_pic($hasImgFile = 0, $post = NULL, $clientId = NULL){
+            if ($hasImgFile){
+                //print_r($post);
+
+                $newFileName = $post['fname'].'_'.$post['lname'].'_'.time();
+                
+                $config['upload_path'] = './upload/';
+                $config['allowed_types'] = 'jpg|png';
+                $config['file_name'] = $newFileName;
+                // $config['max_size'] = 2000;
+                // $config['max_width'] = 1500;
+                // $config['max_height'] = 1500;
+        
+                $this->load->library('upload', $config);
+
+                if($this->upload->do_upload('clientImg')){
+                    
+                    $uploadInfo = $this->upload->data();
+                    $filename = $uploadInfo['file_name'];
+
+                    $result = $this->client_model->update_client_profile_pic($clientId, $filename);
+
+                    if ($result === FALSE){
+                        
+                        $this->data['addClientMessage'] = '
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5><strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong>
+                        Client was added but was unable to upload image!<h5>
+                        </div>
+                        ';
+
+                    }
+
+                }else{
+                        $this->data['addClientMessage'] = '
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5><strong><i class="fa fa-2x fa-frown"></i> We\'re sorry!</strong>
+                        Client was added but was unable to upload image!<h5>
+                        </div>
+                        ';
+                //    echo $this->upload->display_errors();
+                }
+            }
+
+    }
     /**
      * Adds user to the system and emails them a password to login 
      * 
      * get_random_password() will return users back to the dashboard/home providing a success or failure message
      *
      * @access    public
-     * @param     NONE
+     * @param     clientId
      *
      * @return    NONE 
      */
-    public function update_user($userID){
+    public function update_client($clientId = NULL){
+        if ($this->is_session_set() && in_array( 1, $this->user_actions)){
+                // session is set and has privilege to update users
+            $this->data['title'] = 'Update Client';
+            
+            if ($this->input->post('action') === 'updateClient'){
+               
+                $post = $this->input->post(NULL, TRUE);
 
-        if ($this->is_session_set()){
+                $hasImgFile = (!empty($_FILES['clientImg']['name']))? 1 : 0;//checking if image was uploaded
+                $result = $this->client_model->update_client_info($clientId, $post, $hasImgFile);
+                $result2 = $this->client_model->update_client_program_list($clientId, $this->input->post('programList', TRUE)); 
+                $result3 = $this->set_client_pic($hasImgFile, $post, $clientId);
+                // echo "<pre>";
+                // print_r($this->input->post());
+                // echo "</pre>";
+                if ($result){
+                    $message = '
+                    
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5><strong><i class="fa fa-2x fa-smile"></i> Success!</strong> User was updated.<h5>
+                    </div>
+                    
+                    
+                    ';
+                }else{
 
+                    $message = '
+                    
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5><strong><i class="fa fa-2x fa-frown"></i> We\'re Sorry!</strong> Some of the changes were not saved.<h5>
+                    </div>
+                    
+                    
+                    ';
+                }
+                    $this->session->set_flashdata('message',$message);
+                    redirect('client-list') ;
+
+            }else{
+
+                $clientData = $this->client_model->get_personal_info($clientId);
+                $programList = $this->client_model->get_program_list($clientId);
+            
+
+                // form validation of input attributes 
+                $this->form_validation->set_rules('fname', 'First Name:', 'required|trim');
+                $this->form_validation->set_rules('lname', 'Last Name:', 'required|trim');
+                $this->form_validation->set_rules('mname', 'Middle Name:', 'trim');
+                // $this->form_validation->set_rules('mname', '', 'trim');
+                $this->form_validation->set_rules('country', 'Country:', 'required|trim');
+                $this->form_validation->set_rules('ctv', 'City/Town/Village:', 'required|trim');
+                $this->form_validation->set_rules('ssn', 'SSN:', 'required|trim');
+                $this->form_validation->set_rules('homePhone', 'Home Phone #:', 'trim');
+                $this->form_validation->set_rules('mobilePhone', 'Mobile Phone #:', 'required|trim');
+                $this->form_validation->set_rules('street', 'Street Address:', 'required|trim');
+                
+                $this->form_validation->set_rules('ecName', 'Emergency Contact Name:', 'required|trim');
+                $this->form_validation->set_rules('ecNumber', 'Emergency Contact Number:', 'required|trim');
+                $this->form_validation->set_rules('ecRelation', 'Emergency Contact Relation:', 'required|trim');
+                
+                $this->form_validation->set_rules('refName1', 'Name Ref#1:', 'required|trim');
+                $this->form_validation->set_rules('refAddress1', 'Address Ref#1:', 'required|trim');
+                $this->form_validation->set_rules('refCity1', 'City Ref#1:', 'required|trim');
+                $this->form_validation->set_rules('refPhone1', 'Phone Ref#1:', 'required|trim');
+
+                $this->form_validation->set_rules('refName2', 'Name Ref#2:', 'trim');
+                $this->form_validation->set_rules('refAddress2', 'Address Ref#2:', 'trim');
+                $this->form_validation->set_rules('refCity2', 'City Ref#2:', 'trim');
+                $this->form_validation->set_rules('refPhone2', 'Phone Ref#2:', 'trim');
+
+                $this->form_validation->set_rules('refName3', 'Name Ref#3:', 'trim');
+                $this->form_validation->set_rules('refAddress3', 'Address Ref#3:', 'trim');
+                $this->form_validation->set_rules('refCity3', 'City Ref#3:', 'trim');
+                $this->form_validation->set_rules('refPhone3', 'Phone Ref#3:', 'trim');
+
+                $this->form_validation->set_rules('preTestAvg', 'Address Ref#3:', 'trim');
+                $this->form_validation->set_rules('enrolled_on', 'Year Enrolled:', 'trim');
+
+                // Result was return lets go in the if 
+                if ($clientData !== FALSE && $programList !== FALSE){
+
+                    $this->data['clientData'] = $clientData;
+                    $this->data['programList'] = $programList;
+
+                }
+
+                $this->load->view('templates/header', $this->data);
+                $this->load->view('templates/sidebar', $this->data);
+                $this->load->view('templates/topbar', $this->data);
+                $this->load->view('pageContent/updateClient', $this->data);
+                $this->load->view('templates/footer', $this->data);
+
+            }
 
         }else{
             redirect('login');
@@ -374,7 +562,7 @@ class User extends CI_Controller{
                 $result = $this->user_model->enter_user($post);
 
                 if($result === 0){
-                    $this->data['addUserMessage'] = '
+                    $this->message = '
                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -383,7 +571,7 @@ class User extends CI_Controller{
                     </div>
                     ';
                     
-                }elseif ($result === TRUE){
+                }elseif ($result == TRUE){
 
                     $oneTimePass = $this->generate_random_pass();
                     $sub = 'Welcome '.$post['fname'].' '.$post['lname'].' to the BTEC Family!';
@@ -397,6 +585,16 @@ class User extends CI_Controller{
                     
                     ';
                     $emailTo = $post['email'];
+                    $config['email'] = Array( 
+                        'protocol'  => 'smtp', 
+                        'smtp_host' => 'smtp.mailtrap.io', 
+                        'smtp_port' =>  2525, 
+                        'smtp_user' => '0077e845401d5e', 
+                        'smtp_pass' => '736b4e111764b4', 
+                        'crlf'      => "\r\n", 
+                        'newline'   => "\r\n"
+                        );
+                    $this->email->initialize($config);
 
                     $this->email->from('danielsoncorrea@gmail.com', 'Daniels');
                     $this->email->to($emailTo);
@@ -405,7 +603,7 @@ class User extends CI_Controller{
 
                     if ($this->email->send()){
                         
-                        $this->data['addUserMessage'] = '
+                        $this->message = '
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -416,24 +614,22 @@ class User extends CI_Controller{
 
 
                     }else{
-
-                        $this->data['addUserMessage'] = '   
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        $mess ='';
+                        
+                        if ($this->user_model->set_user_default_pass($result) === TRUE){
+                            $mess = 'User defualt password is: <strong>Passw0rd</strong>';
+                        }
+                        $this->message = '   
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h5>
-                        <strong><i class="fa fa-2x fa-frown"></i> Whoops!</strong> The user was added to the system but not notified via Email! 
+                        <strong><i class="fa fa-2x fa-exclamation-triangle"></i> Whoops!</strong> The user was added to the system but not notified via Email!'.$mess.'
                         <h5>
                         </div>
                         ';
-
-
-
                     }            
-
-                    
-
 
                 }else{
 
@@ -442,7 +638,7 @@ class User extends CI_Controller{
                     // <span> Try again?</span>
                     // </a>
 
-                    $this->data['addUserMessage'] = '
+                    $this->message = '
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -453,13 +649,14 @@ class User extends CI_Controller{
                     </div>
                     ';
                 }
-                
+                $this->session->set_flashdata('addUserMessage', $this->message);
                 // returning back to home  page
-                $this->load->view('templates/header', $this->data);
-                $this->load->view('templates/sidebar', $this->data);
-                $this->load->view('templates/topbar', $this->data);
-                $this->load->view('pageContent/home', $this->data);
-                $this->load->view('templates/footer', $this->data);
+                redirect('dashboard');
+                // $this->load->view('templates/header', $this->data);
+                // $this->load->view('templates/sidebar', $this->data);
+                // $this->load->view('templates/topbar', $this->data);
+                // $this->load->view('pageContent/home', $this->data);
+                // $this->load->view('templates/footer', $this->data);
             }
 
             
@@ -522,12 +719,12 @@ class User extends CI_Controller{
             //Session is set user can view_user_profile
 
             if ($userId !== NULL){
-
+                
                 // getting user data from user_model 
                 $result = $this->user_model->get_user_info($userId);
                 
                 if($result === FALSE){
-
+                    
                     echo 'Unable to retrieve user data';
 
                 }else{
@@ -720,6 +917,40 @@ class User extends CI_Controller{
         }
 
     }
+    /**
+     * Will allow user to view clients grade and modify them
+     *
+     * @access    public
+     * @param     NONE
+     *
+     * @return    String An alpha numeric string 
+     */    
+    public function view_client_grade($program = NULL, $clientId = NULL){
+
+        if ($this->is_session_set() && in_array(2, $this->user_actions)){
+
+            $this->data['title'] = "Grades";
+
+            $result = $this->client_model->get_client_program_info($clientId, $this->programTables[$program]);
+
+            if ($result === FALSE){
+                $result = 0;
+            }
+            $this->data['programInfo'] = $result;
+
+            $this->load->view('templates/header', $this->data);
+            $this->load->view('templates/sidebar', $this->data);
+            $this->load->view('templates/topbar', $this->data);
+            $this->load->view('pageContent/grades', $this->data);
+            $this->load->view('templates/footer', $this->data);
+
+
+        }else{
+            redirect('login');
+        }
+        
+
+    }
   
     /**
      * Will generate a random password that is 7 char long containing numbers and letters
@@ -810,6 +1041,53 @@ class User extends CI_Controller{
         }
 
     }
+    /**
+     * Will remove user from system and reload the userlist
+     *
+     * @access    public
+     * @param     userId the ide of the user selected 
+     *
+     * @return    NONE
+     */    
+    public function remove_user($userId = NULL){
+        
+        if ($this->is_session_set()){
+
+            $result = $this->user_model->set_user_status($userId);
+
+            if (!$result){
+                $this->data['message'] = '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5>
+                    <strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong> Unable to remove users. 
+                    <h5>
+                    </div>
+                ';
+            }else{
+                $this->data['message'] = '
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5>
+                    <strong><i class="fa fa-2x fa-smile"></i> Success!</strong> The users has been removed from the system. 
+                    <h5>
+                    </div>
+                ';
+
+            }
+           
+            $this->session->set_flashdata('message', $this->data['message']);
+            redirect('user-list');
+
+
+        }else{
+            redirect('login');
+        }
+    }   
 
 
 }

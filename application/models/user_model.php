@@ -205,8 +205,10 @@ class User_model extends CI_Model{
     public function get_user_list(){
 
         $this->db->trans_start();
-        $this->db->select('id, fname, lname, email, phone, username');
+        $this->db->select('*');
+        $this->db->where('status', '1' );
         $query = $this->db->get('users');
+
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE){
@@ -216,6 +218,22 @@ class User_model extends CI_Model{
         }else{
 
             return $query->result();
+            
+        }
+
+    }
+    public function set_user_default_pass($userId = NULL){
+        
+        if ($userId !== NULL){
+            $defaultPass = 'Passw0rd';
+            $this->db->trans_start();
+            $this->db->update('users',array('password'=>md5($defaultPass)),array('id'=>$userId));
+            $query = $this->db->get('users');
+            $this->db->trans_complete();
+            if ($this->db->trans_status === FALSE){
+                return FALSE ;
+            }
+            return true;
             
         }
 
@@ -248,8 +266,9 @@ class User_model extends CI_Model{
                     'lname'  => $lname,
                     'username'  => $uname,
                     'email'  => $email,
-                    'phone'  => $phone
-                
+                    'phone'  => $phone,
+                    'profile_img_id' => 1,
+                    'created_by' => $this->session->userdata('name')
                     
                 );  
 
@@ -272,12 +291,12 @@ class User_model extends CI_Model{
 
                 }else{
 
-                    return TRUE;
+                    return $actionData['user_id'];
                 }
 
                 
             }else{
-                return 0;//returning 0 to identify that user is int he system
+                return 0;//returning 0 to identify that user is in the system
             }
            
 
@@ -343,6 +362,30 @@ class User_model extends CI_Model{
             }
 
 
+    }
+    /**
+     * sets the status of a users, which indicates if the user can access the system or not.
+     *
+     * @access    public
+     * @param     userId the id of the user selected
+     * @param     status you can specify the status of the user 1 = can use the system and 0 = not being able to use the system
+     *
+     * @return    Boolean true/false if transaction was successful
+     */    
+    public function set_user_status($userId = NULL, $status = 0){
+    
+        $this->db->trans_start(); 
+
+        $this->db->update('users',array('status'=>$status), 'id= '.$userId.'');
+        
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }else{
+            return TRUE;
+        }
+    
     }
 
 

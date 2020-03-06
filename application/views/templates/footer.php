@@ -12,7 +12,7 @@
   if (!$isLogin){
 
     echo '
-      <footer class="sticky-footer bg-white">
+      <footer class="bg-white">
               <div class="container my-auto">
                 <div class="copyright text-center my-auto">
                   <span>Copyright &copy; ci_miniproject 2020</span>
@@ -74,19 +74,23 @@
 
               <div class="form-group">
                 <label for="phone">Phone Number:</label>
-                <input type="tel" class="form-control" name="phone" id="phone" placeholder="668-74..." required>
+                <input type="number" class="form-control" name="phone" id="phone" placeholder="668-74..." required>
               </div>
-              <div class="form-group" >
-                                <label class="" for="last_name">Priviledge:</label>
+                <label class="" for="last_name">Priviledge:</label>
+              <div class="form-group offset-md-1">
+                <input class="form-check-input" type="checkbox" id="selectAll">
+                <label>Select All</label>
+              </div>
+              <div class="form-group" id="privileges">
                                 <div class="row offset-md-1">
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" type="checkbox" value="2" name="privileges[]" id="" checked >
+                                        <input class="form-check-input" id="privi2" type="checkbox" value="2" name="privileges[]" id="" checked >
                                         <label class="form-check-label" for="viewClients">
                                             View Clients
                                         </label>
                                     </div>
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" type="checkbox" value="4" name="privileges[]" id="">
+                                        <input class="form-check-input" id="privi4" type="checkbox" value="4" name="privileges[]" >
                                         <label class="form-check-label" for="viewUsers">
                                             View Users
                                         </label>
@@ -95,15 +99,43 @@
                                 
                                 <div class="row offset-md-1">
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" type="checkbox" value="1" name="privileges[]" id="" checked>
+                                        <input class="form-check-input" id="privi1" type="checkbox" value="1" name="privileges[]" checked>
                                         <label class="form-check-label" for="addClient">
                                             Add Client
                                         </label>
                                     </div>
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" type="checkbox" value="3" name="privileges[]" id="">
+                                        <input class="form-check-input" id="privi3" type="checkbox" value="3" name="privileges[]" >
                                         <label class="form-check-label" for="addClient">
                                             Add User
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row offset-md-1">
+                                    <div class="col col-md-5 form-check">
+                                        <input class="form-check-input action" type="checkbox" value="7" name="privilege[]" id="privi7">
+                                        <label class="form-check-label" for="editClient">
+                                            Edit Client
+                                        </label>
+                                    </div>
+                                    <div class="col col-md-5 form-check">
+                                        <input class="form-check-input action" type="checkbox" value="8" name="privilege[]" id="privi8" >
+                                        <label class="form-check-label" for="editUser">
+                                            Edit User
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row offset-md-1">
+                                    <div class="col col-md-5 form-check">
+                                        <input class="form-check-input" id="privi5" type="checkbox" value="5" name="privileges[]" checked>
+                                        <label class="form-check-label" for="enrolledList">
+                                            View Enrolled List
+                                        </label>
+                                    </div>
+                                    <div class="col col-md-5 form-check">
+                                        <input class="form-check-input" id="privi6" type="checkbox" value="6" name="privileges[]" >
+                                        <label class="form-check-label" for="editGrade">
+                                            Edit Grades
                                         </label>
                                     </div>
                                 </div>
@@ -194,13 +226,35 @@
       </div>
     </div>
   </div>
+<!-- User Delete  Modal-->
+ <div class="modal fade" id="modalUserDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        
+          <h5 class="modal-title text-dark" id="exampleModalLabel">Are you sure you want to remove this User?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "DELETE" below to confirm removal of User.</div>
+        
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a id="confirmUserDelete" href="#" class="btn btn-link btn-danger text-white" >DELETE</a>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+
 
 <!-- !END OF MODALS -->
 
 
   <!-- Bootstrap core JavaScript-->
-  <script src="<?php echo base_url()?>assets/vendor/jquery/jquery.min.js"></script>
-  <script src="<?php echo base_url()?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- <script src="<php echo base_url()?>assets/vendor/jquery/jquery.min.js"></script> -->
+  <!-- <script src="<php echo base_url()?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script> -->
 
   <!-- Core plugin JavaScript-->
   <script src="<?php echo base_url()?>assets/vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -220,9 +274,9 @@
   <script src="<?php echo base_url()?>assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
   <!-- Data Tables custom scripts -->
-  <script src="<?php echo base_url()?>assets/js/demo/datatables-demo.js"></script>
-  <!-- my custom jquery -->
-  <script src="<?php echo base_url()?>assets/js/demo/customJS.js"></script>
+  <!-- <script src="<php echo base_url()?>assets/js/demo/datatables-demo.js"></script>
+  <!- <!- my custom jquery -->
+  <!-- <script src="<php echo base_url()?>assets/js/demo/customJS.js"></script> -->
 
 </body>
 </html>

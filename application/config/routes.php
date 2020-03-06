@@ -55,9 +55,8 @@ $route['translate_uri_dashes'] = FALSE;
 
 //routes for user controller 
 $route['profile'] = 'user/profile';
-// $route['profile/(:num)'] = 'user/profile';
 $route['dashboard'] = 'user/get_dashboard';
-$route['applicant-list'] = 'user/view_applicants';
+$route['enrolled-list'] = 'user/view_enrolled_list';
 $route['client-list'] = 'user/view_clients';
 $route['register-applicant'] = 'user/add_client';
 $route['add-user'] = 'user/add_user';
@@ -68,6 +67,10 @@ $route['user-info/(:num)'] = 'user/view_user_profile/$1';
 $route['change-my-password'] = 'user/change_pass';
 $route['update-profile-picture'] = 'user/change_profile_pic';
 $route['update-user-profile'] = 'user/update_user_profile';
+$route['edit-client-info/(:num)'] = 'user/update_client/$1';
+$route['update-client-info/(:num)'] = 'user/update_client/$1';
+$route['view-client-grade/(:any)/(:num)'] = 'user/view_client_grade/$1/$2';
+$route['remove-user/(:num)'] = 'user/remove_user/$1';
 
 
 //verification routes

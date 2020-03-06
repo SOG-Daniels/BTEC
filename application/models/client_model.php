@@ -18,31 +18,37 @@ class Client_model extends CI_Model{
      */
     public function get_personal_info($clientId = NULL) {
 
-        $this->db->trans_start();
-        
-        $sql = $this->db->query('
-            SELECT *
-            FROM applicants a
-            where '.(($clientId !== NULL)? 'a.id='.$clientId.'' : '' ).' 
-            ');
-        $result = $sql->result_array();
-        if (isset($result[0]['profile_img_id'])){
+        if ($clientId !== NULL){
 
-            $sql2 = $this->db->query('
-                SELECT p.path
-                FROM profile_img p
-                where p.id = '.$result[0]['profile_img_id'].' and p.status = 1
+            $this->db->trans_start();
+            
+            $sql = $this->db->query('
+                SELECT *
+                FROM applicants a
+                where '.(($clientId !== NULL)? 'a.id='.$clientId.'' : '' ).' 
                 ');
-            $result[0]['imgPath'] = $sql2->row()->path;
+            $result = $sql->result_array();
+            if (isset($result[0]['profile_img_id'])){
 
-        }
-        $this->db->trans_complete();
+                $sql2 = $this->db->query('
+                    SELECT p.path
+                    FROM profile_img p
+                    where p.id = '.$result[0]['profile_img_id'].' and p.status = 1
+                    ');
+                $result[0]['imgPath'] = $sql2->row()->path;
 
-        if ($this->db->trans_status() === FALSE){
+            }
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE){
+                return FALSE;
+            }
+            
+            return $result;
+
+        }else{
             return FALSE;
         }
-        
-        return $result;
     }
     /**
      * 
@@ -65,74 +71,74 @@ class Client_model extends CI_Model{
             $this->db->trans_start();
 
             $sql1 = $this->db->query("
-            SELECT * FROM barbering WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM barbering WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['barbering'] = (($sql1->num_rows() > 0 )? $sql1->result_array() : '' );
            
             $sql2 = $this->db->query("
-            SELECT * FROM bartending WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM bartending WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['bartending'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
             
             $sql3 = $this->db->query("
-            SELECT * FROM bpo  WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM bpo  WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['bpo'] = (($sql3->num_rows() > 0 )? $sql3->result_array() : '' );
             
             $sql4 = $this->db->query("
-            SELECT * FROM child_care WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM child_care WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['child_care'] = (($sql4->num_rows() > 0 )? $sql4->result_array() : '' );
             
             $sql5 = $this->db->query("
-            SELECT * FROM computer_basics WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM computer_basics WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['computer_basics'] = (($sql5->num_rows() > 0 )? $sql5->result_array() : '' );
             
             $sql6 = $this->db->query("
-            SELECT * FROM event_planning WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM event_planning WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['event_planning'] = (($sql6->num_rows() > 0 )? $sql6->result_array() : '' );
             
             $sql7 = $this->db->query("
-            SELECT * FROM front_desk WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM front_desk WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['font_desk'] = (($sql7->num_rows() > 0 )? $sql7->result_array() : '' );
            
             $sql8 = $this->db->query("
-            SELECT * FROM home_health WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM home_health WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['home_health'] = (($sql8->num_rows() > 0 )? $sql8->result_array() : '' );
 
             $sql9 = $this->db->query("
-            SELECT * FROM house_keeping WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM house_keeping WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['house_keeping'] = (($sql9->num_rows() > 0 )? $sql9->result_array() : '' );
 
             $sql10 = $this->db->query("
-            SELECT * FROM landscaping WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM landscaping WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['landscaping'] = (($sql10->num_rows() > 0 )? $sql10->result_array() : '' );
 
             $sql11 = $this->db->query("
-            SELECT * FROM life_guard WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM life_guard WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['life_guard'] = (($sql11->num_rows() > 0 )? $sql11->result_array() : '' );
 
             $sql12 = $this->db->query("
-            SELECT * FROM nail_tech WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM nail_tech WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['nail_tech'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
 
             $sql13 = $this->db->query("
-            SELECT * FROM wait_staff WHERE client_id = ".$clientId." and status = 'Completed'
+            SELECT * FROM wait_staff WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
             $data['programs']['wait_staff'] = (($sql13->num_rows() > 0 )? $sql13->result_array() : '' );
 
             $this->db->trans_complete();
 
             if ($this->db->trans_status() === FALSE){
-                return 'error: Coul not get client programs';
+                return 'error: Could not get client programs';
                 
             }
 
@@ -144,7 +150,8 @@ class Client_model extends CI_Model{
             return FALSE;
         }
 
-    }   
+    }
+
 
     /**
      * 
@@ -159,29 +166,53 @@ class Client_model extends CI_Model{
         $this->db->trans_start();
 
         $query = $this->db->query("
-        select a.id, a.first_name, a.last_name, a.email, a.mobile_phone, a.ec_name, a.ec_number, a.ec_relation,
-        bpo.programme as bpo, bar.programme as bartending, ba.programme as barbering, cc.programme as child_care,
-        cb.programme as computer_basics, ep.programme as event_planning, fd.programme as front_desk, hh.programme as home_health,
-        hk.programme as house_keeping, l.programme as landscaping, lg.programme as life_guard, nt.programme as nail_tech, ws.programme as wait_staff, st.organization as specialized_trainings
+       
+        select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+		a.ec_name, a.ec_number, a.ec_relation, a.ssn, a.dob, 
+        bpo.programme as bpo, bpo.status as bpo_status, bpo.enrolled_in as bpo_enrolled, bpo.comments as bpo_comment,
+        bar.programme as bartending, bar.status as bar_status, bar.enrolled_in as bar_enrolled, bar.comments as bar_comment,
+        ba.programme as barbering, ba.status as ba_status, ba.enrolled_in as ba_enrolled, ba.comments as bar_comment ,
+        cc.programme as child_care, cc.status as cc_status, cc.enrolled_in as cc_enrolled, cc.comments as cc_comment,
+        cb.programme as computer_basics, cb.status as cb_status, cb.enrolled_in as cb_enrolled, cb.comments as cb_comment,
+        ep.programme as event_planning, ep.status as ep_status, ep.enrolled_in as ep_enrolled, ep.comments as ep_comment,
+        fd.programme as front_desk, fd.status as fd_status, fd.enrolled_in as fd_enrolled, fd.comments as fd_comment,
+        hh.programme as home_health, hh.status as hh_status, hh.enrolled_in as hh_enrolled, hh.comments as hh_comment,
+        hk.programme as house_keeping, hk.status as hk_status, hk.enrolled_in as hk_enrolled, hk.comments as hk_comment,
+        l.programme as landscaping,  l.status as l_status, l.enrolled_in as l_enrolled, l.comments as l_comment,
+        lg.programme as life_guard, lg.status as lg_status, lg.enrolled_in as lg_enrolled, lg.comments as lg_comment,
+        nt.programme as nail_tech, nt.status as nt_status, nt.enrolled_in as nt_enrolled, nt.comments as nt_comment ,
+        ws.programme as wait_staff, ws.status as ws_status, ws.enrolled_in as ws_enrolled, ws.comments as ws_comment,
+        st.organization as specialized_trainings, st.date_offered as st_date_offered
         from applicants a 
-        left join bpo on bpo.client_id = a.id and bpo.status='completed'
-        left join bartending bar on bar.client_id = a.id and bar.status='completed'
-        left join barbering ba on ba.client_id = a.id and ba.status='completed'
-        left join child_care cc on cc.client_id = a.id and cc.status='completed'
-        left join computer_basics cb on cb.client_id = a.id and cb.status='completed'
-        left join event_planning ep on ep.client_id = a.id and ep.status='completed'
-        left join front_desk fd on fd.client_id = a.id and fd.status='completed'
-        left join home_health hh on hh.client_id = a.id and hh.status='completed'
-        left join house_keeping hk on hk.client_id = a.id and hk.status='completed'
-        left join landscaping l on l.client_id = a.id and l.status='completed'
-        left join life_guard lg on lg.client_id = a.id and lg.status='completed'
-        left join nail_tech nt on nt.client_id = a.id and nt.status='completed'
-        left join wait_staff ws on ws.client_id = a.id and ws.status='completed'
+        left join bpo on bpo.client_id = a.id 
+        left join bartending bar on bar.client_id = a.id 
+        left join barbering ba on ba.client_id = a.id
+        left join child_care cc on cc.client_id = a.id
+        left join computer_basics cb on cb.client_id = a.id
+        left join event_planning ep on ep.client_id = a.id
+        left join front_desk fd on fd.client_id = a.id
+        left join home_health hh on hh.client_id = a.id
+        left join house_keeping hk on hk.client_id = a.id
+        left join landscaping l on l.client_id = a.id
+        left join life_guard lg on lg.client_id = a.id
+        left join nail_tech nt on nt.client_id = a.id
+        left join wait_staff ws on ws.client_id = a.id
         left join specialized_trainings st on a.id = st.client_id
-        where bar.status='completed' or bpo.status='completed' or ba.status='completed' or cc.status='completed'
-        or cb.status = 'completed' or ep.status='completed' or fd.status='completed' or hh.status='completed'
-        or hk.status='completed' or l.status='completed' or lg.status ='completed' or nt.status='completed'
-        or ws.status='completed'
+        where 
+		bar.status='completed' or bar.status = 'participated'
+        or bpo.status='completed' or bpo.status = 'participated'
+        or ba.status='completed' or ba.status = 'participated'
+        or cc.status='completed' or cc.status = 'participated'
+        or cb.status = 'completed' or cb.status = 'participated'
+        or ep.status='completed' or ep.status = 'participated'
+        or fd.status='completed' or fd.status = 'participated'
+        or hh.status='completed' or hh.status = 'participated'
+        or hk.status='completed' or hk.status = 'participated'
+        or l.status='completed' or l.status = 'participated'
+        or lg.status ='completed' or lg.status = 'participated'
+        or nt.status='completed' or nt.status = 'participated'
+        or ws.status='completed' or ws.status = 'participated'
+
         ");
         $this->db->trans_complete();
 
@@ -191,6 +222,136 @@ class Client_model extends CI_Model{
         
         return $query->result_array();
     }
+    /**
+     * 
+     * Function will query all the clients in the database that have completed atleast one program
+     *
+     * @access    public
+     * @param     clientId the id of the client we are updating
+     * @param     post containes all values passed by the post
+     *
+     * @return    Bool if the query fails then it returns false else it will return true
+     */   
+    public function update_client_program_list($clientId = NULL, $programs = NULL){
+        
+        if (!empty($clientId) && !empty($programs)){
+
+            // echo "<pre>";
+            // print_r($programs);
+            // echo "</pre>";
+            $this->db->trans_start();
+
+            foreach ($programs as $program => $data){
+                
+                $status = (isset($data['pre_test_avg']) && ($data['pre_test_avg'] >= 70)? 'Enrolled' : 'Rejected');
+                
+                // if ($program === 'newProgram' && $data['programme'] !== 'none'){
+                //     $query = $this->db->query("
+                //         INSERT INTO ".$data['programme']." (client_id, pre_test_avg, enrolled_in, comments, status) VALUES('".$clientId."', '".$data['pre_test_avg']."', '".$data['enrolled']."', '".$data['comment']."', '".$status."')
+                //     ");
+                    
+                // }else{
+                //     if ($data['programme'] !== 'none')
+                //     $query = $this->db->query("
+                //     UPDATE ".$data['programme']." SET pre_test_avg = '".$data['pre_test_avg']."', enrolled_in = '".$data['enrolled']."', comments = '".$data['comment']."' WHERE client_id = ".$clientId." 
+                            
+                //     ");
+
+                // }
+                
+              
+                
+            }
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE){
+                return FALSE;
+            }else{
+                return TRUE;
+            }
+        }
+        
+        
+        
+    }
+    /**
+     * 
+     * Function will query all the clients in the database that have completed atleast one program
+     *
+     * @access    public
+     * @param     clientId the id of the client we are updating
+     * @param     post containes all values passed by the post
+     *
+     * @return    Bool if the query fails then it returns false else it will return true
+     */   
+    public function update_client_info($clientId = NULL, $data = NULL, $hasImgFile = 1){
+
+        if (isset($data) && isset($clientId)){
+        
+            $profileImgId = ($hasImgFile === 1)? NULL : 1;// One means that we will load the default profile pic that is in the database.
+
+            
+            $homePhone = ($data['homePhone'] !== '')? $data['homePhone'] : NULL;
+
+            // loading array with all the data from post
+            $input = array(
+                
+                'first_name'  => $data['fname'],
+                'last_name'  => $data['lname'],
+                'middle_name'  => $data['mname'],
+                'ssn'  => $data['ssn'],
+                'street'  => $data['street'],
+                'ctv'  => $data['ctv'],
+                'district'  => $data['district'],
+                'country'  => $data['country'],
+                'email'  => $data['email'],
+                'home_phone'  => $homePhone,
+                'mobile_phone'  => $data['mobilePhone'],
+                'ec_name'  => $data['ecName'],
+                'ec_number'  => $data['ecNumber'],
+                'ec_relation'  => $data['ecRelation'],
+                'gender'  => $data['gender'],
+                'dob'  => $data['dob'],
+                'marital_status'  => $data['maritalStatus'],
+                'ref_name1'  => $data['refName1'],
+                'ref_address1'  => $data['refAddress1'],
+                'ref_city1'  => $data['refCity1'],
+                'ref_phone1'  => $data['refPhone1'],
+                'ref_name2'  => $data['refName2'],
+                'ref_address2'  => $data['refAddress2'],
+                'ref_city2'  => $data['refCity2'],
+                'ref_phone2'  => $data['refPhone2'],
+                'ref_name3'  => $data['refName3'],
+                'ref_address3'  => $data['refAddress3'],
+                'ref_city3'  => $data['refCity3'],
+                'ref_phone3'  => $data['refPhone3'],
+                'profile_img_id' => $profileImgId
+                                
+            );
+
+            $this->db->trans_start();//starting transaction
+            $this->db->update('applicants', $input, array('id'=>$clientId));
+
+            $this->db->trans_complete();//ending transaction
+
+            if($this->db->trans_status() === FALSE){//checking to see if an error occured during transaction
+
+                return FALSE;
+
+            }else{
+
+                return $clientId;
+
+            }
+        
+        }else{
+
+            return FALSE;
+
+        }
+
+
+    } 
     /**
      * 
      * Function will query all the clients in the database that have completed atleast one program
@@ -209,17 +370,6 @@ class Client_model extends CI_Model{
                 $status = ($data['preTestAvg'] >= 70 )? 'Enrolled' : 'Rejected';
                 $profileImgId = ($hasImgFile === 1)? NULL : 1;// One means that we will load the default profile pic that is in the database.
 
-                // $data['comment'] = ($data['comment'] !== '')? $data['comment'] : NULL;
-
-                // $data['refName2'] = ($data['refName2'] !== '')? $data['refName2'] : NULL;
-                // $data['refAddress2'] = ($data['refAddress2'] !== '')? $data['refAddress2'] : NULL;
-                // $data['refCity2'] = ($data['refCity2'] !== '')? $data['refCity2'] : NULL;
-                // $data['refPhone2'] = ($data['refPhone2'] !== '')? $data['refPhone2'] : NULL;
-
-                // $data['refName3'] = ($data['refName3'] !== '')? $data['refName3'] : NULL;
-                // $data['refAddress3'] = ($data['refAddress3'] !== '')? $data['refAddress3'] : NULL;
-                // $data['refCity3'] = ($data['refCity3'] !== '')? $data['refCity3'] : NULL;
-                // $data['refPhone3'] = ($data['refPhone3'] !== '')? $data['refPhone3'] : NULL;
                 
                 $homePhone = ($data['homePhone'] !== '')? $data['homePhone'] : NULL;
 
@@ -301,6 +451,42 @@ class Client_model extends CI_Model{
 
 
     }
+    public function update_client_profile_pic($clientid = NULL, $filename = NULL){
+
+        
+        if ($filename !== NULL){
+            //Checking to see if user has an existing profile image other than the default
+            $this->db->trans_start(); 
+            $query = $this->db->query('SELECT a.profile_img_id as imgId FROM applicants a WHERE id = '.$clientid.'');
+            $row = $query->result_array();
+            
+            $input = array(
+                'path' => 'upload/'.$filename ,
+                'status' => 1
+            );
+
+            $this->db->insert('profile_img', $input);
+            $pId = $this->db->insert_id();//getting last inserted ID i.e. id of profile_image 
+            
+            print_r($row);
+           
+            if ($row[0]['imgId'] !== 1){
+
+                $this->db->update('profile_img',array('status' => 0), 'id= '.$row[0]['imgId'].'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
+            }
+                $this->db->update('applicants',array('profile_img_id'=>$pId), 'id= '.$clientid.'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
+
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE){
+                return FALSE;
+            }else{
+                return TRUE;
+            }
+        }
+        return FALSE;
+
+    }
     /**
      * Sets the profile pic of a client in the database
      *
@@ -352,6 +538,345 @@ class Client_model extends CI_Model{
         }
 
 
+    }
+    public function get_enrolled_list ($program = NULL, $year = NULL){
+
+        $year = ((!empty($year))? $year : date('Y'));
+        $program = (!empty($program)? $program : '1');
+        $data = array();
+        $this->db->trans_start();
+
+        if ($program !== '1'){
+            $sql = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join '.$program.' pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+
+                ');
+            array_push($data, $sql->result_array());
+        }else{
+            
+            $bar = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join barbering pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($bar->num_rows() > 0) 
+                array_push($data, $bar->result_array());
+
+            $bart = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join bartending pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($bart->num_rows() > 0) 
+                array_push($data, $bart->result_array());
+            $bpo = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join bpo pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($bar->num_rows() > 0) 
+                array_push($data, $bpo->result_array());
+
+            $cc = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join child_care pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($cc->num_rows() > 0) 
+                array_push($data, $cc->result_array());
+
+            $cb = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join computer_basics pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($cb->num_rows() > 0) 
+                array_push($data, $cb->result_array());
+
+            $ep = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join event_planning pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($ep->num_rows() > 0) 
+                array_push($data, $ep->result_array());
+
+            $fd = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join front_desk pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($fd->num_rows() > 0) 
+                array_push($data, $fd->result_array());
+
+            $hh = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join home_health pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($hh->num_rows() > 0) 
+                array_push($data, $hh->result_array());
+
+            $hk = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join house_keeping pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($hk->num_rows() > 0) 
+                array_push($data, $hk->result_array());
+
+            $l = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join landscaping pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($l->num_rows() > 0) 
+                array_push($data, $l->result_array());
+            
+            $lg = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join life_guard pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($lg->num_rows() > 0) 
+                array_push($data, $lg->result_array());
+            
+            $nt = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join nail_tech pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($nt->num_rows() > 0) 
+            array_push($data, $nt->result_array());
+
+            $ws = $this->db->query('
+                select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
+                a.middle_name, a.dob, pro.programme, pro.status, pro.enrolled_in
+                from applicants a 
+                join wait_staff pro on pro.client_id = a.id
+                where 
+                pro.status="Enrolled" and pro.enrolled_in = '.$year.'
+            ');
+            if($ws->num_rows() > 0) 
+                array_push($data, $ws->result_array());
+
+        }
+
+
+        $this->db->trans_complete();
+        
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+
+        return $data;
+        
+    
+    }
+    public function get_program_list ($clientId = NULL){
+
+        if ($clientId !== NULL){
+            $this->db->trans_start();
+
+            $sql1 = $this->db->query("
+            SELECT * FROM barbering WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            ");
+            $data['barbering'] = (($sql1->num_rows() > 0 )? $sql1->result_array() : '' );
+           
+            $sql2 = $this->db->query("
+            SELECT * FROM bartending WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            ");
+            $data['bartending'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
+            
+            $sql3 = $this->db->query("
+            SELECT * FROM bpo  WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            ");
+            $data['bpo'] = (($sql3->num_rows() > 0 )? $sql3->result_array() : '' );
+            
+            $sql4 = $this->db->query("
+            SELECT * FROM child_care WHERE client_id = ".$clientId."
+            ");
+            $data['child_care'] = (($sql4->num_rows() > 0 )? $sql4->result_array() : '' );
+            
+            $sql5 = $this->db->query("
+            SELECT * FROM computer_basics WHERE client_id = ".$clientId." 
+            ");
+            $data['computer_basics'] = (($sql5->num_rows() > 0 )? $sql5->result_array() : '' );
+            
+            $sql6 = $this->db->query("
+            SELECT * FROM event_planning WHERE client_id = ".$clientId."
+            ");
+            $data['event_planning'] = (($sql6->num_rows() > 0 )? $sql6->result_array() : '' );
+            
+            $sql7 = $this->db->query("
+            SELECT * FROM front_desk WHERE client_id = ".$clientId." 
+            ");
+            $data['font_desk'] = (($sql7->num_rows() > 0 )? $sql7->result_array() : '' );
+           
+            $sql8 = $this->db->query("
+            SELECT * FROM home_health WHERE client_id = ".$clientId." 
+            ");
+            $data['home_health'] = (($sql8->num_rows() > 0 )? $sql8->result_array() : '' );
+
+            $sql9 = $this->db->query("
+            SELECT * FROM house_keeping WHERE client_id = ".$clientId." 
+            ");
+            $data['house_keeping'] = (($sql9->num_rows() > 0 )? $sql9->result_array() : '' );
+
+            $sql10 = $this->db->query("
+            SELECT * FROM landscaping WHERE client_id = ".$clientId." 
+            ");
+            $data['landscaping'] = (($sql10->num_rows() > 0 )? $sql10->result_array() : '' );
+
+            $sql11 = $this->db->query("
+            SELECT * FROM life_guard WHERE client_id = ".$clientId." 
+            ");
+            $data['life_guard'] = (($sql11->num_rows() > 0 )? $sql11->result_array() : '' );
+
+            $sql12 = $this->db->query("
+            SELECT * FROM nail_tech WHERE client_id = ".$clientId." 
+            ");
+            $data['nail_tech'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
+
+            $sql13 = $this->db->query("
+            SELECT * FROM wait_staff WHERE client_id = ".$clientId." 
+            ");
+            $data['wait_staff'] = (($sql13->num_rows() > 0 )? $sql13->result_array() : '' );
+
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE){
+                return FALSE;
+                
+            }
+
+            //print_r($data);
+            return $data;
+            //combining data together
+            // $this->db->trans_start();
+            // $sql = $this->db->query('
+            // select a.id,
+            // bpo.programme as bpo, bpo.status as bpo_status, bpo.enrolled_in as bpo_enrolled, bpo.comments as bpo_comment, bpo.pre_test_avg as bpo_preTestAvg,
+            // bar.programme as bartending, bar.status as bar_status, bar.enrolled_in as bar_enrolled, bar.comments as bar_comment, bar.pre_test_avg as bar_preTestAvg,
+            // ba.programme as barbering, ba.status as ba_status, ba.enrolled_in as ba_enrolled, ba.comments as bar_comment ,  ba.pre_test_avg as ba_preTestAvg,
+            // cc.programme as child_care, cc.status as cc_status, cc.enrolled_in as cc_enrolled, cc.comments as cc_comment, cc.pre_test_avg as cc_preTestAvg,
+            // cb.programme as computer_basics, cb.status as cb_status, cb.enrolled_in as cb_enrolled, cb.comments as cb_comment, cb.pre_test_avg as cb_preTestAvg, 
+            // ep.programme as event_planning, ep.status as ep_status, ep.enrolled_in as ep_enrolled, ep.comments as ep_comment, ep.pre_test_avg as ep_preTestAvg,
+            // fd.programme as front_desk, fd.status as fd_status, fd.enrolled_in as fd_enrolled, fd.comments as fd_comment, fd.pre_test_avg as fd_preTestAvg,
+            // hh.programme as home_health, hh.status as hh_status, hh.enrolled_in as hh_enrolled, hh.comments as hh_comment, hh.pre_test_avg as hh_preTestAvg,
+            // hk.programme as house_keeping, hk.status as hk_status, hk.enrolled_in as hk_enrolled, hk.comments as hk_comment, hk.pre_test_avg as hk_preTestAvg,
+            // l.programme as landscaping,  l.status as l_status, l.enrolled_in as l_enrolled, l.comments as l_comment,  l.pre_test_avg as l_preTestAvg,
+            // lg.programme as life_guard, lg.status as lg_status, lg.enrolled_in as lg_enrolled, lg.comments as lg_comment, lg.pre_test_avg as l_preTestAvg,
+            // nt.programme as nail_tech, nt.status as nt_status, nt.enrolled_in as nt_enrolled, nt.comments as nt_comment , nt.pre_test_avg as nt_preTestAvg,
+            // ws.programme as wait_staff, ws.status as ws_status, ws.enrolled_in as ws_enrolled, ws.comments as ws_comment, ws.pre_test_avg as ws_preTestAvg,
+            // st.organization as specialized_trainings, st.date_offered as st_date_offered
+            // from applicants a 
+            // left join bpo on bpo.client_id = a.id 
+            // left join bartending bar on bar.client_id = a.id 
+            // left join barbering ba on ba.client_id = a.id
+            // left join child_care cc on cc.client_id = a.id
+            // left join computer_basics cb on cb.client_id = a.id
+            // left join event_planning ep on ep.client_id = a.id
+            // left join front_desk fd on fd.client_id = a.id
+            // left join home_health hh on hh.client_id = a.id
+            // left join house_keeping hk on hk.client_id = a.id
+            // left join landscaping l on l.client_id = a.id
+            // left join life_guard lg on lg.client_id = a.id
+            // left join nail_tech nt on nt.client_id = a.id
+            // left join wait_staff ws on ws.client_id = a.id
+            // left join specialized_trainings st on a.id = st.client_id
+            // where 
+            // a.id = '.$clientId.'
+            
+            // ');
+
+            // $this->db->trans_complete();
+            // if ($this->db->trans_status() === FALSE){
+            //     return FALSE;
+            // }
+
+            // return $sql->result_array();
+
+        }
+
+
+    }
+    /**
+     * Sets the profile pic of a client in the database
+     *
+     * @access    public
+     * @param     clientId the id of the client 
+     * @param     table contains the name of the table that contains the training information
+     * 
+     * @return    Array if query was successful it will return an array containing the users grades
+     */    
+    public function get_client_program_info($clientId = NULL, $table = NULL) {
+
+        if ($clientId !== NULL){
+
+            $this->db->trans_start();
+            
+            $sql = $this->db->query('
+            SELECT a.*, pro.* 
+            from applicants a
+            join '.$table.' pro on pro.client_id = a.id
+            where 
+            a.id = '.$clientId.' and pro.status = "Enrolled" and pro.enrolled_in = '.date('Y').'
+                ');
+            $result = $sql->result_array();
+            
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE){
+                return FALSE;
+            }
+            
+            return $result;
+
+        }else{
+            return FALSE;
+        }
     }
 
 }

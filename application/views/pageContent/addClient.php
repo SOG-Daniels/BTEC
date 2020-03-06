@@ -235,7 +235,7 @@
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label for="trainings">Trainings:</label>
+                                <label  for="trainings">Trainings:</label>
                                 <select class="form-control" name="program" id="trainings">
                                 <option  value="barbering">Introduction to Barbering</option>
                                 <option  value="bartending">Bartending</option>

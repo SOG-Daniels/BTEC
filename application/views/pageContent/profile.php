@@ -74,7 +74,7 @@
                         <div class="row mb-3">
                             <div class="col col-md-6">
                                 <label for="first_name">Phone #:</label>
-                                <input type="text" class="form-control" name="phone" id="phone" value="<?php echo (isset($profileData['phone']))? $profileData['phone'] : ''; ?>">
+                                <input type="number" class="form-control" name="phone" id="phone" value="<?php echo (isset($profileData['phone']))? $profileData['phone'] : ''; ?>">
                             </div>
                             
                         </div>

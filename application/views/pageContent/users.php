@@ -1,4 +1,9 @@
-<?php echo (isset($userListMessage))? $userListMessage : ' '; ?>
+<?php echo (isset($userListMessage))? $userListMessage : ' ';
+  // echo "<pre>";
+  // print_r($userList);
+  // echo "</pre>";
+  echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : ' ');
+?>
 <h1 class="h3 mb-2 text-gray-800">User List</h1>
 
           <!-- DataTales Example -->
@@ -9,26 +14,32 @@
                   <h6 class="m-0 font-weight-bold text-primary">Users</h6>
                 </div>
                 <div class="col col-md-2">
-                <button class="btn btn-primary btn-sm nav-link float-right" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
+                <?php 
+                if (in_array(3, $this->session->userdata('action'))){
+                  echo '<button class="btn btn-primary btn-sm nav-link float-right" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
                   <i class="fas fa-fw fa-user-plus"></i>
                   <span>Add User</span>
-                </button>
+                </button>';
+                }
+                ?>
                 </div>
               </div>
             </div>
             <div class="card-body">
               <div class="table-responsive">
-                <table class="table table-bordered table-striped" id="dataTableUsers" width="100%" cellspacing="0">
+                <table class="table table-striped" id="userDataTable" width="100%" cellspacing="0">
       
                   <thead class="thead-dark">
                     <tr>
                       <th>#</th>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>User Name</th>
+                      <th>Full Name</th>
                       <th>Email </th>
-                      <th>Phone #</th>
+                      <th>Created By</th>
+                      <th>Created On</th>
+                      <th>Updated By</th>
+                      <th>Updated On</th>
                       <th>Profile</th>
+                      <th><?php echo (in_array(3, $this->session->userdata('action')) && in_array(8, $this->session->userdata('action')))? 'Action':''; ?></th>
                     </tr>
                   </thead>
                   
@@ -44,13 +55,16 @@
                         
                           <tr>
                           <td>'.$array->id.'</td>
-                          <td>'.$array->fname.'</td>
-                          <td>'.$array->lname.'</td>
-                          <td>'.$array->username.'</td>
+                          <td>'.$array->fname.' '.$array->lname.'</td>
                           <td>'.$array->email.'</td>
-                          <td>'.$array->phone.'</td>
+                          <td>'.$array->created_by.'</td>
+                          <td>'.$array->created_on.'</td>
+                          <td>'.(($array->updated_by == NULL)? 'N/A': $array->updated_by).'</td>
+                          <td>'.(($array->updated_on == NULL)? 'N/A' : $array->updated_on).'</td>
                           <td><a href="'.site_url().'user-info/'.$array->id.'" > View </a></td>
-                          </tr>
+                          <td>'.((in_array(3, $this->session->userdata('action')) && in_array(8, $this->session->userdata('action')))? 
+                          '<a id="removeUser" href="'.site_url().'remove-user/'.$array->id.'" data-toggle="modal" data-target="#modalUserDelete" class="text-danger"> Delete </a></td>' 
+                          : '').'</tr>
                         
                         ';
 
@@ -68,5 +82,7 @@
               </div>
             </div>
           </div>
-
+<script>
+var clist = [];//defining clist so that it does not trigger an error in datatables script upon loading of document
+</script>
           

@@ -12,20 +12,34 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
 ?>
 <div class="card shadow mb-3">
     <div class="card-header py-3">
-        
-    <h1 class="h4 mb-2 text-gray-800">Client Information</h1>
+        <div class="row">
+        <div class="col-12 col-md-10">
+            <h4 class="m-0 ">Client Information</h4>
+        </div>
+        <div  class="col-12 col-md-2 pl-5 ">
+            <?php 
+                if (in_array(7, $this->session->userdata('action'))){
+                    echo '
+                        <a class="btn btn-primary btn-sm" href="'.base_url().'edit-client-info/'.$clientData[0]['id'].'" >
+                        <i class="fas fa-fw fa-edit"></i>
+                        Edit Profile
+                        </a>
+                    
+                    ';
+                }
+            ?>
+        </div>
+        </div>
+    
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-12 col-md-4 "><!--left col-->
+            <div class="col-12 col-md-6 "><!--left col-->
                 <div class="text-center">
                 <img src="<?php echo isset($personalInfo['imgPath'])? base_url().$personalInfo['imgPath'] : base_url()."upload/default_profile_img.png";?>" class="avatar rounded-circle img-thumbnail">
                 <br>
                 <?php echo '<h3>'.$name.'</h3>';?>
                 </div>
-
-            </div><!--/col-4-->
-            <div class="col-12 col-md-8 ">
 
             <h6>
                 <small class="font-weight-bold">
@@ -34,13 +48,13 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
                 </small>        
             </h6>
             <div class="row">
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="mobile_phone" class="font-weight-bold d-block " >Phone Number:</label>
                         <?php echo (isset($clientData[0]['mobile_phone']))? $clientData[0]['mobile_phone'] : 'None' ;?>
                     </div>
                 </div>
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="my-input" class="font-weight-bold d-block " >Home Phone #:</label>
                         <?php echo (isset($clientData[0]['home_phone']))? $clientData[0]['home_phone'] : 'None' ;?>
@@ -49,13 +63,13 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
   
             </div>
             <div class="row">
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="email" class="font-weight-bold d-block " >Email:</label>
                         <?php echo $clientData[0]['email'];?>
                     </div>
                 </div>
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="mobile_phone" class="font-weight-bold d-block " >District:</label>
                         <?php echo (isset($clientData[0]['district']))? $clientData[0]['district'] : 'None' ;?>
@@ -64,13 +78,13 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
             
             </div>
             <div class="row">
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="my-input" class="font-weight-bold d-block " >City/Town/Village:</label>
                         <?php echo (isset($clientData[0]['ctv']))? $clientData[0]['ctv'] : 'None' ;?>
                     </div>
                 </div>
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="mobile_phone" class="font-weight-bold d-block " >Street:</label>
                         <?php echo (isset($clientData[0]['street']))? $clientData[0]['street'] : 'None' ;?>
@@ -79,13 +93,13 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
             
             </div>
             <div class="row">
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="my-input" class="font-weight-bold d-block " >DoB:</label>
                         <?php echo (isset($clientData[0]['dob']))? $clientData[0]['dob'] : 'None' ;?>
                     </div>
                 </div>
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="my-input" class="font-weight-bold d-block " >Gender:</label>
                         <?php echo (isset($clientData[0]['gender']))? $clientData[0]['gender'] : 'None' ;?>
@@ -94,13 +108,13 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
             
             </div>
             <div class="row">
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="my-input" class="font-weight-bold d-block " >Marital Status:</label>
                         <?php echo (isset($clientData[0]['marital_status']))? $clientData[0]['marital_status'] : 'None' ;?>
                     </div>
                 </div>
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="my-input" class="font-weight-bold d-block " >Emergency Contact Name:</label>
                         <?php echo (isset($clientData[0]['ec_name']))? $clientData[0]['ec_name'] : 'None' ;?>
@@ -109,13 +123,13 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
             
             </div>
             <div class="row">
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="mobile_phone" class="font-weight-bold d-block " >Emergency Contact #:</label>
                         <?php echo (isset($clientData[0]['ec_number']))? $clientData[0]['ec_number'] : 'None' ;?>
                     </div>
                 </div>
-                <div class="col col-md-6">
+                <div class="col-12 col-md-6">
                     <div class="form-group">
                         <label for="mobile_phone" class="font-weight-bold d-block " >Emergency Contact Relation:</label>
                         <?php echo (isset($clientData[0]['ec_relation']))? $clientData[0]['ec_relation'] : 'None' ;?>
@@ -123,10 +137,112 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
                 </div>
             
             </div>
+
+            </div><!--/col-4-->
+            <div class="col-12 col-md-6 ">
+            <h6>
+                <small class="font-weight-bold">
+                REFERENCE #1
+                <hr>    
+                </small>        
+            </h6>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >Name:</label>
+                        <?php echo (isset($clientData[0]['ref_name1']))? $clientData[0]['ref_name1'] : 'None' ;?>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >Address:</label>
+                        <?php echo (isset($clientData[0]['ref_address1']))? $clientData[0]['ref_address1'] : 'None' ;?>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >Contact #:</label>
+                        <?php echo (isset($clientData[0]['ref_phone1']))? $clientData[0]['ref_phone1'] : 'None' ;?>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >City:</label>
+                        <?php echo (isset($clientData[0]['ref_city1']))? $clientData[0]['ref_city1'] : 'None' ;?>
+                    </div>
+                </div>
+            </div>
+            <h6>
+                <small class="font-weight-bold">
+                REFERENCE #2
+                <hr>    
+                </small>        
+            </h6>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >Name:</label>
+                        <?php echo (isset($clientData[0]['ref_name2']))? $clientData[0]['ref_name2'] : 'None' ;?>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >Address:</label>
+                        <?php echo (isset($clientData[0]['ref_address2']))? $clientData[0]['ref_address2'] : 'None' ;?>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >Contact #:</label>
+                        <?php echo (isset($clientData[0]['ref_phone2']))? $clientData[0]['ref_phone2'] : 'None' ;?>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >City:</label>
+                        <?php echo (isset($clientData[0]['ref_city2']))? $clientData[0]['ref_city2'] : 'None' ;?>
+                    </div>
+                </div>
+            
+            </div>
+            <h6>
+                <small class="font-weight-bold">
+                REFERENCE #3
+                <hr>    
+                </small>        
+            </h6>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >Name:</label>
+                        <?php echo (isset($clientData[0]['ref_name3']))? $clientData[0]['ref_name3'] : 'None' ;?>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >Address:</label>
+                        <?php echo (isset($clientData[0]['ref_address3']))? $clientData[0]['ref_address3'] : 'None' ;?>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >Contact #:</label>
+                        <?php echo (isset($clientData[0]['ref_phone3']))? $clientData[0]['ref_phone3'] : 'None' ;?>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                        <label for="mobile_phone" class="font-weight-bold d-block " >City:</label>
+                        <?php echo (isset($clientData[0]['ref_city3']))? $clientData[0]['ref_city3'] : 'None' ;?>
+                    </div>
+                </div>
+            
+            </div>
+
             </div><!--/col-8-->
         </div><!--/row-->
         <div class="row">
-            <div class="col col-md">
+            <div class="col col-md ml-2">
                 <!-- <ul class="list-group">
                     <li class="list-group-item font-weight-bold bg-dark text-light text-right"> <span class="pull-left">Training</span>Enrolled
                     </li>

@@ -526,7 +526,7 @@ $config['proxy_ips'] = '';
 // Email configuration below
 
 // change hostname
-// $config['smtp_host'] = 'smtp.gmail.com';
+// $config['smtp_host'] = 'smtp.mailtrap.io';
 
 // // change stmp port number
 // $config['smtp_port'] = '587';
@@ -537,4 +537,14 @@ $config['proxy_ips'] = '';
 
 // // Change charset
 // $config['charset'] = 'iso-8859-1';
+// $this->email->initialize($config);
+// $config['email'] = Array( 
+//     'protocol'  => 'smtp', 
+//     'smtp_host' => 'smtp.mailtrap.io', 
+//     'smtp_port' =>  2525, 
+//     'smtp_user' => '0077e845401d5e', 
+//     'smtp_pass' => '736b4e111764b4', 
+//     'crlf'      => "\r\n", 
+//     'newline'   => "\r\n"
+//     );
 // $this->email->initialize($config);

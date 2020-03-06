@@ -19,7 +19,16 @@
     <link href="<?php echo base_url()?>assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title><?php echo $title; ?></title>
+    <!-- scripts are loaded below because some jquery are used within some of the pageContents and triggers error if not declared here -->
+    <script src="<?php echo base_url()?>assets/vendor/jquery/jquery.min.js"></script>
+    <script src="<?php echo base_url()?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Data Tables custom scripts -->
+    <script src="<?php echo base_url()?>assets/js/demo/datatables-demo.js"></script>
+    <!-- my custom jquery -->
+    <script src="<?php echo base_url()?>assets/js/demo/customJS.js"></script>
+
+
+  <title><?php echo $title; ?></title>
 </head>
 <body id="page-top">
   <!-- Page Wrapper -->

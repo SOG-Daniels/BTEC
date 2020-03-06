@@ -75,17 +75,18 @@
                                     }
                                 }
                             ?>
+                            
                             <div class="col col-md-6" >
                                 <label class="" for="last_name">Priviledge:</label>
                                 <div class="row offset-md-1">
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" name="privilege[]" value="2" id="viewClients" <?php echo ( isset($action) && in_array(2, $action) )? 'checked' : ' '; ?> disabled>
+                                        <input class="form-check-input action" type="checkbox" name="privilege[]" value="2" id="privi2" <?php echo ( isset($action) && in_array(2, $action) )? 'checked' : ' '; ?> disabled>
                                         <label class="form-check-label" for="viewClients">
                                             View Clients
                                         </label>
                                     </div>
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" name="privilege[]" value="4" id="viewUsers" <?php echo (isset($action) && in_array(4, $action))? 'checked' : ' '; ?> disabled>
+                                        <input class="form-check-input action" type="checkbox" name="privilege[]" value="4" id="privi4" <?php echo (isset($action) && in_array(4, $action))? 'checked' : ' '; ?> disabled>
                                         <label class="form-check-label" for="viewUsers">
                                             View Users
                                         </label>
@@ -94,19 +95,47 @@
                                 
                                 <div class="row offset-md-1">
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="1" name="privilege[]" id="addClient"  <?php echo (isset($action) && in_array(1, $action))? 'checked' : ' '; ?> disabled>
+                                        <input class="form-check-input action" type="checkbox" value="1" name="privilege[]" id="privi1"  <?php echo (isset($action) && in_array(1, $action))? 'checked' : ' '; ?> disabled>
                                         <label class="form-check-label" for="addClient">
                                             Add Client
                                         </label>
                                     </div>
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="3" name="privilege[]" id="addClient"  <?php echo (isset($action) && in_array(3, $action))? 'checked' : ' '; ?> disabled>
+                                        <input class="form-check-input action" type="checkbox" value="3" name="privilege[]" id="privi3"  <?php echo (isset($action) && in_array(3, $action))? 'checked' : ' '; ?> disabled>
                                         <label class="form-check-label" for="addClient">
                                             Add User
                                         </label>
                                     </div>
                                 </div>
                                  
+                                <div class="row offset-md-1">
+                                    <div class="col col-md-5 form-check">
+                                        <input class="form-check-input action" type="checkbox" value="7" name="privilege[]" id="privi7"  <?php echo (isset($action) && in_array(7, $action))? 'checked' : ' '; ?> disabled>
+                                        <label class="form-check-label" for="enrolledList">
+                                            Edit Client
+                                        </label>
+                                    </div>
+                                    <div class="col col-md-5 form-check">
+                                        <input class="form-check-input action" type="checkbox" value="8" name="privilege[]" id="privi8"  <?php echo (isset($action) && in_array(8, $action))? 'checked' : ' '; ?> disabled>
+                                        <label class="form-check-label" for="editGrade">
+                                            Edit User
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="row offset-md-1">
+                                    <div class="col col-md-5 form-check">
+                                        <input class="form-check-input action" type="checkbox" value="5" name="privilege[]" id="privi5"  <?php echo (isset($action) && in_array(5, $action))? 'checked' : ' '; ?> disabled>
+                                        <label class="form-check-label" for="enrolledList">
+                                            View Enrolled List
+                                        </label>
+                                    </div>
+                                    <div class="col col-md-5 form-check">
+                                        <input class="form-check-input action" type="checkbox" value="6" name="privilege[]" id="privi6"  <?php echo (isset($action) && in_array(6, $action))? 'checked' : ' '; ?> disabled>
+                                        <label class="form-check-label" for="editGrade">
+                                            Edit Grade
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     <!-- </form> -->
