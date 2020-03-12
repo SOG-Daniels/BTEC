@@ -858,13 +858,22 @@ class Client_model extends CI_Model{
             $this->db->trans_start();
             
             $sql = $this->db->query('
-            SELECT a.*, pro.* 
+            SELECT a.*, pro.*
             from applicants a
             join '.$table.' pro on pro.client_id = a.id
             where 
             a.id = '.$clientId.' and pro.status = "Enrolled" and pro.enrolled_in = '.date('Y').'
                 ');
             $result = $sql->result_array();
+            
+            $sql2 = $this->db->query('
+                SELECT p.path as imgPath
+                FROM profile_img p
+                WHERE p.id = '.$result[0]['profile_img_id'].'
+            ');
+            $result2 = $sql2->result_array();
+            $result[0]['imgPath'] = $result2[0]['imgPath'];
+
             
             $this->db->trans_complete();
 
@@ -878,6 +887,89 @@ class Client_model extends CI_Model{
             return FALSE;
         }
     }
+    /**
+     * updates the grades of a user
+     *
+     * @access    public
+     * @param     data the post data  
+     * 
+     * @return    Boolean true if successful, false if transaction faild
+     */    
+    public function update_client_grade($data = NULL) {
+
+        if (!empty($data)){
+
+            $set = array();
+            $set['status'] = ($data['status'] == 0 ? 'Enrolled' : $data['status']);
+            $set['final_Assesment'] = isset($data['final_assesment'])? $data['final_assesment'] : NULL;
+            $set['comments'] = isset($data['comment'])? $data['comment'] : NULL;
+            
+           
+            // in the query for assesmets 1-5 we are checking to see if the input exist by means of checking array keys
+            if (array_key_exists('assesment', $data)){
+                $set['Assesment1'] = array_key_exists(0,$data['assesment']) ? $data['assesment'][0]: NULL;
+                $set['Assesment2'] = array_key_exists(1,$data['assesment']) ? $data['assesment'][1]: NULL;
+                $set['Assesment3'] = array_key_exists(2,$data['assesment']) ? $data['assesment'][2]: NULL;
+                $set['Assesment4'] = array_key_exists(3,$data['assesment']) ? $data['assesment'][3]: NULL;
+                $set['Assesment5'] = array_key_exists(4,$data['assesment']) ? $data['assesment'][4]: NULL;
+
+            }else{
+                $set['Assesment1'] = NULL;
+                $set['Assesment2'] = NULL;
+                $set['Assesment3'] = NULL;
+                $set['Assesment4'] = NULL;
+                $set['Assesment5'] = NULL;
+              
+            }            
+
+            // echo $endSql;
+            $this->db->trans_start();
+
+            echo "<pre>";
+            print_r($set);
+            echo "</pre>";
+            
+            //  $this->db->query($sql);
+            $this->db->update($data['program'], $set, 'client_id= '.$data['clientId'].'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
+            
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE){
+                return FALSE;
+            }
+            return TRUE;
+
+        }else{
+            return FALSE;
+        }
+    
+    }
+    /**
+     * function set updated_by and update_on in the choosen table
+     *
+     * @access    public
+     * @param     clientId the client we are uppdating 
+     * @param     table the name of the table we will query from  
+     * @param     userIdentity the signiture stamp of the user that made the update  
+     * 
+     * @return    Boolean true if successful, false if transaction faild
+     */    
+    public function set_client_update_info($clientId = NULL, $table = NULL, $userIdentity = NULL) {
+        
+        $this->db->trans_start();
+        
+        $this->db->update($table, array('updated_on' => date("Y-m-d H:i:sa") , 'updated_by' => $userIdentity), array('id' => $clientId));
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+        
+        return TRUE;
+    
+    }
+
 
 }
 

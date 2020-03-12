@@ -1,5 +1,6 @@
 <?php 
   echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : '');
+  $actions = $this->session->userdata('action');
   // echo json_encode($cList);
 ?>
 <h1 class="h3 mb-2 text-gray-800">Client List</h1>
@@ -47,7 +48,9 @@
               <th>DOB</th>
               <th>Email</th>
               <th>Phone #</th>
-              <th>Profile</th>
+              <?php 
+              echo (in_array(2,$actions ) || in_array(7,$actions))? '<th class="text-center">Profile</th>' : '';
+              ?>
           </tr>
       </thead>
       <tfoot>
@@ -59,7 +62,9 @@
               <th>DOB</th>
               <th>Email</th>
               <th>Phone #</th>
-              <th>Profile</th>
+              <?php 
+              echo (in_array(2,$actions ) || in_array(7,$actions))? '<th class="text-center">Profile</th>' : '';
+              ?>
           </tr>
       </tfoot>
       </table>

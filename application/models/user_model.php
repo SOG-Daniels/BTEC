@@ -44,7 +44,7 @@ class User_model extends CI_Model{
     public function get_user_info($userId){
 
         $sql = $this->db->query(
-        'SELECT u.id, fname, lname, email, username, phone, p.path as imgPath
+        'SELECT u.id, fname, lname, email, username, u.status, phone, p.path as imgPath
         FROM users u, profile_img p WHERE u.id = '.$userId.' and u.profile_img_id = p.id and p.status = 1'
         );
         $row = $sql->num_rows();
@@ -253,22 +253,25 @@ class User_model extends CI_Model{
             $priviledges = (!empty($data['privileges']))? $data['privileges'] : NULL;
             
             //Checking to see if user exist in the database by email
-            $this->db->select('id');
-            $this->db->where('email', $email);
+            $this->db->select('id', 'status');
+            $this->db->where(array('email' => $email ));
             $query = $this->db->get('users');
             $row = $query->num_rows();
+            $existingUser = $query->row();
             //$size = count($data['privileges']);
            
             if($row < 1){
                 // user does not exist lets add him to the system
+                
                 $input = array(
                     'fname'  => $fname,
                     'lname'  => $lname,
                     'username'  => $uname,
                     'email'  => $email,
+                    'password'  => md5("Passw0rd"),
                     'phone'  => $phone,
                     'profile_img_id' => 1,
-                    'created_by' => $this->session->userdata('name')
+                    'created_by' => $this->session->userdata('userIdentity')
                     
                 );  
 
@@ -291,12 +294,12 @@ class User_model extends CI_Model{
 
                 }else{
 
-                    return $actionData['user_id'];
+                    return TRUE;
                 }
 
                 
             }else{
-                return 0;//returning 0 to identify that user is in the system
+                return $existingUser->id;//returning 0 to identify that user is in the system
             }
            
 
@@ -389,8 +392,53 @@ class User_model extends CI_Model{
     }
 
 
+    /**
+     * function set updated_by and update_on in the user table
+     *
+     * @access    public
+     * @param     userId the id of the user whose profile was updated
+     * @param     userIdentity the signiture stamp of the user that made the update  
+     * 
+     * @return    Boolean true if successful, false if transaction faild
+     */    
+    public function set_user_update_info($userId = NULL, $userIdentity = NULL) {
+        
+        $this->db->trans_start();
+        
+        $this->db->update('users', array('updated_on' => date("Y-m-d H:i:sa") , 'updated_by' => $userIdentity), array('id' => $userId));
 
+        $this->db->trans_complete();
 
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+        
+        return TRUE;
+    
+    }
+    /**
+     * function set updated_by and update_on in the user table
+     *
+     * @access    public
+     * @param     userId the id of the user whose profile needs to be activated
+     * 
+     * @return    Boolean true if successful, false if transaction faild
+     */    
+    public function activate_user($userId = NULL) {
+    
+        $this->db->trans_start();
+        
+        $this->db->update('users', array('status' => 1), array('id' => $userId));
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+        
+        return TRUE;
+        
+    }
 }
 
 ?>

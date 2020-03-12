@@ -11,7 +11,7 @@ class User extends CI_Controller{
         protected $user_actions;
         protected $message;
         protected $programTables;
-
+        protected $userIdent;
     // protected $data = array();
     // protected $session = array();
 
@@ -31,6 +31,7 @@ class User extends CI_Controller{
         $this->userId = $this->session->userdata('userid');
         $this->data['name'] = $this->session->userdata('name');
         $this->user_actions = $this->session->userdata('action');
+        $this->userIdent = $this->session->userdata('userIdentity');
 
         $this->programTables = array(
             'Introduction-to-Barbering' => 'barbering',
@@ -127,7 +128,8 @@ class User extends CI_Controller{
      */ 
     public function view_enrolled_list(){
         
-        if($this->is_session_set()){
+
+        if($this->is_session_set() && in_array(5, $this->user_actions)){
            
             $this->data['title'] = 'Enrolled List';
             $this->data['active'] = 'applicants';
@@ -141,6 +143,10 @@ class User extends CI_Controller{
                 // // Passing the post values with xxs filterig to the get_enrolled_list model
                 $this->data['enrolledList'] = array($this->client_model->get_enrolled_list($this->input->post('program', TRUE)));
                 //$this->data['enrolledList']['selected'] = $this->input->post('program');
+                $this->data['enrolledList']['hasGradeEdit'] = (in_array(6,$this->session->userdata('action')))? 1 : 0;
+                $this->data['enrolledList']['hasView'] = (in_array(2,$this->session->userdata('action')))? 1 : 0;
+                $this->data['enrolledList']['hasEdit'] = (in_array(6,$this->session->userdata('action')))? 1 : 0;
+                $this->data['enrolledList']['base_url'] = base_url();
 
                 echo json_encode($this->data['enrolledList'],JSON_HEX_TAG);//providing the data to the ajax request;
                 // $data['selected'] = $this->input->post('program');
@@ -561,17 +567,19 @@ class User extends CI_Controller{
                 //passing post data to the model 
                 $result = $this->user_model->enter_user($post);
 
-                if($result === 0){
+                if($result === FALSE){
                     $this->message = '
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h5><strong><i class="fa fa-2x fa-exclamation-triangle"></i> Notice!</strong> The user is already in the system please check the user list to confirm.<h5>
+                    <h5>
+                    <strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong> The user was not added to the system! 
+                    <h5>
                     </div>
                     ';
                     
-                }elseif ($result == TRUE){
+                }elseif ($result === TRUE){
 
                     $oneTimePass = $this->generate_random_pass();
                     $sub = 'Welcome '.$post['fname'].' '.$post['lname'].' to the BTEC Family!';
@@ -625,7 +633,7 @@ class User extends CI_Controller{
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h5>
-                        <strong><i class="fa fa-2x fa-exclamation-triangle"></i> Whoops!</strong> The user was added to the system but not notified via Email!'.$mess.'
+                        <strong><i class="fa fa-2x fa-exclamation-triangle"></i> Whoops!</strong> The user was added to the system but not notified via Email! '.$mess.'
                         <h5>
                         </div>
                         ';
@@ -633,21 +641,20 @@ class User extends CI_Controller{
 
                 }else{
 
+                    $this->message = '
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5><strong><i class="fa fa-2x fa-exclamation-triangle"></i> Notice!</strong> The user is already in the system please <a href="'.base_url().'user-info/'.$result.'">check here</a> to view their profile.<h5>
+                    </div>
+                    ';
                     // <a class="btn btn-link nav-link" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
                     // <i class="fas fa-fw fa-user-plus "></i>
                     // <span> Try again?</span>
                     // </a>
 
-                    $this->message = '
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h5>
-                    <strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong> The user was not added to the system! 
-                    <h5>
-                    </div>
-                    ';
+                    
                 }
                 $this->session->set_flashdata('addUserMessage', $this->message);
                 // returning back to home  page
@@ -933,6 +940,11 @@ class User extends CI_Controller{
 
             $result = $this->client_model->get_client_program_info($clientId, $this->programTables[$program]);
 
+            // appending the parameters to the result array as we will need it to update client grade
+            $result[0]['program'] = $this->programTables[$program];
+            $result[0]['clientId'] = $clientId;
+            $result[0]['slug'] = $program.'/'.$clientId;
+
             if ($result === FALSE){
                 $result = 0;
             }
@@ -1051,7 +1063,7 @@ class User extends CI_Controller{
      */    
     public function remove_user($userId = NULL){
         
-        if ($this->is_session_set()){
+        if ($this->is_session_set() && in_array(8, $this->user_actions)){
 
             $result = $this->user_model->set_user_status($userId);
 
@@ -1088,7 +1100,97 @@ class User extends CI_Controller{
             redirect('login');
         }
     }   
+    /**
+     * WIll update the program based on the inputs recieved 
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE
+     */    
+    public function update_client_grade(){
+        
+        if ($this->is_session_set() && in_array(6, $this->user_actions)){
 
+            if (!empty($this->input->post())){
+                //passing post data to client model to update info
+                echo "<pre>";
+                print_r($this->input->post());
+                echo "</pre>";
+
+                $result = $this->client_model->update_client_grade($this->input->post(NULL, TRUE));
+
+                //Below are messages that will be flashed to the view once
+                if ($result === FALSE){
+
+                    $this->data['message'] = '
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5>
+                        <strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong> Something went wrong trying to update the grades. 
+                        <h5>
+                        </div>
+                    ';
+
+                }else{
+                    
+                    $this->data['message'] = '
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5>
+                        <strong><i class="fa fa-2x fa-smile"></i> Success!</strong> Updates have been saved. 
+                        <h5>
+                        </div>
+                    ';
+
+                    $result2 = $this->client_model->set_client_update_info($this->input->post('clientId'),$this->input->post('program'),$this->userIdent);
+                    if ($result2 == FALSE){
+                        log_message('error', 'User.php update_client_grade() : Could not ser client updated_on and updated by');
+                    }
+
+                }
+
+                $this->session->set_flashdata('message', $this->data['message']);
+                redirect('view-client-grade/'.$this->input->post('slug'));
+
+            }
+
+
+        }else{
+            redirect('login');
+        }
+
+    
+    }
+    /**
+     * WIll update the program based on the inputs recieved 
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE
+     */    
+    public function activate_user(){
+        
+        if (!empty($this->input->post())){
+            
+            $result = $this->user_model->activate_user($this->input->post('userId'), TRUE);
+            if ($result == FALSE){
+                echo 'Unable to Activate User';
+                // log_message('error','Unable to activate user');
+            }else{
+                echo 'Success! User has been activated.';
+            }
+        }else{
+            
+            log_message('error', 'User.php active_user(), empty post recieved');
+
+        }
+    }
 
 }
 

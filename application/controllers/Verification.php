@@ -51,7 +51,9 @@ class Verification extends CI_Controller{
 
                     //passwords matched so we will create a session and assign to it some values
                     $name = $result['fname'].' '.$result['lname'];
+                    $userIdentiy = $result['fname'][0].$result['lname'];
 
+                    $this->session->set_userdata('userIdentity', strtoupper($userIdentiy));
                     $this->session->set_userdata('userid', $result['id']);
                     $this->session->set_userdata('name', $name);
                     $this->session->set_userdata('email', $result['email']);

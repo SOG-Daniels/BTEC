@@ -8,11 +8,8 @@ $(document).ready(function(){
       { "orderable" : false, targets: [3,4,5,6,7,8] } 
     ]
   });
-  
-  var table = $('#dataTable').DataTable({
-      "data": clist.data,
-      select:"single",
-      "columns": [
+
+  let columns =[
           {
               "className": 'details-control',
               "orderable": false,
@@ -29,9 +26,18 @@ $(document).ready(function(){
           { "data": "dob"},
           { "data": "email", "sortable" : false},
           { "data": "mobile_phone", "sortable" : false},
-          { "data": "profile" , "sortable" : false},
           
-      ],
+      ];
+      if ((hasView == 1 || hasEdit == 1)){
+        columns.push(
+          { "data": "profile" , "sortable" : false},
+        );
+      }
+  
+  var table = $('#dataTable').DataTable({
+      "data": clist.data,
+      select:"single",
+      "columns": columns,
       "order": [[1, 'asc']]
   });
 

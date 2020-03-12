@@ -113,13 +113,13 @@
                                 </div>
                                 <div class="row offset-md-1">
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="7" name="privilege[]" id="privi7">
+                                        <input class="form-check-input action" type="checkbox" value="7" name="privileges[]" id="privi7">
                                         <label class="form-check-label" for="editClient">
                                             Edit Client
                                         </label>
                                     </div>
                                     <div class="col col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="8" name="privilege[]" id="privi8" >
+                                        <input class="form-check-input action" type="checkbox" value="8" name="privileges[]" id="privi8" >
                                         <label class="form-check-label" for="editUser">
                                             Edit User
                                         </label>
@@ -272,6 +272,7 @@
   <!-- Data Tables plugins -->
   <script src="<?php echo base_url()?>assets/vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="<?php echo base_url()?>assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  <script src="<?php echo base_url()?>assets/js/bootstrap-datepicker.js"></script>
 
   <!-- Data Tables custom scripts -->
   <!-- <script src="<php echo base_url()?>assets/js/demo/datatables-demo.js"></script>

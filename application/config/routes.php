@@ -71,6 +71,8 @@ $route['edit-client-info/(:num)'] = 'user/update_client/$1';
 $route['update-client-info/(:num)'] = 'user/update_client/$1';
 $route['view-client-grade/(:any)/(:num)'] = 'user/view_client_grade/$1/$2';
 $route['remove-user/(:num)'] = 'user/remove_user/$1';
+$route['update-grades'] = 'user/update_client_grade';
+$route['activate-user'] = 'user/activate_user';
 
 
 //verification routes

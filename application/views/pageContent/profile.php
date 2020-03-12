@@ -11,7 +11,7 @@
             <div class="col col-md-4"><!--left col-->
                 <form id="upload-img-form">
                     <div class="text-center">
-                    <img src="<?php echo isset($imgPath)? base_url().$imgPath: base_url()."upload/default_profile_img.png";?>" class="avatar rounded-circle img-thumbnail">
+                    <img src="<?php echo isset($imgPath)? base_url().$imgPath: base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="300" height="400">
                     <div class="p-image">
                         <a href="#" id="upload-img" >
                         <i class="fa fa-camera "></i> Upload Image

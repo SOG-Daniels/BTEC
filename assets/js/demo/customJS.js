@@ -2,11 +2,19 @@
 
 // defining global variables 
 var eList = [];
+var clist = [];
+var hasView;
+var hasEdit;
+var inputCount = 2;
+
 // var cList = [];
 
 
 // end of definition 
 
+function setInputCount(value){
+    inputCount = value;
+}
 // function for validation if passwords match before submission and checks if requirements for 
 // new password are met
 function checkPasswordMatch() {
@@ -44,6 +52,97 @@ function checkPasswordMatch() {
     }
 }
 $(document).ready(function() {
+    
+    $('#activateUser').click(function(e){
+
+        e.preventDefault();//if the button is to submit it will not do it //
+        var formData = $("#activationForm").serialize();
+        var url = $("#activationForm").attr('action');
+
+        $.post(url, formData, function(data){
+           
+            // console.log(data);
+            location.reload(false);
+            alert(data);
+
+
+        }).fail(function(){
+            alert('Something went wrong while trying to complete your request');
+        }); 
+
+
+        
+
+    });
+
+    $('#saveGradeChanges').click(function(e){
+        e.preventDefault;
+        $('#gradeForm').submit();
+
+
+    });
+    $('.add-more').click(function(e){
+        e.preventDefault();
+        let html = '';   
+        // alert(inputCount);
+        if (inputCount <= 5) {
+            
+            html = '<div id="asses-input'+inputCount+'">';
+            html += '<label >Assesment Grade:</label>';
+            html += '<div class="input-group">';
+            html += '<input type="number" class="form-control" name="assesment[]" id="assesment'+inputCount+'" placeholder="Enter a Grade....">';
+            html += '<span class="input-group-append ">';
+            html += '<span class="input-group-text bg-danger remove-grade"><i class="fa fa-minus text-white"></i></span>';
+            html += '</span>';
+            html += '</div>';
+            html += '</div>';
+            
+            $('#assesments').append(html);
+            inputCount++;
+        }else{
+          console.log('5 assesments are the maximum');
+        }
+
+    });
+    $('#assesments').on('click','.add-grade', function(e){
+        e.preventDefault();
+        var html = '';
+        if (inputCount <= 5){
+
+            html = '<br><div id="asses-input'+inputCount+'">';
+            html += '<label >Assesment Grade:</label>';
+            html += '<div class="input-group">';
+            html += '<input type="number" class="form-control" name="assesment[]" id="assesment'+inputCount+'" placeholder="Enter a Grade....">';
+            html += '<span class="input-group-append ">';
+            html += '<span class="input-group-text bg-primary add-grade"><i class="fa fa-plus text-white"></i></span>';
+            html += '</span>';
+            html += '</div>';
+            html += '</div>';
+            
+            $('.add-grade').removeClass('bg-primary');
+            $('.add-grade').addClass('bg-danger');
+            
+            $('.add-grade i').removeClass('fa-plus');
+            $('.add-grade i').addClass('fa-minus');
+
+            $('.add-grade').addClass('remove-grade');
+            $(this).removeClass('add-grade');
+
+            $('#assesments').append(html);
+            
+            inputCount++;
+        }else{
+          console.log('5 assesments are the maximum');
+        }
+        
+
+    });
+    $('#assesments').on('click','.remove-grade', function(){
+
+        $(this).parent().parent().parent().remove();
+        inputCount--;
+
+    });
     
     $('#selectAll').change(function() {
         if($(this).is(':checked')){
@@ -218,51 +317,8 @@ $(document).ready(function() {
             dataType: "json",                    
             cache: false,                       
             success: function(response) {                        
-                createList(response[0]);    
-                //     $('#enrolledListBody').html('');
-                //     //$('#enrolledListBody').dataTable().fnDestroy();
-                //    let trHTML = '';
-                //     $.each(response, function (i, item) {
-                //         //let list = {"data":response[0] };
-
-                //         // $('#enrolledList').DataTable({
-                //         //     "data" : list.data,
-                //         //     "columns" :
-                //         //     [
-                //         //         { "data": "id" },
-                //         //         { "data": "first_name" },
-                //         //         { "data": "last_name" },
-                //         //         { "data": "ssn" },
-                //         //         { "data": "dob"},
-                //         //         { "data": "email" },
-                //         //         { "data": "mobile_phone" },
-                //         //         { "data": "view" },
-                //         //         { "data": "edit" }
-
-                //         //     ]
-                //         // });
-
-                //         console.log(item[i].length);
-                //         if (item[i].length > 0 ){
-
-                //             let gradeEdit = '<a  href="'+ base_url+'client-grade/'+ item[i][0].id +'">Edit</a>';
-                //             let viewProfile = '<a href="'+ base_url+'client-info/'+ item[i][0].id +'">View</a>';
-                //             let editProfile = '<a href="'+ base_url+'edit-client-info/'+ item[i][0].id +'">Edit</a>';
-
-                //             trHTML +=    '<tr><td>' + item[i][0].id + '</td>' +
-                //             '<td>' + item[i][0].first_name + ' ' + item[i][0].last_name + '</td><td>' + item[i][0].programme +
-                //             '</td><td>' + item[i][0].enrolled_in + '</td><td>' + item[i][0].dob + '</td><td>' + item[i][0].mobile_phone +
-                //             '</td><td>' + gradeEdit + '</td><td>' + viewProfile +'&nbsp&nbsp'+ editProfile +'</td></tr>';
-                //             //console.log(item);
-
-                //         }else{
-                //             trHTML  = '<tr><td colspan="8" class="text-center">No Results found! No one is enrolled in the program.</td><tr>'
-                //         }
-                //         console.log(item);
-                //     });
-                //     $('#enrolledListBody').html(trHTML);
-                    //$('#enrolledListBody').append(trHTML);
-
+                createList(response[0],response['base_url'], response['hasGradeEdit'], response['hasEdit'], response['hasView']);
+                console.log(response);   
                 console.log('success');
                 //console.log(response);
             },
@@ -298,7 +354,7 @@ $(document).ready(function() {
 // function creates the enrolled structuring it into an object and so that it can be used by the datatable
 function createList (jsonData, base_url, hasGradeEdit, hasEdit, hasView){
   eList = [];
-  console.log(jsonData);
+//   console.log(jsonData);
 
     if (jsonData[0].length > 0){
 
@@ -310,7 +366,7 @@ function createList (jsonData, base_url, hasGradeEdit, hasEdit, hasView){
             eTempList.data[i][0].pActions = ((hasView == 1)? '<a href ="'+base_url+'client-info/'+eTempList.data[i][0].id+'">View</a>':"")+
             ((hasEdit == 1)? '&nbsp'+'<a href ="'+base_url+'edit-client-info/'+eTempList.data[i][0].id+'"> Edit</a>' : ""); 
             
-            eTempList.data[i][0].gView =((hasGradeEdit == 1)? '<a href ="'+base_url+'view-client-grade/'+(eTempList.data[i][0].programme.replace(/\s/g , "-")).replace(/'/g,"")+'/'+eTempList.data[i][0].id+'">View</a>' : "");
+            eTempList.data[i][0].gView =((hasGradeEdit == 1)? '<a href ="'+base_url+'view-client-grade/'+(eTempList.data[i][0].programme.replace(/\s/g , "-")).replace(/'/g,"")+'/'+eTempList.data[i][0].id+'">Edit</a>' : "");
 
             eList.push(eTempList.data[i][0]);
         }
@@ -330,21 +386,24 @@ function initializeDatatable(data){
             $('#enrolledList').DataTable().clear().destroy();
         }
         if (data != 0){
-            let gView = (hasGradeEdit == 1)? { "data": "gView", "sortable" : false } : '';
-            let pAction = (hasView == 1 || hasEdit == 1)? { "data": "pActions", "sortable" : false } : '';
+            let columns = [
+                { "data": "id" , "sortable" : true },
+                { "data": "full_name" , "sortable" : true},
+                { "data": "programme" , "sortable" : false, "width": "25%"},
+                { "data": "enrolled_in", "sortable" : false },
+                { "data": "dob", "sortable" : true},
+                { "data": "mobile_phone" , "sortable" : false}
+            ];
+            //we are gonna push the data for the colum if they have the privileges
+            (hasGradeEdit == 1)? columns.push({ "data": "gView", "sortable" : false }) : '';
+            (hasView == 1 || hasEdit == 1)? columns.push({ "data": "pActions", "sortable" : false }) : '';
+
+            
+            // columns.data = pAction;
+            // console.log(columns)
             $('#enrolledList').DataTable({
                     "data" : data,
-                    "columns" :[
-                    
-                    { "data": "id" , "sortable" : true },
-                    { "data": "full_name" , "sortable" : true},
-                    { "data": "programme" , "sortable" : false, "width": "25%"},
-                    { "data": "enrolled_in", "sortable" : false },
-                    { "data": "dob", "sortable" : true},
-                    { "data": "mobile_phone" , "sortable" : false},
-                    gView,
-                    pAction
-                    ],
+                    "columns" :columns,
                     "order": [[1, 'asc']]
 
             });    

@@ -33,7 +33,7 @@
                 <!-- <form class="form" action="<?php //echo base_url()?>register-client" method="post" id="clientInfoForm"> -->
                     <input type="hidden" name="action" value="addClient">
                     <h6>
-                        <small class="font-weight-bold">
+                        <small class="font-weight-bold text-primary">
                         PERSONAL INFORMATION
                         <hr>    
                         </small>        
@@ -137,12 +137,50 @@
                             <input type="text" class="form-control" name="email" id="" placeholder=""  required>
                         </div>
                    </div> 
+                   <br>
+                   <h6>
+                        <small class="font-weight-bold text-primary">
+                        CURRENT WORK INFO (Optional)
+                        <hr>
+                        </small>        
+                    </h6>
+                    
+                    <div class="row mb-1">
+                        <div class="col-12 col-md-6">
+                            <label for="companyName">Company Name:</label>
+                            <input type="text" class="form-control" name="companyName" id="" placeholder="" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="position">Position / Job Title:</label>
+                            <input type="text" class="form-control" name="position" id="" placeholder=""  required>
+                        </div>
+                    </div>
+
             <!--End of personal information col -->
             </div><!--/col-4-->
             <div class="col col-md-6 mt-5">
+                   <h6>
+                        <small class="font-weight-bold text-primary">
+                        EDUCATION
+                        <hr>
+                        </small>        
+                    </h6>
                     
+                    <div class="row mb-1">
+                        <div class="col-12 col-md-6">
+                            <label for="edName">School Name:</label>
+                            <input type="text" class="form-control" name="edName" id="" placeholder="" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="schoolLevel">Highest Level of Education</label>
+                            <input type="text" class="form-control" name="edDegree" id="" placeholder="" required>
+                            
+                        </div>
+                        
+                    </div>
+                    <br> 
                     <h6>
-                        <small class="font-weight-bold">
+                        <small class="font-weight-bold text-primary">
                         EMERGENCY CONTACT INFORMATION
                         <hr>
                         </small>        
@@ -164,10 +202,10 @@
                     </div>
                     <br>
                     <h6>
-                        <small class="font-weight-bold">
+                        <small class="font-weight-bold text-primary">
                         PERSONAL REFERENCES
                         <hr>
-                        </small>        
+                        </small> 
                     </h6>
                     <div class="row">
                         <div class="col-12 col-md-6">
@@ -227,7 +265,7 @@
                     </div>
                     <br>
                     <h6>
-                        <small class="font-weight-bold">
+                        <small class="font-weight-bold text-primary">
                         TRAINING PROGRAM
                         <hr>
                         </small>        
@@ -261,11 +299,11 @@
                             <label for="PreTest">Year Enrolled:</label>
                             <input type="number" class="form-control" name="enrolled_in" id="enrolledIn" value="<?php echo date('Y'); ?>" required>
                         </div>
-                        <div class="col col-md-12">
+                        <!-- <div class="col col-md-12">
                             <label for="comment">Comment:</label>
                             <textarea class="form-control" name="comment" placeholder="You can type something about the individual" rows="3"></textarea>
                         </div>
-                        
+                         -->
                     </div>
                     <!-- <hr>
                     <h6>

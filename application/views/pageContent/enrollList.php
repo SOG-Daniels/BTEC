@@ -1,8 +1,14 @@
 <?php 
   // $session = (empty($session)? '1': '');
   // echo "<pre>";
-  // print_r($enrolledList);
+  // print_r($this->session->userdata());
+  // // print_r($enrolledList);
   // echo "</pre>";
+  print_r($this->session->userdata());
+  print_r($this->session->userdata());
+  echo "</pre>";
+
+  $actions = $this->session->userdata('action');
 
 
 ?>
@@ -18,7 +24,7 @@
       <div class="col col-md-2">
         <?php 
           echo (in_array(1, $this->session->userdata('action'))?' 
-        <a class="btn btn-link btn-primary btn-sm nav-link text-light" href="<?php echo base_url()?>register-applicant" >
+        <a class="btn btn-link btn-primary btn-sm nav-link text-light" href="'.base_url().'register-applicant" >
           <i class="fas fa-fw fa-user-plus"></i>
           <span>Add Applicant</span>
         </a>' : '' );
@@ -58,8 +64,8 @@
               <th>Enrolled In </th>
               <th>DOB</th>
               <th>Phone #</th>
-              <?php echo (in_array(6, $this->session->userdata('action')))? '<th>Grades</th>' : '';?>
-              <?php echo (in_array(2, $this->session->userdata('action')) || in_array(7, $this->session->userdata('action')))? '<th class="text-center">Profile</th>' : '';?>
+              <?php echo (in_array(6, $actions))? '<th>Grades</th>' : '';?>
+              <?php echo (in_array(2, $actions) || in_array(7, $actions))? '<th class="text-center">Profile</th>' : '';?>
               
           </tr>
       </thead>
@@ -103,8 +109,8 @@
               <th>Enrolled In </th>
               <th>DOB</th>
               <th>Phone #</th>
-              <?php echo (in_array(6, $this->session->userdata('action')))? '<th>Grades</th>' : '';?>
-              <?php echo (in_array(2, $this->session->userdata('action')) || in_array(7, $this->session->userdata('action')))? '<th class="text-center">Profile</th>' : '';?>
+              <?php echo (in_array(6, $actions)? '<th>Grades</th>' : '');?>
+              <?php echo (in_array(2, $actions) || in_array(7, $actions))? '<th class="text-center">Profile</th>' : '';?>
               
           </tr>
       </tfoot>
@@ -124,6 +130,7 @@
   }
 </style>
 <script>
+var clist;
 var data = <?php echo json_encode($enrolledList, JSON_HEX_TAG); ?>;
 var hasGradeEdit = <?php echo (in_array(6,$this->session->userdata('action')))? 1 : 0;?>;
 var hasView = <?php echo (in_array(2,$this->session->userdata('action')))? 1 : 0;?>;

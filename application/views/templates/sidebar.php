@@ -111,7 +111,7 @@ $active = (isset($active))? $active : ' ';
         if (in_array(3, $actions)){
           echo '
             <li class="nav-item">
-            <button class="btn btn-link nav-link '.(($active === 'addUser')? 'active' : ' ').'" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
+            <button class="btn btn-link nav-link '.(($active === 'addUser')? '' : ' ').'" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
               <i class="fas fa-fw fa-user-plus "></i>
               <span>Add User</span>
             </button>

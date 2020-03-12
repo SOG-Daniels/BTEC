@@ -26,6 +26,10 @@
     <script src="<?php echo base_url()?>assets/js/demo/datatables-demo.js"></script>
     <!-- my custom jquery -->
     <script src="<?php echo base_url()?>assets/js/demo/customJS.js"></script>
+    
+    <!-- Boostrap Datepicker plugin -->
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet"> -->
+
 
 
   <title><?php echo $title; ?></title>

@@ -34,15 +34,15 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-12 col-md-6 "><!--left col-->
+            <div class="col-12 col-md-6"><!--left col-->
                 <div class="text-center">
-                <img src="<?php echo isset($personalInfo['imgPath'])? base_url().$personalInfo['imgPath'] : base_url()."upload/default_profile_img.png";?>" class="avatar rounded-circle img-thumbnail">
+                <img src="<?php echo isset($personalInfo['imgPath'])? base_url().$personalInfo['imgPath'] : base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="300" height="400">
                 <br>
                 <?php echo '<h3>'.$name.'</h3>';?>
                 </div>
 
             <h6>
-                <small class="font-weight-bold">
+                <small class="font-weight-bold text-primary">
                 PERSONAL INFORMATION
                 <hr>    
                 </small>        
@@ -141,7 +141,7 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
             </div><!--/col-4-->
             <div class="col-12 col-md-6 ">
             <h6>
-                <small class="font-weight-bold">
+                <small class="font-weight-bold text-primary">
                 REFERENCE #1
                 <hr>    
                 </small>        
@@ -173,7 +173,7 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
                 </div>
             </div>
             <h6>
-                <small class="font-weight-bold">
+                <small class="font-weight-bold text-primary">
                 REFERENCE #2
                 <hr>    
                 </small>        
@@ -206,7 +206,7 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
             
             </div>
             <h6>
-                <small class="font-weight-bold">
+                <small class="font-weight-bold text-primary">
                 REFERENCE #3
                 <hr>    
                 </small>        
