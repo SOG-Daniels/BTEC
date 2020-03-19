@@ -53,33 +53,61 @@ $route['default_controller'] = 'verification/login';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-//routes for user controller 
+//////////////////////User controller routes start/////////////////////
+
+//view my profile routes
 $route['profile'] = 'user/profile';
+
+// Home/Dashboard page routes
 $route['dashboard'] = 'user/get_dashboard';
+
+// Routes used for the Enrolled list 
 $route['enrolled-list'] = 'user/view_enrolled_list';
-$route['client-list'] = 'user/view_clients';
 $route['register-applicant'] = 'user/add_client';
-$route['add-user'] = 'user/add_user';
-$route['user-list'] = 'user/view_users';
+$route['view-client-grade/(:any)/(:num)'] = 'user/view_client_grade/$1/$2';
+
+// Route used to update grades
+$route['update-grades'] = 'user/update_client_grade';
+
+// Routes used for the Client List
+$route['client-list'] = 'user/view_clients';
+
+//routes are used in both Client list and Enrolled list
 $route['client-info/(:num)'] = 'user/view_client_profile/$1';
-$route['update-profile'] = 'user/update_my_profile';
+$route['edit-client-info/(:num)'] = 'user/update_client/$1';
+
+// Adding a user route
+$route['add-user'] = 'user/add_user';
+
+// Routes used for User List
+$route['user-list'] = 'user/view_users';
 $route['user-info/(:num)'] = 'user/view_user_profile/$1';
+$route['remove-user/(:num)'] = 'user/remove_user/$1';
+$route['update-user-profile'] = 'user/update_user_profile';
+
+// routes used for viewing my profile
+$route['update-profile'] = 'user/update_my_profile';
 $route['change-my-password'] = 'user/change_pass';
 $route['update-profile-picture'] = 'user/change_profile_pic';
-$route['update-user-profile'] = 'user/update_user_profile';
-$route['edit-client-info/(:num)'] = 'user/update_client/$1';
-$route['update-client-info/(:num)'] = 'user/update_client/$1';
-$route['view-client-grade/(:any)/(:num)'] = 'user/view_client_grade/$1/$2';
-$route['remove-user/(:num)'] = 'user/remove_user/$1';
-$route['update-grades'] = 'user/update_client_grade';
+
+//Additional routes
 $route['activate-user'] = 'user/activate_user';
+$route['autocomplete'] = 'user/auto_complete';
 
+//////////////////////User controller routes end///////////////////////
 
-//verification routes
+//program setup page routes
+$route['program-setup'] = 'user/program_setup';
+$route['save-program-setup'] = 'user/save_assesment_name';
+
+//verification routes start//
+
+//routes for login UI
 $route['login'] = 'verification/login';
 $route['logout'] = 'verification/logout';
 $route['change-password/(:any)'] = 'verification/change_password/$1';
 
+//verification routes end//
 
 //email controller routes
 $route['forgot-password'] = 'email/request_email';

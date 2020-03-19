@@ -228,6 +228,12 @@ class User extends CI_Controller{
             $this->form_validation->set_rules('ecNumber', 'Emergency Contact Number:', 'required|trim');
             $this->form_validation->set_rules('ecRelation', 'Emergency Contact Relation:', 'required|trim');
             
+            $this->form_validation->set_rules('company_name', 'Company Name:', 'required|trim');
+            $this->form_validation->set_rules('position', 'Position/Job Title:', 'required|trim');
+            
+            $this->form_validation->set_rules('ed_name', 'Insititution Name:', 'required|trim');
+            $this->form_validation->set_rules('ed_degree', 'Highest level of Education:', 'required|trim');
+            
             $this->form_validation->set_rules('refName1', 'Name Ref#1:', 'required|trim');
             $this->form_validation->set_rules('refAddress1', 'Address Ref#1:', 'required|trim');
             $this->form_validation->set_rules('refCity1', 'City Ref#1:', 'required|trim');
@@ -445,7 +451,8 @@ class User extends CI_Controller{
             $this->data['title'] = 'Update Client';
             
             if ($this->input->post('action') === 'updateClient'){
-               
+                
+                
                 $post = $this->input->post(NULL, TRUE);
 
                 $hasImgFile = (!empty($_FILES['clientImg']['name']))? 1 : 0;//checking if image was uploaded
@@ -777,11 +784,15 @@ class User extends CI_Controller{
         if( $this->is_session_set() && in_array(4, $this->user_actions)){
             
             //going to update the user profile
-            if ($this->input->post('action') === 'saveUserInfo' && $this->input->post('userid') !== ' '){
+            if ($this->input->post('action') === 'saveUserInfo' && !empty($this->input->post('userId'))){
             
                 $postData = $this->input->post(NULL, TRUE);
                 $result = $this->user_model->update_user_info($postData);
+                $result2 = $this->user_model->set_user_update_info($this->input->post('userId', TRUE), $this->userIdent);
 
+                if ($result2 === FALSE){
+                    log_message('debug', 'set_user_update_info() returned false, unable to set updated_on and updated by');
+                }
                 if ($result === FALSE){
                     echo 'Opps! some of modifications have not been saved!';
                 }else{
@@ -1091,7 +1102,6 @@ class User extends CI_Controller{
                 ';
 
             }
-           
             $this->session->set_flashdata('message', $this->data['message']);
             redirect('user-list');
 
@@ -1114,11 +1124,16 @@ class User extends CI_Controller{
 
             if (!empty($this->input->post())){
                 //passing post data to client model to update info
+                // echo "<pre>";
+                // print_r($this->input->post());
+                // echo "</pre>";
+                $comment = $this->input->post('comment');
                 echo "<pre>";
-                print_r($this->input->post());
+                echo $comment;
                 echo "</pre>";
 
-                $result = $this->client_model->update_client_grade($this->input->post(NULL, TRUE));
+                
+                $result = $this->client_model->update_client_grade($this->input->post(NULL, TRUE), $comment);
 
                 //Below are messages that will be flashed to the view once
                 if ($result === FALSE){
@@ -1147,15 +1162,24 @@ class User extends CI_Controller{
                         </div>
                     ';
 
-                    $result2 = $this->client_model->set_client_update_info($this->input->post('clientId'),$this->input->post('program'),$this->userIdent);
+                    $result2 = $this->client_model->set_client_updateGrade_info($this->input->post('clientId', TRUE),$this->input->post('program', TRUE),$this->userIdent);
                     if ($result2 == FALSE){
-                        log_message('error', 'User.php update_client_grade() : Could not ser client updated_on and updated by');
+                        log_message('debug', 'User.php update_client_grade() : Could not ser client updated_on and updated by');
                     }
 
                 }
 
-                $this->session->set_flashdata('message', $this->data['message']);
-                redirect('view-client-grade/'.$this->input->post('slug'));
+                $this->session->set_flashdata('message', $this->data['message']);//setting a message that will only be flashed once to the UI
+
+                if($this->input->post('status') != "1"){
+                //  status is not enrolled so we will go to the enrolled list
+                    redirect('user-list');
+                
+                }else{
+                // the user is still enrolled so we will reload the same page
+                    redirect('view-client-grade/'.$this->input->post('slug'));
+
+                }
 
             }
 
@@ -1187,11 +1211,165 @@ class User extends CI_Controller{
             }
         }else{
             
-            log_message('error', 'User.php active_user(), empty post recieved');
+            log_message('debug', 'User.php active_user(), empty post recieved');
 
         }
     }
+    /**
+     * calls upon a model to get the list of potential equal values to that of what is being searched
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    jasonEncode data that was found to be a match
+     */    
+    public function auto_complete(){
 
+        // if($this->client_model->)
+        if( $this->is_session_set() ){
+
+            if ($this->input->get('term')){
+                
+            }
+            
+            // echo '<script>alert("test");</script>';
+            // echo '<script>alert('.$this->input->get('term', TRUE).');</script>';
+            $result = $this->user_model->autocomplete_search( $this->input->get('term', TRUE));
+
+            if ($result === FALSE){
+                log_message('debug', 'Auto complete query returned false');
+            }else{
+                echo jason_encode($result); 
+                // echo "<pre>";
+                // print_r($result);
+                // echo "</pre>";
+            }
+
+        }else{
+            redirect('login');
+        }
+    }
+    /* program_setup will allow admin/users to setup the grades or availability of functions
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    jasonEncode data that was found to be a match
+     */    
+    public function program_setup(){
+    
+        if ($this->is_session_set()){
+           
+            // echo "<pre>";
+            // print_r($this->input->post());
+            // echo "</pre>";
+
+            // checking to see if ajax has sent a post request
+            if (!empty($this->input->post()) && !empty($this->input->post('program'))){
+
+                $result = $this->client_model->get_program_grades_names($this->input->post('program'), TRUE);
+                echo json_encode($result);
+                // echo jason_encode($this->data['programInfo']);
+                // echo 'test';     
+            }else{// No ajax post sent, then we will just load the default 
+
+                // $table = (!empty($this->input->post('program'))? $this->input->post('program') : 'barbering');
+                $this->data['programInfo'] = $this->client_model->get_program_grades_names();
+                
+                $this->data['title'] = "Program Setup";
+                
+                $this->load->view('templates/header', $this->data);
+                $this->load->view('templates/sidebar', $this->data);
+                $this->load->view('templates/topbar', $this->data);
+                $this->load->view('pageContent/programSetup', $this->data);
+                $this->load->view('templates/footer', $this->data);
+                // echo 'does not send the post';
+                // echo '<pre>';
+                // print_r($this->input->post());
+                // echo '</pre>';
+
+
+            }
+            // echo "<pre>";
+            // print_r($this->data['programInfo']);
+            // echo "</pre>";
+
+
+
+        }else{
+            redirect('login');
+        }
+    }
+    /* save_assesments_name will save the names of the assesments listed
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE
+     */    
+    public function save_assesment_name(){
+    
+        if ($this->is_session_set()){
+
+            if(!empty($this->input->post()) && !empty($this->input->post('program'))){
+
+                $result = $this->client_model->set_program_asses_name($this->input->post(NULL, TRUE));
+ 
+                if ($result === FALSE){
+
+                    $this->data['message'] = '
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5>
+                        <strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong> Something went wrong trying to update the assesment names. 
+                        <h5>
+                        </div>
+                    ';
+
+                }else if ($result === 0){
+                    
+                    $this->data['message'] = '
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5>
+                    <strong><i class="fa fa-2x fa-exclamation-mark"></i> Notice: </strong> The training/program you have selected does not have anyone enrolled at the moment.
+                    Please refer to the <a href="'.base_url().'enrolled-list"> enrolled list</a> or <a href="'.base_url().'client-list">add a client </a>
+                    <h5>
+                    </div>
+                ';
+
+                }else{
+
+                    $this->data['message'] = '
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5>
+                        <strong><i class="fa fa-2x fa-smile"></i> Success!</strong> The assesment names were saved. 
+                        <h5>
+                        </div>
+                        ';
+
+                }
+
+                $this->session->set_flashdata('message', $this->data['message']);
+                redirect('program-setup');
+
+
+            }else{
+                redirect('program-setup');
+            }
+
+        }else{
+            redirect('login');
+        }
+    }
+    
 }
 
 ?>

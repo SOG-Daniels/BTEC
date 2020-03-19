@@ -19,13 +19,22 @@
     <link href="<?php echo base_url()?>assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- include summernote css -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-bs4.min.css" rel="stylesheet">
+    
     <!-- scripts are loaded below because some jquery are used within some of the pageContents and triggers error if not declared here -->
     <script src="<?php echo base_url()?>assets/vendor/jquery/jquery.min.js"></script>
     <script src="<?php echo base_url()?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    
     <!-- Data Tables custom scripts -->
     <script src="<?php echo base_url()?>assets/js/demo/datatables-demo.js"></script>
-    <!-- my custom jquery -->
+    
+    <!-- my custom jquery is loaded here because some php files require this custom script to run its
+         javascript especially function definitions-->
     <script src="<?php echo base_url()?>assets/js/demo/customJS.js"></script>
+
+  
     
     <!-- Boostrap Datepicker plugin -->
     <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet"> -->

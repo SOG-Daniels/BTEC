@@ -7,16 +7,16 @@
 <h1 class="h3 mb-2 text-gray-800">User List</h1>
 
           <!-- DataTales Example -->
-          <div class="card shadow mb-4">
+          <div class="card shadow-lg mb-4">
             <div class="card-header py-3">
               <div class="row">
-                <div class=" col col-md-10">
+                <div class=" col-5 col-md-6">
                   <h6 class="m-0 font-weight-bold text-primary">Users</h6>
                 </div>
-                <div class="col col-md-2">
+                <div class="col-7 col-md-6 d-flex justify-content-end">
                 <?php 
                 if (in_array(3, $this->session->userdata('action'))){
-                  echo '<button class="btn btn-primary btn-sm nav-link float-right" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
+                  echo '<button class="btn btn-primary btn-sm" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
                   <i class="fas fa-fw fa-user-plus"></i>
                   <span>Add User</span>
                 </button>';
@@ -61,9 +61,9 @@
                           <td>'.$array->created_on.'</td>
                           <td>'.(($array->updated_by == NULL)? 'N/A': $array->updated_by).'</td>
                           <td>'.(($array->updated_on == NULL)? 'N/A' : $array->updated_on).'</td>
-                          <td><a href="'.site_url().'user-info/'.$array->id.'" > View </a></td>
+                          <td><a class="btn btn-link viewUser" href="'.site_url().'user-info/'.$array->id.'">View </a></td>
                           <td>'.((in_array(3, $this->session->userdata('action')) && in_array(8, $this->session->userdata('action')))? 
-                          '<a id="removeUser" href="'.site_url().'remove-user/'.$array->id.'" data-toggle="modal" data-target="#modalUserDelete" class="text-danger"> Delete </a></td>' 
+                          '<a id="removeUser" class="btn btn-link text-danger" href="'.site_url().'remove-user/'.$array->id.'" data-toggle="modal" data-target="#modalUserDelete" >Delete </a></td>' 
                           : '').'</tr>
                         
                         ';

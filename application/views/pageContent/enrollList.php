@@ -4,9 +4,9 @@
   // print_r($this->session->userdata());
   // // print_r($enrolledList);
   // echo "</pre>";
-  print_r($this->session->userdata());
-  print_r($this->session->userdata());
-  echo "</pre>";
+  // print_r($this->session->userdata());
+  // print_r($this->session->userdata());
+  // echo "</pre>";
 
   $actions = $this->session->userdata('action');
 
@@ -15,16 +15,16 @@
 <h1 class="h3 mb-2 text-gray-800">Enrolled List</h1>
 
 <!-- DataTales Example -->
-<div class="card shadow mb-4">
+<div class="card shadow-lg mb-4">
   <div class="card-header py-3">
     <div class="row">
-      <div class=" col col-md-10">
+      <div class=" col-8 col-md-8">
         <h6 class="m-0 font-weight-bold text-primary">Trainees</h6>
       </div>
-      <div class="col col-md-2">
+      <div class="col-4 col-md-4 d-flex justify-content-end">
         <?php 
           echo (in_array(1, $this->session->userdata('action'))?' 
-        <a class="btn btn-link btn-primary btn-sm nav-link text-light" href="'.base_url().'register-applicant" >
+        <a class="btn btn-link btn-primary btn-sm text-light" href="'.base_url().'register-applicant" >
           <i class="fas fa-fw fa-user-plus"></i>
           <span>Add Applicant</span>
         </a>' : '' );

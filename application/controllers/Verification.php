@@ -42,10 +42,12 @@ class Verification extends CI_Controller{
                     $data['message'] = '<div class="alert alert-danger" role="alert">
                     Please make sure email and password are correct
                     </div>';
-                    
-                    $this->load->view('templates/header', $data);
-                    $this->load->view('pageContent/login', $data);
-                    $this->load->view('templates/footer');
+
+                    $this->session->set_flashdata('message', $data['message']);//setting a message that will only be flashed once to the UI
+                    redirect('login');
+                    // $this->load->view('templates/header', $data);
+                    // $this->load->view('pageContent/login', $data);
+                    // $this->load->view('templates/footer');
                    
                 }else{
 

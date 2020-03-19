@@ -317,15 +317,21 @@ class Client_model extends CI_Model{
                 'ref_address1'  => $data['refAddress1'],
                 'ref_city1'  => $data['refCity1'],
                 'ref_phone1'  => $data['refPhone1'],
-                'ref_name2'  => $data['refName2'],
-                'ref_address2'  => $data['refAddress2'],
-                'ref_city2'  => $data['refCity2'],
-                'ref_phone2'  => $data['refPhone2'],
-                'ref_name3'  => $data['refName3'],
-                'ref_address3'  => $data['refAddress3'],
-                'ref_city3'  => $data['refCity3'],
-                'ref_phone3'  => $data['refPhone3'],
-                'profile_img_id' => $profileImgId
+                'ref_name2'  => (isset($data['refName2'])? $data['refName2'] : NULL),
+                'ref_address2'  => (isset($data['refAddress2'])? $data['refAddress2'] : NULL),
+                'ref_city2'  => (isset($data['refCity2'])? $data['refCity2'] : NULL),
+                'ref_phone2'  => (isset($data['refPhone2'])? $data['refPhone2'] : NULL),
+                'ref_name3'  => (isset($data['refName3'])? $data['refName3'] : NULL),
+                'ref_address3'  => (isset($data['refAddress3'])? $data['refAddress3'] : NULL),
+                'ref_city3'  => (isset($data['refCity3'])? $data['refCity3'] : NULL),
+                'ref_phone3'  => (isset($data['refPhone3'])? $data['refPhone3'] : NULL),
+                'profile_img_id' => $profileImgId,
+                'updated_on' => date("Y-m-d H:i:s"),
+                'updated_by' => $data['userIdent'],
+                'ed_degree' => $data['ed_degree'],
+                'ed_name' => $data['ed_name'],
+                'employed_at' => $data['company_name'],
+                'em_position' => $data['postion']
                                 
             );
 
@@ -397,16 +403,21 @@ class Client_model extends CI_Model{
                     'ref_address1'  => $data['refAddress1'],
                     'ref_city1'  => $data['refCity1'],
                     'ref_phone1'  => $data['refPhone1'],
-                    'ref_name2'  => $data['refName2'],
-                    'ref_address2'  => $data['refAddress2'],
-                    'ref_city2'  => $data['refCity2'],
-                    'ref_phone2'  => $data['refPhone2'],
-                    'ref_name3'  => $data['refName3'],
-                    'ref_address3'  => $data['refAddress3'],
-                    'ref_city3'  => $data['refCity3'],
-                    'ref_phone3'  => $data['refPhone3'],
+                    'ref_name2'  => (isset($data['refName2'])? $data['refName2'] : NULL),
+                    'ref_address2'  => (isset($data['refAddress2'])? $data['refAddress2'] : NULL),
+                    'ref_city2'  => (isset($data['refCity2'])? $data['refCity2'] : NULL),
+                    'ref_phone2'  => (isset($data['refPhone2'])? $data['refPhone2'] : NULL),
+                    'ref_name3'  => (isset($data['refName3'])? $data['refName3'] : NULL),
+                    'ref_address3'  => (isset($data['refAddress3'])? $data['refAddress3'] : NULL),
+                    'ref_city3'  => (isset($data['refCity3'])? $data['refCity3'] : NULL),
+                    'ref_phone3'  => (isset($data['refPhone3'])? $data['refPhone3'] : NULL),
                     'is_client' => $isClient,
-                    'profile_img_id' => $profileImgId
+                    'profile_img_id' => $profileImgId,
+                    'created_on' => date("Y-m-d H:i:s"),
+                    'ed_degree' => $data['ed_degree'],
+                    'ed_name' => $data['ed_name'],
+                    'employed_at' => $data['company_name'],
+                    'em_position' => $data['position']
                                     
                 );
 
@@ -426,7 +437,6 @@ class Client_model extends CI_Model{
                     'client_id' => $clientId,
                     'pre_test_avg' => $data['preTestAvg'],
                     'enrolled_in' => $data['enrolled_in'],
-                    'comments' => $data['comment'],
                     'status' => $status
 
                 );
@@ -892,28 +902,48 @@ class Client_model extends CI_Model{
      *
      * @access    public
      * @param     data the post data  
+     * @param     comment the comment made on the client
      * 
      * @return    Boolean true if successful, false if transaction faild
      */    
-    public function update_client_grade($data = NULL) {
+    public function update_client_grade($data = NULL, $comment = NULL) {
 
         if (!empty($data)){
 
+            $average = 0;
+            $assSum = 0;
+            $assCount = 0;
+
             $set = array();
-            $set['status'] = ($data['status'] == 0 ? 'Enrolled' : $data['status']);
-            $set['final_Assesment'] = isset($data['final_assesment'])? $data['final_assesment'] : NULL;
-            $set['comments'] = isset($data['comment'])? $data['comment'] : NULL;
+            $set['status'] = ($data['status'] == "1" )? 'Enrolled' : $data['status'];
+            // $set['final_Assesment'] = isset($data['final_assesment'])? $data['final_assesment'] : NULL;
+            $set['comments'] = isset($comment)? $comment : NULL;
             
            
             // in the query for assesmets 1-5 we are checking to see if the input exist by means of checking array keys
-            if (array_key_exists('assesment', $data)){
-                $set['Assesment1'] = array_key_exists(0,$data['assesment']) ? $data['assesment'][0]: NULL;
-                $set['Assesment2'] = array_key_exists(1,$data['assesment']) ? $data['assesment'][1]: NULL;
-                $set['Assesment3'] = array_key_exists(2,$data['assesment']) ? $data['assesment'][2]: NULL;
-                $set['Assesment4'] = array_key_exists(3,$data['assesment']) ? $data['assesment'][3]: NULL;
-                $set['Assesment5'] = array_key_exists(4,$data['assesment']) ? $data['assesment'][4]: NULL;
+            if (array_key_exists('assesGrade', $data)){
+
+                for($i = 0; $i < 5; $i++){
+
+                    if (array_key_exists($i, $data['assesGrade'])){
+                        
+                        $set['Assesment'.($i + 1)] = $data['assesName'][$i].','.$data['assesGrade'][$i];
+                        $assSum += $data['assesGrade'][$i];
+                        $assCount++;
+
+                    }
+                    // else{
+                    //     $set['Assesment'.($i + 1)] = NULL;
+                    // }
+
+                }
+                // $set['Assesment2'] = array_key_exists(1,$data['assesment']) ? $data['assesment'][1]: NULL;
+                // $set['Assesment3'] = array_key_exists(2,$data['assesment']) ? $data['assesment'][2]: NULL;
+                // $set['Assesment4'] = array_key_exists(3,$data['assesment']) ? $data['assesment'][3]: NULL;
+                // $set['Assesment5'] = array_key_exists(4,$data['assesment']) ? $data['assesment'][4]: NULL;
 
             }else{
+
                 $set['Assesment1'] = NULL;
                 $set['Assesment2'] = NULL;
                 $set['Assesment3'] = NULL;
@@ -921,13 +951,14 @@ class Client_model extends CI_Model{
                 $set['Assesment5'] = NULL;
               
             }            
+            $set['final_grade'] = ($assSum / $assCount);
 
             // echo $endSql;
             $this->db->trans_start();
 
-            echo "<pre>";
-            print_r($set);
-            echo "</pre>";
+            // echo "<pre>";
+            // print_r($set);
+            // echo "</pre>";
             
             //  $this->db->query($sql);
             $this->db->update($data['program'], $set, 'client_id= '.$data['clientId'].'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
@@ -954,7 +985,7 @@ class Client_model extends CI_Model{
      * 
      * @return    Boolean true if successful, false if transaction faild
      */    
-    public function set_client_update_info($clientId = NULL, $table = NULL, $userIdentity = NULL) {
+    public function set_client_updateGrade_info($clientId = NULL, $table = NULL, $userIdentity = NULL) {
         
         $this->db->trans_start();
         
@@ -969,7 +1000,93 @@ class Client_model extends CI_Model{
         return TRUE;
     
     }
+    /**
+     * function set updated_by and update_on in the choosen table
+     *
+     * @access    public
+     * @param     table the table we are to query from, by default it is barbering
+     * @param     userIdentity the signiture stamp of the user that made the update  
+     * 
+     * @return    Boolean true if successful, false if transaction faild
+     */    
+    public function get_program_grades_names($table = 'barbering') {
+        $this->db->trans_start();
+        
+        $this->db->select('Assesment1, Assesment2, Assesment3, Assesment4, Assesment5');
+        $this->db->where('status', 'Enrolled' );
+        $query = $this->db->get($table);
 
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+        
+        return $query->row_array();
+
+    }
+
+    /**
+     * updates the assesment names of the program/ training
+     *
+     * @access    public
+     * @param     data the post data  
+     * 
+     * @return    Boolean true if successful, false if transaction faild
+     */    
+    public function set_program_asses_name($data = NULL) {
+        
+        // $assesments = array();
+        $set = array();
+        $table = $data['program'];
+
+        // in the query for assesmets 1-5 we are checking to see if the input exist by means of checking array keys
+        if (array_key_exists('assesmentName', $data)){
+
+            for($i = 0; $i < 5; $i++){
+
+                if (array_key_exists($i, $data['assesmentName'])){
+                    // pushing to the set array the assesment names
+                    $set['Assesment'.($i + 1)] = $data['assesmentName'][$i].',';
+                
+                }else{
+                    // setting the assesment to null if no grades were entered
+                    $set['Assesment'.($i + 1)] = NULL;
+                
+                }
+
+            }
+
+        }else{
+
+            //there were no assesments entered therefore all assesments will be set to null
+
+            $set['Assesment1'] = NULL;
+            $set['Assesment2'] = NULL;
+            $set['Assesment3'] = NULL;
+            $set['Assesment4'] = NULL;
+            $set['Assesment5'] = NULL;
+            
+        }            
+        $this->db->trans_start();
+        
+        $this->db->where();
+        $this->db->where();
+        // $this->db->update($table, $set, array('status' => 'Enrolled'));
+
+        $affectedRows = $this->db->affected_rows();
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){//Something went wrong with the query
+            return FALSE;
+        }
+        if($affectedRows === 0){// checking to see if the query ran successfully but no updates made
+            return 0;
+        }
+        
+        return TRUE;
+    }
 
 }
 

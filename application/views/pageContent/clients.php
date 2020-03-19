@@ -16,13 +16,13 @@
   }
 </style>
 <!-- DataTales Example -->
-<div class="card shadow mb-4">
+<div class="card shadow-lg mb-4">
   <div class="card-header py-3">
     <div class="row">
-      <div class="col-12 col-md-10">
-        <h6 class="m-0 font-weight-bold text-primary">Clients</h6>
+      <div class="col-5 col-md-6">
+        <h6 class=" font-weight-bold text-primary">Clients</h6>
       </div>
-      <div  class="col-12 col-md-2 pl-5 ">
+      <div  class="col-7 col-md-6 d-flex justify-content-end">
         <?php 
           echo (in_array(1, $this->session->userdata('action'))?' 
           <a class="btn btn-primary btn-sm" href="<?php echo base_url()?>register-applicant" >

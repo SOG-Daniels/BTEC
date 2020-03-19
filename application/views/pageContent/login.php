@@ -2,11 +2,11 @@
 <div class="container-fluid">
 	<div class="row mt-5">
 		<div class="col-md-12 d-flex justify-content-center mt-5"> 
-			<div class="card" style="width: 25rem;" >
+			<div class="card shadow-lg" style="width: 25rem;" >
 			<div class="card-body">
 				<h4 class="card-title text-center mb-4 mt-1">Login</h4>
 				<hr>
-				<?php echo (isset($message))? $message: ''; ?>
+				<?php echo (!empty($this->session->flashdata('message')))? $this->session->flashdata('message') : ''; ?>
 				<form role="form" method="POST" action="<?php echo base_url()?>login">
 				<div class="form-group">
 				<div class="input-group">

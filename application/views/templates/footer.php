@@ -15,7 +15,7 @@
       <footer class="bg-white">
               <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                  <span>Copyright &copy; ci_miniproject 2020</span>
+                  <span>Copyright &copy; ci_miniproject '.date('Y').'</span>
                 </div>
               </div>
       </footer>
@@ -50,7 +50,7 @@
         <form role="form" action="<?php echo base_url()?>add-user" method="POST">
         <div class="modal-body">
           <div class="row">
-            <div class="col col-md-6">
+            <div class="col-12 col-md-6">
               <div class="form-group">
                 <label for="fname">First Name:</label>
                 <input type="text" class="form-control" name="fname" id="fname" placeholder="John..." required>
@@ -66,7 +66,7 @@
                 <input type="text" class="form-control" name="uname" id="uname" placeholder="Pudge..." required>
               </div>
             </div>
-            <div class="col col-md-6">
+            <div class="col-12 col-md-6">
               <div class="form-group">
                 <label for="lname">Last Name:</label>
                 <input type="text" class="form-control" name="lname" id="lname" placeholder="Doe..." required>
@@ -77,70 +77,84 @@
                 <input type="number" class="form-control" name="phone" id="phone" placeholder="668-74..." required>
               </div>
                 <label class="" for="last_name">Priviledge:</label>
-              <div class="form-group offset-md-1">
+              <div class="form-group offset-1">
                 <input class="form-check-input" type="checkbox" id="selectAll">
                 <label>Select All</label>
               </div>
               <div class="form-group" id="privileges">
-                                <div class="row offset-md-1">
-                                    <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" id="privi2" type="checkbox" value="2" name="privileges[]" id="" checked >
-                                        <label class="form-check-label" for="viewClients">
-                                            View Clients
-                                        </label>
-                                    </div>
-                                    <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" id="privi4" type="checkbox" value="4" name="privileges[]" >
-                                        <label class="form-check-label" for="viewUsers">
-                                            View Users
-                                        </label>
-                                    </div>
-                                </div>
-                                
-                                <div class="row offset-md-1">
-                                    <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" id="privi1" type="checkbox" value="1" name="privileges[]" checked>
-                                        <label class="form-check-label" for="addClient">
-                                            Add Client
-                                        </label>
-                                    </div>
-                                    <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" id="privi3" type="checkbox" value="3" name="privileges[]" >
-                                        <label class="form-check-label" for="addClient">
-                                            Add User
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="row offset-md-1">
-                                    <div class="col col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="7" name="privileges[]" id="privi7">
-                                        <label class="form-check-label" for="editClient">
-                                            Edit Client
-                                        </label>
-                                    </div>
-                                    <div class="col col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="8" name="privileges[]" id="privi8" >
-                                        <label class="form-check-label" for="editUser">
-                                            Edit User
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="row offset-md-1">
-                                    <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" id="privi5" type="checkbox" value="5" name="privileges[]" checked>
-                                        <label class="form-check-label" for="enrolledList">
-                                            View Enrolled List
-                                        </label>
-                                    </div>
-                                    <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" id="privi6" type="checkbox" value="6" name="privileges[]" >
-                                        <label class="form-check-label" for="editGrade">
-                                            Edit Grades
-                                        </label>
-                                    </div>
-                                </div>
-                                 
-                            </div> </div>
+                <div class="row offset-1">
+                    <div class="col-12 col-md-5 form-check">
+                        <input class="form-check-input" id="privi2" type="checkbox" value="2" name="privileges[]" id="" checked >
+                        <label class="form-check-label" for="viewClients">
+                            View Clients
+                        </label>
+                    </div>
+                    <div class="col-12 col-md-5 form-check">
+                        <input class="form-check-input" id="privi4" type="checkbox" value="4" name="privileges[]" >
+                        <label class="form-check-label" for="viewUsers">
+                            View Users
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="row offset-1">
+                    <div class="col-12 col-md-5 form-check">
+                        <input class="form-check-input" id="privi1" type="checkbox" value="1" name="privileges[]" checked>
+                        <label class="form-check-label" for="addClient">
+                            Add Client
+                        </label>
+                    </div>
+                    <div class="col-12 col-md-5 form-check">
+                        <input class="form-check-input" id="privi3" type="checkbox" value="3" name="privileges[]" >
+                        <label class="form-check-label" for="addClient">
+                            Add User
+                        </label>
+                    </div>
+                </div>
+                <div class="row offset-1">
+                    <div class="col-12 col-md-5 form-check">
+                        <input class="form-check-input action" type="checkbox" value="7" name="privileges[]" id="privi7" checked>
+                        <label class="form-check-label" for="editClient">
+                            Edit Client
+                        </label>
+                    </div>
+                    <div class="col-12 col-md-5 form-check">
+                        <input class="form-check-input action" type="checkbox" value="8" name="privileges[]" id="privi8" >
+                        <label class="form-check-label" for="editUser">
+                            Edit User
+                        </label>
+                    </div>
+                </div>
+                <div class="row offset-1">
+                    <div class="col-12 col-md-5 form-check">
+                        <input class="form-check-input" id="privi5" type="checkbox" value="5" name="privileges[]" checked>
+                        <label class="form-check-label" for="enrolledList">
+                            View Enrolled List
+                        </label>
+                    </div>
+                    <div class="col-12 col-md-5 form-check">
+                        <input class="form-check-input" id="privi6" type="checkbox" value="6" name="privileges[]" checked>
+                        <label class="form-check-label" for="editGrade">
+                            Edit Grades
+                        </label>
+                    </div>
+                </div>
+                <div class="row offset-1">
+                    <div class="col-12 col-md-5 form-check">
+                        <input class="form-check-input" id="privi9" type="checkbox" value="9" name="privileges[]" >
+                        <label class="form-check-label" for="enrolledList">
+                            Program Setup
+                        </label>
+                    </div>
+                    <!-- <div class="col col-md-5 form-check">
+                        <input class="form-check-input" id="privi6" type="checkbox" value="6" name="privileges[]" >
+                        <label class="form-check-label" for="editGrade">
+                            Edit Grades
+                        </label> -->
+                </div>
+                  
+              </div>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -247,6 +261,28 @@
       </div>
     </div>
   </div>
+<!-- Program completion Confimation Modal-->
+ <div class="modal fade" id="modalProgramConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        
+          <h5 class="modal-title text-dark" id="confirmprogramcom">Are you sure you're ready to submit?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "CONFIRM" below to confirm Client Completion.</div>
+        
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a id="confirmProgComp" href="#" class="btn btn-link btn-primary text-white" >CONFIRM</a>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+
 
 
 <!-- !END OF MODALS -->
@@ -269,10 +305,40 @@
   <script src="assets/js/demo/chart-area-demo.js"></script>
   <script src="assets/js/demo/chart-pie-demo.js"></script> -->
   
+  
+  <!-- JQuery plugins for autocomplete feature -->
+  <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.min.js"></script>
+   -->
   <!-- Data Tables plugins -->
   <script src="<?php echo base_url()?>assets/vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="<?php echo base_url()?>assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  
+  <!-- data picker custom javascript -->
   <script src="<?php echo base_url()?>assets/js/bootstrap-datepicker.js"></script>
+  
+  <!-- Summernote plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-bs4.min.js"></script>
+
+    
+  <script type="text/javascript">
+    //declaring variable for global use
+    // $(function() {
+    // $("#auto").autocomplete({
+    //     source: "<?php //echo base_url('autocomplete'); ?>",
+    //     minLength: 1,
+    //     select: function( event, ui ) {
+    //         event.preventDefault();
+    //         $("#skill_input").val(ui.item.id);
+    //     }
+    //     // source: function(request, response) {
+    //     //   var results = $.ui.autocomplete.filter(src, request.term);
+          
+    //     //   response(results.slice(0, 10));
+    //     // }
+    // });
+// });
+  </script>
 
   <!-- Data Tables custom scripts -->
   <!-- <script src="<php echo base_url()?>assets/js/demo/datatables-demo.js"></script>

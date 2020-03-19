@@ -439,6 +439,36 @@ class User_model extends CI_Model{
         return TRUE;
         
     }
+    /**
+     * Will query the applicants table to get alist of all the clients based on the search value
+     *
+     * @access    public
+     * @param     word the keyword that is to be queried
+     * 
+     * @return    Array containing all the data that matched the word
+     */    
+    public function autocomplete_search($word = NULL) {
+
+        $this->db->trans_start();
+          
+           $sql = $this->db->query('
+            SELECT CONCAT (first_name," ",last_name) as full_name
+            FROM applicants
+            WHERE 
+                first_name = "%'.$word.'%" or last_name = "%'.$word.'%"
+           ');
+            $query = $this->db->get();
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+        
+        return $query->result_array();
+
+    
+    }
 }
 
 ?>

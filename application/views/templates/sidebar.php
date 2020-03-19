@@ -137,6 +137,26 @@ $active = (isset($active))? $active : ' ';
         }
         ?>
 
+      <!-- Nav Item - Tables -->
+      <?php 
+        
+        if (in_array(9, $actions)){
+          echo '
+
+          <!-- Heading -->
+          <div class="sidebar-heading">
+            Program Settings
+          </div>
+              <li class="nav-item '.(($active === "programSetup")? "active" : " ").'">
+                <a class="nav-link" href="'.site_url('program-setup').'">
+                  <i class="fas fa-fw fa-cog "></i>
+                  <span>Program Setting</span></a>
+              </li>
+          <!-- Divider -->
+          <hr class="sidebar-divider">
+              ';
+        }
+      ?>
 
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">

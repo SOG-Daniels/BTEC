@@ -1,13 +1,14 @@
 <?php 
     // echo "<pre>";
-    // print_r($clientData);
+    // // print_r($clientData);
+    // print_r($this->session->userdata());
     // echo "</pre>";
     // echo "<pre>";
     // print_r($programList);
     // echo "</pre>";
     echo validation_errors();
     echo (isset($addClientMessage))? $addClientMessage : ' ';?>
-<div class="card shadow mb-3">
+<div class="card shadow-lg mb-3">
     <div class="card-header py-3">
     <?php
         //@param 1 action location one form is submitted
@@ -17,7 +18,7 @@
     <span class="float-right ">
         <button  id="updateClient" class="btn btn-sm btn-primary " type="submit"><i class=" fa fa-check"></i> Apply Changes</button>
     </span>
-    <h1 class="h4 mb-2 text-gray-800">Application Form</h1>
+    <h1 class="h4 mb-2 text-gray-800">Update Client</h1>
     </div>
     <div class="card-body">
         <div class="row">
@@ -26,7 +27,7 @@
                     <img src="<?php echo base_url().((isset($clientData[0]['imgPath']))? $clientData[0]['imgPath'] : 'upload/default_profile_img.png'); ?>" class="avatar rounded img-thumbnail" alt="avatar">
                     <br>
                     <?php //echo isset($clientName)? '<h3 class=" ">'.$clientName.'</h3>' : 'Client Image'; ?>
-                    <div class="p-image">
+                    <div class="p-image pt-2">
                         <a href="#" id="upload-client-img">
                         <i class="fa fa-camera "></i> Upload Image
                         </a>
@@ -37,8 +38,10 @@
                 
                 <!-- <form class="form" action="<?php //echo base_url()?>register-client" method="post" id="clientInfoForm"> -->
                 <input type="hidden" name="action" value="updateClient">
+                <input type="hidden" name="userIdent" value="<?php echo $this->session->userdata('userIdentity');?>">
+
                     <h6>
-                        <small class="font-weight-bold">
+                        <small class="font-weight-bold text-dark">
                         PERSONAL INFORMATION
                         <hr>    
                         </small>        
@@ -147,7 +150,7 @@
             <div class="col col-md-6 mt-5">
                     
                     <h6>
-                        <small class="font-weight-bold">
+                        <small class="font-weight-bold text-dark">
                         EMERGENCY CONTACT INFORMATION
                         <hr>
                         </small>        
@@ -169,7 +172,7 @@
                     </div>
                     <br>
                     <h6>
-                        <small class="font-weight-bold">
+                        <small class="font-weight-bold text-dark">
                         PERSONAL REFERENCES
                         <hr>
                         </small>        
@@ -232,8 +235,8 @@
                     </div>
                     <br>
                     <h6>
-                        <small class="font-weight-bold">
-                        TRAINING PROGRAM
+                        <small class="font-weight-bold text-dark">
+                        TRAINING PROGRAM TAKEN
                         <hr>
                         </small>        
                     </h6>
@@ -247,8 +250,8 @@
                                         <div class="row">
                                             <div class="col-12 col-md-6">
                                                 <div class="form-group">
-                                                    <label for="trainings">Trainings:</label>
-                                                    <select class="form-control" name="programList['.$program.'][programme]" id="trainings">
+                                                    <label for="trainings">Training:</label>
+                                                    <select class="form-control" name="programList['.$program.'][programme]" id="trainings" disabled>
                                                     <option  value="'.$program.'">'.$data[0]['programme'].'</option>
                                                     
                                                     </select>
@@ -256,15 +259,11 @@
                                             </div>
                                                 <div class="col-12 col-md-3">
                                                 <label for="PreTest">Pre-Test Avg:</label>
-                                                <input type="number" class="form-control" name="programList['.$program.'][pre_test_avg]" id="preTestAvg" value="'.(isset($data[0]['pre_test_avg'])? $data[0]['pre_test_avg']: '').'" required>
+                                                <input type="number" class="form-control" name="programList['.$program.'][pre_test_avg]" id="preTestAvg" value="'.(isset($data[0]['pre_test_avg'])? $data[0]['pre_test_avg']: '').'" disabled>
                                             </div>
                                             <div class="col-12 col-md-3">
                                                 <label for="PreTest">Year Enrolled:</label>
-                                                <input type="number" class="form-control" name="programList['.$program.'][enrolled]" id="enrolledIn" value="'.(isset($data[0]['enrolled_in'])? $data[0]['enrolled_in']:'').'" required>
-                                            </div>
-                                            <div class="col col-md-12">
-                                                <label for="comment">Comment:</label>
-                                                <textarea class="form-control" name="programList['.$program.'][comment]"  rows="3">'.(isset($data[0]['comments'])? $data[0]['comments']: '').'</textarea>
+                                                <input type="number" class="form-control" name="programList['.$program.'][enrolled]" id="enrolledIn" value="'.(isset($data[0]['enrolled_in'])? $data[0]['enrolled_in']:'').'" disabled>
                                             </div>
                                             
                     
@@ -283,6 +282,17 @@
 
 
                         ?>
+                                            <!-- <div class="col col-md-12">
+                                                <label for="comment">Comment:</label>
+                                                <textarea class="form-control" name="programList['.$program.'][comment]"  rows="3">'.(isset($data[0]['comments'])? $data[0]['comments']: '').'</textarea>
+                                            </div> -->
+                    <br>
+                    <h6>
+                        <small class="font-weight-bold text-dark">
+                        ADD A NEW TRAINING PROGRAM (Optional)
+                        <hr>
+                        </small>        
+                    </h6>
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group">
@@ -317,10 +327,10 @@
                             <label for="PreTest">Year Enrolled:</label>
                             <input type="number" class="form-control" name="<?php echo 'programList[newProgram][enrolled]';?>" id="enrolledIn" value="<?php echo date('Y'); ?>" >
                         </div>
-                        <div class="col col-md-12">
+                        <!-- <div class="col col-md-12">
                             <label for="comment">Comment:</label>
                             <textarea class="form-control" name="<?php echo 'programList[newProgram][comment]';?>" placeholder="You can type something about the individual" rows="3"></textarea>
-                        </div>
+                        </div> -->
                         
 
                     </div>
