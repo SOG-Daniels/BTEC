@@ -10,10 +10,10 @@
           <div class="card shadow-lg mb-4">
             <div class="card-header py-3">
               <div class="row">
-                <div class=" col-8 col-md-10">
+                <div class=" col-12 col-md-10">
                   <h5 class="m-0 font-weight-bold text-primary"><?php echo $programInfo[0]['programme'] ?></h5>
                 </div>
-                <div class="col-4 col-md-2 d-flex justify-content-end">
+                <div class="col-12 col-md-2 d-flex justify-content-end">
                 <button id="saveGradeChanges" class="btn btn-success btn-sm ">
                   <i class="fas fa-fw fa-save"></i>
                   <span>Save</span>
@@ -28,10 +28,10 @@
                         <div class="text-center">
                         <img src="<?php echo isset($programInfo[0]['imgPath'])? base_url().$programInfo[0]['imgPath'] : base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="300" height="350">
                         <br>
-                        <?php echo '<h3 class="pt-2">'.$programInfo[0]['first_name'].' '.$programInfo[0]['last_name'].'</h3>';?>
+                        <?php echo '<h3 class="pt-2 text-dark">'.ucwords($programInfo[0]['first_name'].' '.$programInfo[0]['last_name']).'</h3>';?>
                         </div>
                         <h6>
-                            <small class="font-weight-bold text-dark">
+                            <small class="font-weight-bold text-primary">
                             PERSONAL INFORMATION
                             <hr>    
                             </small>        
@@ -100,13 +100,14 @@
                     </div>
                     </div>
                   </div>
-                  <div class="col-12 col-md-7 border-left">
+                  <div class="col-12 col-md-7">
                     <h6>
-                        <small class="font-weight-bold text-dark">
+                        <small class="font-weight-bold text-primary">
                         PROGRAM ASSESMENTS 
                         <hr>    
                         </small>        
                     </h6>
+                <div  class="rounded" style="background-color: #F5F5F5 ;">
 
                 <form id="gradeForm" action="<?php echo base_url() ;?>update-grades/" method="POST">
                   <input type="hidden" name="action" value="updateGrades">
@@ -114,7 +115,7 @@
                   <input type="hidden" name="clientId" value="<?php echo (isset($programInfo[0]['clientId'])? $programInfo[0]['clientId'] : '');?>">
                   <input type="hidden" name="slug" value="<?php echo (isset($programInfo[0]['slug'])? $programInfo[0]['slug'] : '');?>">
                     <div id="assesments">
-                      <div class="row">
+                      <div class="row pl-3 pr-3 pt-3">
                     <!-- <input type="hidden" name="assesment[]" value=""> -->
                     <?php 
                     if (!empty($programInfo[0]['Assesment1'])){
@@ -162,8 +163,8 @@
                     </div>
                   
                     <br>
-                    <div class="row">
-                    <div class="form-group col-12 col-md-6">
+                    <div class="row pl-3 pr-3">
+                    <div class="form-group col-12 col-md-6 ">
                       <label>Course Status:</label>
                       <select class="custom-select" name="status" id="courseStatus">
                         <option selected value="1">Enrolled</option>
@@ -181,8 +182,10 @@
                     <div class="form-group col-12">                   
                       <label for="my-textarea">Comment:</label>
                       <textarea id="programComment" name="comment" ></textarea>
+                      <br>
                     </div>
                   </form>
+                  </div>
                   </div>
                 </div>
             </div>

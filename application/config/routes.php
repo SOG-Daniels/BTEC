@@ -75,6 +75,7 @@ $route['client-list'] = 'user/view_clients';
 //routes are used in both Client list and Enrolled list
 $route['client-info/(:num)'] = 'user/view_client_profile/$1';
 $route['edit-client-info/(:num)'] = 'user/update_client/$1';
+$route['update-client-info/(:num)'] = 'user/update_client/$1';
 
 // Adding a user route
 $route['add-user'] = 'user/add_user';

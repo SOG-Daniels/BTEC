@@ -489,7 +489,7 @@ class User extends CI_Controller{
                     ';
                 }
                     $this->session->set_flashdata('message',$message);
-                    redirect('client-list') ;
+                    redirect('edit-client-info/'.$clientId) ;
 
             }else{
 

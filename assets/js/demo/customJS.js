@@ -234,10 +234,14 @@ $(document).ready(function() {
 
     });
     
+    // Function below works for the select all for adding a user
+    // selects all the privileges when the checkbox select all is selected and likewise
+    // removes the uncheck off all privileges upon unchecking the checkbox
+
     $('#selectAll').change(function() {
         if($(this).is(':checked')){
-            //setting all selects indside div to checked
-            for (i = 1; i <= 8; i++){
+            //setting all checkbox indside div to checked
+            for (i = 1; i <= 9; i++){
 
                 $('#privi'+i).attr("checked", true);
         
@@ -245,7 +249,7 @@ $(document).ready(function() {
         
         }
         if(!$(this).is(':checked')){
-            //removing checked from all selects inside div
+            //removing checked from all checkbox inside the div
             for (i = 1; i <= 8; i++){
 
                 $('#privi'+i).attr("checked", false);
@@ -254,6 +258,8 @@ $(document).ready(function() {
         }
       });
 
+      // triggered when the deleteing a user is click and assignes the modals confirm 
+      // delete button the same href as the delete button link that was clicked
     $('#removeUser').click(function(e){
         e.preventDefault();
         let url = $(this).attr('href');
@@ -261,13 +267,16 @@ $(document).ready(function() {
         $('#confirmUserDelete').attr('href', url);
     });
 
+    //Used for changing a password in the user profile page.
+    //it calls to the checkPasswordMatch() function to validate passwords
     $("#newPass, #confirmPass").keyup(checkPasswordMatch);
 
+    // $("#clientInfoForm :input").attr("readOnly", true);//not used
+    
     //Make all inputs in the clientinfoform readonly
-    // $("#clientInfoForm :input").attr("readOnly", true);
     $("#profileForm :input").attr("readOnly", true);
     
-    //form for modifying a user profile
+    //form for updating a user profile is set to readonly
     $("#userInfoForm :input").attr("readOnly", true);
     
     var readURL = function(input) {
@@ -309,27 +318,31 @@ $(document).ready(function() {
         readURL(this);
 
     });
-
-    $('#editClient').click(function(e){
+// /////////// Code no longer in use //////////////////////
+    // Maked the edit client inputs writtable 
+    // $('#editClient').click(function(e){
         
-        e.preventDefault();//if the button is to submit it will not do it //
-        $("#clientInfoForm :input").attr("readOnly", false);
-        $("#editClient").css("display", "none");
-        $("#saveClientInfo").css("display", "block");
-        $("#upload-img").css("display", "block");
+    //     e.preventDefault();//if the button is to submit it will not do it //
+    //     $("#clientInfoForm :input").attr("readOnly", false);
+    //     $("#editClient").css("display", "none");
+    //     $("#saveClientInfo").css("display", "block");
+    //     $("#upload-img").css("display", "block");
 
-    });
-    $('#saveClientInfo').click(function(e){
+    // });
+    // $('#saveClientInfo').click(function(e){
 
-        e.preventDefault();//if the button is to submit it will not do it //
-        $("#clientInfoForm :input").attr("readOnly", true);
-        $("#editClient").css("display", "block");
-        $("#saveClientInfo").css("display", "none");
-        $("#upload-img").css("display", "none");
+    //     e.preventDefault();//if the button is to submit it will not do it //
+    //     $("#clientInfoForm :input").attr("readOnly", true);
+    //     $("#editClient").css("display", "block");
+    //     $("#saveClientInfo").css("display", "none");
+    //     $("#upload-img").css("display", "none");
 
-        //send out the input feilds that were modified and update the database 
+    //     //send out the input feilds that were modified and update the database 
 
-    });
+    // });
+    /////////////////////////////////////////////////////////////////////////////////////////
+
+    // Used in the edit my profile page, makes all input fields writable
     $('#editProfile').click(function(e){
         
         e.preventDefault();//if the button is to submit it will not do it //
@@ -339,6 +352,10 @@ $(document).ready(function() {
         $("#saveProfileInfo").css("display", "block");
 
     });
+
+    // Used in the edit my profile page.
+    // sends an jquery ajax post to update the users profile 
+    // and upon success makes all input fields readonly
     $('#saveProfileInfo').click(function(e){
 
         e.preventDefault();//if the button is to submit it will not do it //

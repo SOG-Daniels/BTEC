@@ -41,22 +41,22 @@
                     <!--Start of personal information form   -->
                     <div class="row">
                         <div class="col-12 col-md-6 form-group">
-                            <label for="first_name">First Name:</label>
+                            <label for="first_name" class="font-weight-bold d-block">First Name:</label>
                             <input type="text" class="form-control" name="fname" id="fname" placeholder="Danielson..."  required>
                         </div>
                         <div class="col-12 col-md-6 form-group">
-                            <label for="last_name">Last Name:</label>
+                            <label for="last_name" class="font-weight-bold d-block">Last Name:</label>
                             <input type="text" class="form-control" name="lname" id="lname" placeholder="Correa..."  required>
                         </div>
                         <div class="col-12 form-group">
-                            <label for="last_name">Middle Name:</label>
+                            <label for="last_name" class="font-weight-bold">Middle Name:</label>
                             <input type="text" class="form-control" name="mname" id="mname" placeholder="Linito..." >
                         </div>
                     
                     </div>
                     <div class="row">
                         <div class="col col-mb-6">
-                            <label for="maritalStatus">Gender:</label>
+                            <label for="maritalStatus" class="font-weight-bold">Gender:</label>
                             <div class="form-group pl-3">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="gender" id="male" value="M" checked>
@@ -69,11 +69,11 @@
                             </div>
                         </div>
                         <div class="col col-mb-6">
-                            <label for="dob">DOB:</label>
+                            <label for="dob" class="font-weight-bold">DOB:</label>
                             <input class="form-control" name="dob" type="date" value="" id="" required>
                         </div>
                     </div>
-                    <label for="maritalStatus">Marital Status:</label>
+                    <label for="maritalStatus" class="font-weight-bold">Marital Status:</label>
                     <div class="col-12 col-mb-6">
                            <div class="form-group">
                                 <div class="form-check form-check-inline ">
@@ -92,11 +92,11 @@
                     </div>
                     <div class="row">
                         <div class="col-12 col-md-6 form-group">
-                                <label for="country">Country:</label>
+                                <label for="country" class="font-weight-bold">Country:</label>
                                 <input type="text" class="form-control" name="country" id="country" placeholder="Belize..."  required>
                         </div>
                         <div class="col-12 col-md-6 form-group">
-                            <label for="exampleFormControlSelect1">District</label>
+                            <label for="exampleFormControlSelect1" class="font-weight-bold">District</label>
                             <select class="form-control" name="district" id="">
                                 <option>Corozal</option>
                                 <option>Orange Walk</option>
@@ -109,31 +109,31 @@
                     </div>
                     <div class=" row form-group">
                         <div class="col-12 col-md-6">
-                            <label for="first_name">City/Town/Village:</label>
+                            <label for="first_name" class="font-weight-bold">City/Town/Village:</label>
                             <input type="text" class="form-control" name="ctv" id="ctv" placeholder="Ladyville Village..." required>
                         </div>
                         <div class="col-12 col-md-6">
-                                <label for="first_name">SSN:</label>
+                                <label for="first_name" class="font-weight-bold">SSN:</label>
                                 <input type="text" class="form-control" name="ssn" id="ssn" placeholder="000123456..."  required>
                         </div> 
                     </div>
                     <div class="row form-group">
                         <div class="col-12 col-md-6">
-                            <label for="first_name">Home Phone #:</label>
+                            <label for="first_name" class="font-weight-bold">Home Phone #:</label>
                             <input type="number" class="form-control" name="homePhone" id="" placeholder="2555454..." >
                         </div>
                         <div class="col-12 col-md-6">
-                            <label for="first_name">Mobile Phone #:</label>
+                            <label for="first_name" class="font-weight-bold">Mobile Phone #:</label>
                             <input type="number" class="form-control" name="mobilePhone" id="" placeholder="6687434..."  required>
                         </div>
                     </div> 
                     <div class="row form-group">
                         <div class="col-12 col-md-6">
-                            <label for="street">Street Address:</label>
+                            <label for="street" class="font-weight-bold">Street Address:</label>
                             <input type="text" class="form-control" name="street" id="" placeholder="54 Quilter Avenue..."  required>
                         </div>
                         <div class="col-12 col-md-6">
-                            <label for="first_name">Email:</label>
+                            <label for="first_name" class="font-weight-bold">Email:</label>
                             <input type="text" class="form-control" name="email" id="" placeholder="danielsoncorrea@gmail.com..."  required>
                         </div>
                    </div> 
@@ -147,11 +147,11 @@
                     
                     <div class="row mb-1">
                         <div class="col-12 col-md-6">
-                            <label for="companyName">Company Name:</label>
+                            <label for="companyName" class="font-weight-bold">Company Name:</label>
                             <input type="text" class="form-control" name="company_name" id="" placeholder="BELTRAIDE..." required>
                         </div>
-                        <div class="col-12 col-md-6">
-                            <label for="position">Position/Job Title:</label>
+                        <div class="col-12 col-md-6" >
+                            <label for="position" class="font-weight-bold">Position/Job Title:</label>
                             <input type="text" class="form-control" name="position" placeholder="Junior Developer..."  required>
                         </div>
                     </div>
@@ -161,18 +161,18 @@
             <div class="col col-md-6 mt-5">
                    <h6>
                         <small class="font-weight-bold text-primary">
-                        EDUCATION
+                        EDUCATION INFORMATION
                         <hr>
                         </small>        
                     </h6>
                     
                     <div class="row mb-1">
                         <div class="col-12 col-md-6">
-                            <label for="edName">Institution Name:</label>
+                            <label for="edName" class="font-weight-bold">Institution Name:</label>
                             <input type="text" class="form-control" name="ed_name" id="" placeholder="University of Belize..." required>
                         </div>
                         <div class="col-12 col-md-6">
-                            <label for="schoolLevel">Highest Level of Education</label>
+                            <label for="schoolLevel" class="font-weight-bold">Highest Level of Education:</label>
                             <input type="text" class="form-control" name="ed_degree" id="" placeholder="Associates..." required>
                             
                         </div>
@@ -186,17 +186,17 @@
                         </small>        
                     </h6>
                     
-                    <div class="row mb-1">
-                        <div class="col-12 col-md-6">
-                            <label for="ecName">Emergency Contact Name:</label>
+                    <div class="row mb-1 ">
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="ecName" class="font-weight-bold">Emergency Contact Name:</label>
                             <input type="text" class="form-control" name="ecName" id="" placeholder="Abelino Correa..." required>
                         </div>
-                        <div class="col-12 col-md-6">
-                            <label for="ecNumber">Emergency Contact Number:</label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="ecNumber" class="font-weight-bold">Emergency Contact Number:</label>
                             <input type="number" class="form-control" name="ecNumber" id="" placeholder="6687434..."  required>
                         </div>
-                        <div class="col-12">
-                            <label for="ecRelation">Emergency Contact Relationship:</label>
+                        <div class="col-6 col-md-6 form-group">
+                            <label for="ecRelation" class="font-weight-bold">Emergency Contact Relationship:</label>
                             <input type="text" class="form-control" name="ecRelation" id="" placeholder="Father..." required>
                         </div>
                     </div>
@@ -208,58 +208,58 @@
                         </small> 
                     </h6>
                     <div class="row">
-                        <div class="col-12 col-md-6">
-                            <label for="first_name">Name <small class="font-weight-bold">Ref#1:</small></label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="first_name" class="font-weight-bold">Name <small class="font-weight-bold">Ref#1:</small></label>
                             <input type="text" class="form-control" name="refName1" id="" placeholder="Daniels..." required>
                         </div>
-                        <div class="col-12 col-md-6">
-                            <label for="last_name">Address <small class="font-weight-bold">Ref#1:</small></label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="last_name" class="font-weight-bold">Address <small class="font-weight-bold">Ref#1:</small></label>
                             <input type="text" class="form-control" name="refAddress1" id="" placeholder="56 Quilter Avenue..." required>
                         </div>
-                        <div class="col-12 col-md-6">
-                            <label for="first_name">City <small class="font-weight-bold">Ref#1:</small></label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="first_name" class="font-weight-bold">City <small class="font-weight-bold">Ref#1:</small></label>
                             <input type="text" class="form-control" name="refCity1" id="" placeholder="Belize..." required>
                         </div>
-                        <div class="col-12 col-md-6">
-                            <label for="last_name">Phone Number <small class="font-weight-bold">Ref#1:</small></label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="last_name" class="font-weight-bold">Phone Number <small class="font-weight-bold">Ref#1:</small></label>
                             <input type="number" class="form-control" name="refPhone1" id="" placeholder="6687434..."  required>
                         </div>
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-12 col-md-6">
-                            <label for="first_name">Name <small class="font-weight-bold">Ref#2:</small></label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="first_name" class="font-weight-bold">Name <small class="font-weight-bold">Ref#2:</small></label>
                             <input type="text" class="form-control" name="refName2" id="" placeholder="">
                         </div>
-                        <div class="col-12 col-md-6">
-                            <label for="last_name">Address <small class="font-weight-bold">Ref#2:</small></label>
+                        <div class="col-12 col-md-6 form-group" class="font-weight-bold">
+                            <label for="last_name" class="font-weight-bold">Address <small class="font-weight-bold">Ref#2:</small></label>
                             <input type="text" class="form-control" name="refAddress2" id="" placeholder="">
                         </div>
-                        <div class="col-12 col-md-6">
-                            <label for="first_name">City <small class="font-weight-bold">Ref#2:</small></label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="first_name" class="font-weight-bold">City <small class="font-weight-bold">Ref#2:</small></label>
                             <input type="text" class="form-control" name="refCity2" id="" placeholder="">
                         </div>
-                        <div class="col-12 col-md-6">
-                            <label for="last_name">Phone Number <small class="font-weight-bold">Ref#2:</small></label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="last_name" class="font-weight-bold">Phone Number <small class="font-weight-bold">Ref#2:</small></label>
                             <input type="number" class="form-control" name="refPhone2" id="" placeholder="" >
                         </div>
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-12 col-md-6">
-                            <label for="first_name">Name <small class="font-weight-bold">Ref#3:</small></label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="first_name" class="font-weight-bold">Name <small class="font-weight-bold">Ref#3:</small></label>
                             <input type="text" class="form-control" name="refName3" id="" placeholder="" >
                         </div>
-                        <div class="col-12 col-md-6">
-                            <label for="last_name">Address <small class="font-weight-bold">Ref#3:</small></label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="last_name" class="font-weight-bold">Address <small class="font-weight-bold">Ref#3:</small></label>
                             <input type="text" class="form-control" name="refAddress3" id="" placeholder="">
                         </div>
-                        <div class="col-12 col-md-6">
-                            <label for="first_name">City <small class="font-weight-bold">Ref#3:</small></label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="first_name" class="font-weight-bold">City <small class="font-weight-bold">Ref#3:</small></label>
                             <input type="text" class="form-control" name="refCity3" id="" placeholder="">
                         </div>
-                        <div class="col-12 col-md-6">
-                            <label for="last_name">Phone Number <small class="font-weight-bold">Ref#3:</small></label>
+                        <div class="col-12 col-md-6 form-group">
+                            <label for="last_name" class="font-weight-bold">Phone Number <small class="font-weight-bold">Ref#3:</small></label>
                             <input type="number" class="form-control" name="refPhone3" id="" placeholder="" >
                         </div>
                     </div>
@@ -273,7 +273,7 @@
                     <div class="row">
                         <div class="col-12 col-md-6">
                             <div class="form-group">
-                                <label  for="trainings">Trainings:</label>
+                                <label  for="trainings" class="font-weight-bold">Trainings:</label>
                                 <select class="form-control" name="program" id="trainings">
                                 <option  value="barbering">Introduction to Barbering</option>
                                 <option  value="bartending">Bartending</option>
@@ -292,11 +292,11 @@
                             </div>
                         </div>
                         <div class="col-12 col-md-3">
-                            <label for="PreTest">Pre-Test Avg:</label>
+                            <label for="PreTest" class="font-weight-bold">Pre-Test Avg:</label>
                             <input type="number" class="form-control" name="preTestAvg" id="preTestAvg" placeholder="" required>
                         </div>
                         <div class="col-12 col-md-3">
-                            <label for="PreTest">Year Enrolled:</label>
+                            <label for="PreTest" class="font-weight-bold">Year Enrolled:</label>
                             <input type="number" class="form-control" name="enrolled_in" id="enrolledIn" value="<?php echo date('Y'); ?>" required>
                         </div>
                         <!-- <div class="col col-md-12">

@@ -296,42 +296,42 @@ class Client_model extends CI_Model{
             // loading array with all the data from post
             $input = array(
                 
-                'first_name'  => $data['fname'],
-                'last_name'  => $data['lname'],
-                'middle_name'  => $data['mname'],
+                'first_name'  => trim($data['fname']),
+                'last_name'  => trim($data['lname']),
+                'middle_name'  => trim($data['mname']),
                 'ssn'  => $data['ssn'],
-                'street'  => $data['street'],
-                'ctv'  => $data['ctv'],
+                'street'  => trim($data['street']),
+                'ctv'  => trim($data['ctv']),
                 'district'  => $data['district'],
-                'country'  => $data['country'],
-                'email'  => $data['email'],
+                'country'  => trim($data['country']),
+                'email'  => trim($data['email']),
                 'home_phone'  => $homePhone,
                 'mobile_phone'  => $data['mobilePhone'],
-                'ec_name'  => $data['ecName'],
+                'ec_name'  => trim($data['ecName']),
                 'ec_number'  => $data['ecNumber'],
-                'ec_relation'  => $data['ecRelation'],
+                'ec_relation'  => trim($data['ecRelation']),
                 'gender'  => $data['gender'],
                 'dob'  => $data['dob'],
                 'marital_status'  => $data['maritalStatus'],
-                'ref_name1'  => $data['refName1'],
-                'ref_address1'  => $data['refAddress1'],
-                'ref_city1'  => $data['refCity1'],
+                'ref_name1'  => trim($data['refName1']),
+                'ref_address1'  => trim($data['refAddress1']),
+                'ref_city1'  => trim($data['refCity1']),
                 'ref_phone1'  => $data['refPhone1'],
-                'ref_name2'  => (isset($data['refName2'])? $data['refName2'] : NULL),
-                'ref_address2'  => (isset($data['refAddress2'])? $data['refAddress2'] : NULL),
-                'ref_city2'  => (isset($data['refCity2'])? $data['refCity2'] : NULL),
+                'ref_name2'  => (isset($data['refName2'])? trim($data['refName2']) : NULL),
+                'ref_address2'  => (isset($data['refAddress2'])? trim($data['refAddress2']) : NULL),
+                'ref_city2'  => (isset($data['refCity2'])? trim($data['refCity2']) : NULL),
                 'ref_phone2'  => (isset($data['refPhone2'])? $data['refPhone2'] : NULL),
-                'ref_name3'  => (isset($data['refName3'])? $data['refName3'] : NULL),
-                'ref_address3'  => (isset($data['refAddress3'])? $data['refAddress3'] : NULL),
-                'ref_city3'  => (isset($data['refCity3'])? $data['refCity3'] : NULL),
+                'ref_name3'  => (isset($data['refName3'])? trim($data['refName3']) : NULL),
+                'ref_address3'  => (isset($data['refAddress3'])? trim($data['refAddress3']) : NULL),
+                'ref_city3'  => (isset($data['refCity3'])? trim($data['refCity3']) : NULL),
                 'ref_phone3'  => (isset($data['refPhone3'])? $data['refPhone3'] : NULL),
                 'profile_img_id' => $profileImgId,
                 'updated_on' => date("Y-m-d H:i:s"),
                 'updated_by' => $data['userIdent'],
-                'ed_degree' => $data['ed_degree'],
-                'ed_name' => $data['ed_name'],
-                'employed_at' => $data['company_name'],
-                'em_position' => $data['postion']
+                'ed_degree' => trim($data['ed_degree']),
+                'ed_name' => trim($data['ed_name']),
+                'employed_at' => trim($data['company_name']),
+                'em_position' => trim($data['postion'])
                                 
             );
 
@@ -1070,9 +1070,9 @@ class Client_model extends CI_Model{
         }            
         $this->db->trans_start();
         
-        $this->db->where();
-        $this->db->where();
-        // $this->db->update($table, $set, array('status' => 'Enrolled'));
+        // $this->db->where();
+        // $this->db->where();
+        $this->db->update($table, $set, array('status' => 'Enrolled'));
 
         $affectedRows = $this->db->affected_rows();
 

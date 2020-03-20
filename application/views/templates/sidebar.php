@@ -9,10 +9,12 @@ $active = (isset($active))? $active : ' ';
 
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo site_url('dashboard'); ?>">
-        <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
+        
+        <div class="sidebar-brand-icon rounded-circle bg-white">
+          <!-- <i class="fas fa-laugh-wink"></i> -->
+          <img src="<?php echo base_url();?>assets/img/BTEC_Logo.png" alt="BTEC Logo" width="57px" height="55px" overflow="hidden">
         </div>
-        <div class="sidebar-brand-text mx-3">Site <sup>name</sup></div>
+        <div class="sidebar-brand-text mx-3">Unit of beltraide</div>
       </a>
 
       <!-- Divider -->
@@ -111,10 +113,10 @@ $active = (isset($active))? $active : ' ';
         if (in_array(3, $actions)){
           echo '
             <li class="nav-item">
-            <button class="btn btn-link nav-link '.(($active === 'addUser')? '' : ' ').'" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
-              <i class="fas fa-fw fa-user-plus "></i>
+            <a class="btn btn-link nav-link'.(($active === 'addUser')? '' : '').'" href="#" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
+              <i class="fas fa-fw fa-user-plus"></i>
               <span>Add User</span>
-            </button>
+            </a>
             </li>';
         }
           ?>
