@@ -14,7 +14,7 @@
                   <h5 class="m-0 font-weight-bold text-primary">Settings</h5>
                 </div>
                 <div class="col-6 col-md-3 d-flex justify-content-end">
-                <button id="saveProSettings" class="btn btn-success btn-sm ">
+                <button id="saveProSettings" class="btn btn-success btn-sm " type="submit" form="assesNames">
                   <i class="fas fa-1x fa-save"></i>
                   Save
                 </button>
@@ -132,8 +132,18 @@
           </div>
           <script type="text/javascript">
 
+            //Global Variable used in customJS
+            var assesNameForm; 
 
-            setInputCount(<?php echo $count;?>);
+            $(document).ready(function(){
+
+              assesNameForm = $('#assesNames').serialize();//saving the current state of the form
+              
+              // setting the input count of assesments names
+              setInputCount(<?php echo $count;?>);
+
+
+            });
             
           </script>
           

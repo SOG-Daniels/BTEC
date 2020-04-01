@@ -59,20 +59,64 @@ function checkPasswordMatch() {
 }
 $(document).ready(function() {
 
-    $('#saveProSettings').click(function (e){
 
-        e.preventDefault();
-        $('#assesNames').submit();
+    /////// start for custom function declaration //////////
+
+    // function declared inside $(docuemnt).ready because it uses jquery 
+    get_UserInfoFormData = function() {
+        //saving current userInfoForm for to check if changes were made to it later
+        var userInfoForm = $('#userInfoForm');
+
+        // Find disabled inputs, and remove the "disabled" attribute
+        var disabled = userInfoForm.find(':input:disabled').removeAttr('disabled');
+
+        // serialize the form
+        userInfoForm.data('serialize', userInfoForm.serialize());
+        userInfoFormData = $(userInfoForm).data('serialize');// saving the current state of the userInfoForm
+
+        //disabled the set of inputs that you previously enabled
+        disabled.attr('disabled','disabled');
+        
+        //used for testing purposes
+        console.log(userInfoFormData);
+        console.log('userinfo');
+
+    }
+
+    ////end of function declaration///////
+
+    // on submitting the program assesmetn form
+    $('#assesNames').on('submit', function (e){
+
+
+        let modifiedFormData = $('#assesNames').serialize();
+       
+        console.log(assesNameForm);
+        console.log('break');
+        console.log(modifiedFormData);
+        // checking to see if the form has changed
+        //assesNameForm is defined in programSetup
+        if(modifiedFormData !== assesNameForm){
+            
+            //submitting the form
+            // $('#assesNames').submit();
+            console.log('form not the same');
+
+        }else{
+            
+            e.preventDefault();
+            alert('No changes were made!');
+        }
 
     });
-    //setting up the summer not plugin my specifying the components it should have
+
+    //setting up the summernote plugin by specifying the components it should have
     $('#programComment').summernote({
 
         placeholder: 'Enter a comment...',
         tabsize: 2,
         height: 250,
         toolbar: [
-            // [groupName, [list of button]]
             ['style', ['bold', 'italic', 'underline', 'clear']],
             ['font', ['strikethrough', 'superscript', 'subscript']],
             ['fontsize', ['fontsize']],
@@ -81,6 +125,7 @@ $(document).ready(function() {
             ['height', ['height']]
           ]
     });
+
     //when the activation button is click it will send the activation form to the user.php controller
     //check form action to identify controller method
     $('#activateUser').click(function(e){
@@ -115,16 +160,14 @@ $(document).ready(function() {
 
     //submitting grade changes that were made
     $('#saveGradeChanges').click(function(e){
-        //e.preventDefault;
-        // $('#gradeForm').submit();
-
+       
         //checking if the status has been changed
         if ($('#courseStatus').val() != 1){
         
             $('#triggerConfirmModal').click();
             
-            // $('#modalProgramConfirm').modal('show');
             // alert('is not enrolled');
+
         }else{
 
             $('#gradeForm').submit();
@@ -153,12 +196,17 @@ $(document).ready(function() {
             html += '</div>';
             
             $('#assesments').append(html);
+
             inputCount++;
+
         }else{
-          console.log('5 assesments are the maximum');
+            
+            alert('5 assesments are the maximum');
+            console.log('5 assesments are the maximum');
         }
 
     });
+    // used for adding more grades
     $('.add-more').click(function(e){
         e.preventDefault();
         let html = '';   
@@ -193,6 +241,7 @@ $(document).ready(function() {
         var html = '';
         if (inputCount <= 5){
 
+            //creating an input field
             html = '<div id="asses-input'+inputCount+'" class="row">';
             html += '<div class="col-12 col-md-6">';
             html += '<label >Assesment Name:</label>';
@@ -295,7 +344,9 @@ $(document).ready(function() {
     $(".file-upload").on('change', function(){
         readURL(this);
         var data = new FormData(document.getElementById("upload-img-form"));
-        // sending a ajax request to update the profile image of the user
+       
+        //sends a request to the change_profile_pic() function in the user controller
+        // to change the users profile pic
         $.ajax({
             url: 'update-profile-picture',  
             type: 'POST',
@@ -318,30 +369,6 @@ $(document).ready(function() {
         readURL(this);
 
     });
-// /////////// Code no longer in use //////////////////////
-    // Maked the edit client inputs writtable 
-    // $('#editClient').click(function(e){
-        
-    //     e.preventDefault();//if the button is to submit it will not do it //
-    //     $("#clientInfoForm :input").attr("readOnly", false);
-    //     $("#editClient").css("display", "none");
-    //     $("#saveClientInfo").css("display", "block");
-    //     $("#upload-img").css("display", "block");
-
-    // });
-    // $('#saveClientInfo').click(function(e){
-
-    //     e.preventDefault();//if the button is to submit it will not do it //
-    //     $("#clientInfoForm :input").attr("readOnly", true);
-    //     $("#editClient").css("display", "block");
-    //     $("#saveClientInfo").css("display", "none");
-    //     $("#upload-img").css("display", "none");
-
-    //     //send out the input feilds that were modified and update the database 
-
-    // });
-    /////////////////////////////////////////////////////////////////////////////////////////
-
     // Used in the edit my profile page, makes all input fields writable
     $('#editProfile').click(function(e){
         
@@ -381,33 +408,18 @@ $(document).ready(function() {
     $('#editUser').click(function(e){
         
         e.preventDefault();//if the button is to submit it will not do it //
+
         $("#userInfoForm :input").attr("readOnly", false);
-        $("#editUser").css("display", "none");
-        $("#saveUserInfo").css("display", "block");
-        $("input.action").attr("disabled", false);
+        $("#editUser").css("display", "none");//hiding the edit button
+        $("#saveUserInfo").css("display", "block");//displaying the save button 
+        $("input.action").attr("disabled", false);//finding all input with class called action. 
 
     });
-    get_UserInfoFormData = function() {
-        //saving current userInfoForm for to check if changes were made to it later
-        var userInfoForm = $('#userInfoForm');
 
-        // Find disabled inputs, and remove the "disabled" attribute
-        var disabled = userInfoForm.find(':input:disabled').removeAttr('disabled');
-
-        // serialize the form
-        userInfoForm.data('serialize', userInfoForm.serialize());
-        userInfoFormData = $(userInfoForm).data('serialize');
-
-        // re-disabled the set of inputs that you previously enabled
-        disabled.attr('disabled','disabled');
-        
-        console.log(userInfoFormData);
-        console.log('userinfo');
-
-    }
     $('#saveUserInfo').click(function(e){
 
         e.preventDefault();//if the button is to submit it will not do it //
+        
         var formData = $("#userInfoForm").serialize();
         var base_url = $("#userInfoForm").attr('action');
 
@@ -497,28 +509,28 @@ $(document).ready(function() {
             //JSON.parse convers the data recieved into jason format
             console.log(JSON.parse(data));
             $.each(JSON.parse(data), function(key, value) {
+                
                 // console.log(value);
+                
                 //Spliting the value to separate the assesment name and grade
-
-
                 if ( value !== null && value !== ""){
 
                     //splitting the value since we have it set in database as assesmentName-gradeValue
                     let asses = value.split(',');
 
-                    // console.log(asses);
-
+                    // creating an input element
                     let html = '<div id="asses-input'+inputCount+'" class="row">';
                     html += '<div class="col-12 col-md-12">';
                     html += '<label >Assesment Grade:</label>';
                     html += '<div class="input-group">';
-                    html += '<input type="text" class="form-control" name="assesmentName[]" id="assesment'+inputCount+'" value="'+asses[0]+'">';
+                    html += '<input type="text" class="form-control" name="assesmentName[]" id="assesment'+inputCount+'" value="'+asses[0]+'" required>';
                     html += '<span class="input-group-append ">';
                     html += '<span class="input-group-text bg-danger remove-grade"><i class="fa fa-minus text-white"></i></span>';
                     html += '</span>';
                     html += '</div>';
                     html += '</div>';
                     html += '</div>';
+
                     inputs += html;
                     inputCount++;
 
@@ -530,7 +542,7 @@ $(document).ready(function() {
                 html += '<div class="col-12 col-md-12">';
                 html += '<label >Assesment Grade:</label>';
                 html += '<div class="input-group">';
-                html += '<input type="text" class="form-control" name="assesmentName[]" id="assesment'+inputCount+'" placeholder="Enter a grade....">';
+                html += '<input type="text" class="form-control" name="assesmentName[]" id="assesment'+inputCount+'" placeholder="Enter a name...." required>';
                 html += '<span class="input-group-append ">';
                 html += '<span class="input-group-text bg-danger remove-grade"><i class="fa fa-minus text-white"></i></span>';
                 html += '</span>';
@@ -541,20 +553,11 @@ $(document).ready(function() {
                 inputCount++;
               }
               $('#assesments').html(inputs);
-
-
-            // console.log(data['Assesment'+i]);   
-            // alert(data);
      
         });
 
     });
-    // $('#addClient').click(function (e){
 
-    //     e.preventDefault();
-    //     $('#clientInfoForm').submit();
-
-    // });
     $('#upload-img').click(function (e){
         //e.preventDefault();
         $('.file-upload').click();
@@ -576,7 +579,7 @@ function createList (jsonData, base_url, hasGradeEdit, hasEdit, hasView){
         var eTempList = { "data" : jsonData};
         var i;
 
-        // loops used to get inner arrays 
+        // loops used to get inner array data  
         for (var i in eTempList.data){
             for (var sub in eTempList.data[i]){
                 eTempList.data[i][sub].full_name = eTempList.data[i][sub].first_name + ' ' + eTempList.data[i][sub].last_name;
@@ -585,32 +588,24 @@ function createList (jsonData, base_url, hasGradeEdit, hasEdit, hasView){
                 
                 eTempList.data[i][sub].gView =((hasGradeEdit == 1)? '<a href ="'+base_url+'view-client-grade/'+(eTempList.data[i][sub].programme.replace(/\s/g , "-")).replace(/'/g,"")+'/'+eTempList.data[i][sub].id+'">Edit</a>' : "");
 
+                //enrolled list object
                 eList.push(eTempList.data[i][sub]);//we take the arrays that are embeded and list them out into one array 
             }
 
         }
-        console.log(eList);
-        // for (i = 0; i < eTempList.data.length; i++) {
-
-        //     eTempList.data[i][0].full_name = eTempList.data[i][0].first_name + ' ' + eTempList.data[i][0].last_name;
-        //     eTempList.data[i][0].pActions = ((hasView == 1)? '<a href ="'+base_url+'client-info/'+eTempList.data[i][0].id+'">View</a>':"")+
-        //     ((hasEdit == 1)? '&nbsp'+'<a href ="'+base_url+'edit-client-info/'+eTempList.data[i][0].id+'"> Edit</a>' : ""); 
-            
-        //     eTempList.data[i][0].gView =((hasGradeEdit == 1)? '<a href ="'+base_url+'view-client-grade/'+(eTempList.data[i][0].programme.replace(/\s/g , "-")).replace(/'/g,"")+'/'+eTempList.data[i][0].id+'">Edit</a>' : "");
-
-        //     eList.push(eTempList.data[i][0]);
-        // }
+    
+        // console.log(eList); // checking if we have the correct data to display in the datatables
         initializeDatatable(eList);
+
     }else{
         //No record was returned so set parameter as 0 - false
         initializeDatatable(0);
     }
 
 }
-// This function initializes the data table api with the object created from the createList function
+// This function initializes the data table plugin with the object created from the createList function
 function initializeDatatable(data){
 
-    
     $(document).ready(function(){
         if ($.fn.DataTable.isDataTable("#enrolledList")) {
             $('#enrolledList').DataTable().clear().destroy();

@@ -141,7 +141,7 @@
                                 </div>
                                 <div class="row offset-1">
                                     <div class="col-12 col-md-5 form-check">
-                                        <input class="form-check-input" id="privi9" type="checkbox" value="9" name="privileges[]" <?php echo (isset($action) && in_array(6, $action))? 'checked' : ' '; ?> disabled>
+                                        <input class="form-check-input action" id="privil9" type="checkbox" value="9" name="privilege[]" <?php echo (isset($action) && in_array(9, $action))? 'checked' : ' '; ?> disabled>
                                         <label class="form-check-label" for="enrolledList">
                                             Program Setup
                                         </label>

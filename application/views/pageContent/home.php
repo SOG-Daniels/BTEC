@@ -1,4 +1,8 @@
-<?php echo (!empty($this->session->flashdata('addUserMessage')))? $this->session->flashdata('addUserMessage') : ' '; ?>
+<?php 
+    // flashdata('message') will only be available once, i.e. its a temporary variable that will be deleted if 
+    // the page is reloaded again
+    echo (!empty($this->session->flashdata('message')))? $this->session->flashdata('message') : ' '; 
+?>
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
 <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>

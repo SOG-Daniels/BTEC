@@ -4,7 +4,8 @@
 // that do not have administrative priviledge
 class User extends CI_Controller{
 
-    //data Members
+    //start of data Members//
+
         protected $data;
         protected $userId;
         protected $username;
@@ -12,27 +13,27 @@ class User extends CI_Controller{
         protected $message;
         protected $programTables;
         protected $userIdent;
-    // protected $data = array();
-    // protected $session = array();
 
+    //end of data members//
 
-    //end of data members
     public function __construct(){
 
         //calls parent contructor and executes what ever is in it. THis is not needed if no construct
         //is created in the child class i.e. the User class
         parent::__construct();
+
+        // loading session library and 2 models defined in the model folder
         $this->load->library('session');
-       // $this->session = array($this->session->all_userdata());
-        //$this->data['name'] = $this->session['userid'];
         $this->load->model('user_model'); 
         $this->load->model('client_model'); 
 
+        // initializing datamembers with session data 
         $this->userId = $this->session->userdata('userid');
         $this->data['name'] = $this->session->userdata('name');
         $this->user_actions = $this->session->userdata('action');
-        $this->userIdent = $this->session->userdata('userIdentity');
+        $this->userIdent = $this->session->userdata('userIdentity');// signature i.e. first letter name and lastname of current user
 
+        // array that keeps track of the slug name as the key and table name as the value
         $this->programTables = array(
             'Introduction-to-Barbering' => 'barbering',
             'Bartending' => 'bartending',
@@ -51,17 +52,26 @@ class User extends CI_Controller{
         
 
     }
-    // displays the main home page upon login 
+     /**
+     * 
+     * get_dashboard() loads the home view 
+     * 
+     * @access    public
+     * @param     NONE
+     *
+     * @return    NONE 
+     */ 
     public function get_dashboard(){
 
         
     // setting session so only logged in users have access
         if( $this->is_session_set()){
 
-            $this->data['title'] = 'Dashboard';
-            $this->data['active'] = 'dashboard';
-            $this->data['name'] = $this->session->userdata('name');
+            $this->data['title'] = 'Dashboard';// title of page
+            $this->data['active'] = 'dashboard';// setting the dashboard as current option on sidebar
+            $this->data['name'] = $this->session->userdata('name');// name of the users that logged in
             
+            //displaying the homepage
             $this->load->view('templates/header', $this->data);
             $this->load->view('templates/sidebar', $this->data);
             $this->load->view('templates/topbar', $this->data);
@@ -69,38 +79,63 @@ class User extends CI_Controller{
             $this->load->view('templates/footer', $this->data);
 
         }else{
+            
             //if there is no session direct them back to the login 
-            //print_r($this->session->all_userdata());
             redirect('login');
         }
 
         
         
     }
-    // displayed the pageContent for viewing one's profile 
+     /**
+     * 
+     * profile() displays all info the system has on the user on a view 
+     * 
+     * @access    public
+     * @param     NONE
+     *
+     * @return    NONE 
+     */ 
     public function profile($slug = NULL){
 
         if($this->is_session_set()){
 
             $this->data['title'] = 'Profile';
-            // getting client data to pass to view 
             $this->data['name'] = $this->session->userdata('name');
 
+            //getting the current users info 
             $result = $this->user_model->get_user_info($this->session->userdata('userid'));
 
             if ($result === FALSE){
-                echo "cannot retrieve profile data";
+                //something went wrong trying to get the users info from the modal
+
+                log_message('debug', 'user_model->get_user_info returned false');// logging error
+
+                $this->session->set_flashdata('message',
+                '
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5><strong><i class="fa fa-2x fa-frown"></i>Error:</strong>
+                    Cannot get your info from the system, please try again later or ask an IT personnel for help.<h5>
+                    </div>
+                
+                '
+                ); 
+                redirect('dashboard');
             }
 
             $this->data['profileData'] = $result;
 
-            if ($this->session->flashdata('message')){
+            // if ($this->session->flashdata('message')){
 
-                $this->data['message'] = $this->session->flashdata('message');
+            //     $this->data['message'] = $this->session->flashdata('message');
                 
-            }
+            // }
+
+            //setting the title of the page
             $this->data['title'] = 'profile';
-            
 
             $this->load->view('templates/header', $this->data);
             $this->load->view('templates/sidebar', $this->data);
@@ -216,7 +251,7 @@ class User extends CI_Controller{
             $this->form_validation->set_rules('fname', 'First Name:', 'required|trim');
             $this->form_validation->set_rules('lname', 'Last Name:', 'required|trim');
             $this->form_validation->set_rules('mname', 'Middle Name:', 'trim');
-            // $this->form_validation->set_rules('mname', '', 'trim');
+            
             $this->form_validation->set_rules('country', 'Country:', 'required|trim');
             $this->form_validation->set_rules('ctv', 'City/Town/Village:', 'required|trim');
             $this->form_validation->set_rules('ssn', 'SSN:', 'required|trim');
@@ -251,7 +286,8 @@ class User extends CI_Controller{
 
             $this->form_validation->set_rules('preTestAvg', 'Address Ref#3:', 'trim');
             $this->form_validation->set_rules('enrolled_on', 'Year Enrolled:', 'trim');
-            // Data that will be passed to the view 
+            
+            //data that will be passed to the view
             $this->data['title'] = 'Add Client';
             $this->data['active'] = 'addClient';
 
@@ -663,9 +699,11 @@ class User extends CI_Controller{
 
                     
                 }
-                $this->session->set_flashdata('addUserMessage', $this->message);
+                $this->session->set_flashdata('message', $this->message);
+                
                 // returning back to home  page
                 redirect('dashboard');
+
                 // $this->load->view('templates/header', $this->data);
                 // $this->load->view('templates/sidebar', $this->data);
                 // $this->load->view('templates/topbar', $this->data);
@@ -786,7 +824,8 @@ class User extends CI_Controller{
             //going to update the user profile
             if ($this->input->post('action') === 'saveUserInfo' && !empty($this->input->post('userId'))){
             
-                $postData = $this->input->post(NULL, TRUE);
+                $postData = $this->input->post(NULL, TRUE);//Enabling XSS filtering
+
                 $result = $this->user_model->update_user_info($postData);
                 $result2 = $this->user_model->set_user_update_info($this->input->post('userId', TRUE), $this->userIdent);
 
@@ -807,16 +846,23 @@ class User extends CI_Controller{
         }
 
     }
+    /**
+     * View_client_profile() loads a view with the requested clients info  
+     *
+     * @access    public
+     * @param     clientId the id of the client we want to view
+     *
+     * @return    NONE 
+     */    
     // shows a more detailed description of what the system has on the user
     public function view_client_profile($clientId = NULL){
 
         if( $this->is_session_set() && in_array(2, $this->user_actions)){
             //Session is set user can view client profile 
-            $this->data['title'] = 'Client Details';
-            // getting client data to pass to view 
-            $this->data['name'] = $this->session->userdata('name');
 
-            //requesting data from model
+            //Data array will be passed to the view
+            $this->data['title'] = 'Client Details';
+            $this->data['name'] = $this->session->userdata('name');
             $this->data['clientData'] = $this->client_model->get_client_profile($clientId);
 
             // display the data on the view     
@@ -867,6 +913,14 @@ class User extends CI_Controller{
             redirect('login');
         }
     }
+    /**
+     * change_profile_pic() changes the profile pic of the user using the system
+     *
+     * @access    public
+     * @param     NONE
+     *
+     * @return    String states its success or failure as a string to the ajax request 
+     */    
     public function change_profile_pic(){
         
         if ($this->is_session_set()){
@@ -874,17 +928,17 @@ class User extends CI_Controller{
 
             if(!empty($_FILES['profileImg']['name'])){
                 
+                //creating a file name for the image uploaded
                 $newFileName = trim($this->session->userdata('name'), ' ').'_'.time();
                 
                 $config['upload_path'] = './upload/';
                 $config['allowed_types'] = 'gif|jpg|png';
                 $config['file_name'] = $newFileName;
-                // $config['max_size'] = 2000;
-                // $config['max_width'] = 1500;
-                // $config['max_height'] = 1500;
         
+                //loading the upload library and setting the configurations made above
                 $this->load->library('upload', $config);
 
+                //uploading the file to the upload_path, returns true if successful
                 if($this->upload->do_upload('profileImg')){
                     
                     $uploadInfo = $this->upload->data();
@@ -912,7 +966,7 @@ class User extends CI_Controller{
 
 
             }else{
-                 print_r($_FILES);
+                 echo 'no files uploaded';
             }
 
         }else{
@@ -922,7 +976,15 @@ class User extends CI_Controller{
 
     }
 
-    // Checks if the session is set by returning TRUE or FALSE
+    /**
+     * is_session_set() checks if users session is set
+     *
+     * @access    public
+     * @param     NONE
+     *
+     * @return    Boolean 
+     */    
+    
     public function is_session_set(){
 
         if ( isset($this->userId) ){
@@ -1259,18 +1321,13 @@ class User extends CI_Controller{
     public function program_setup(){
     
         if ($this->is_session_set()){
-           
-            // echo "<pre>";
-            // print_r($this->input->post());
-            // echo "</pre>";
 
             // checking to see if ajax has sent a post request
             if (!empty($this->input->post()) && !empty($this->input->post('program'))){
 
                 $result = $this->client_model->get_program_grades_names($this->input->post('program'), TRUE);
                 echo json_encode($result);
-                // echo jason_encode($this->data['programInfo']);
-                // echo 'test';     
+                
             }else{// No ajax post sent, then we will just load the default 
 
                 // $table = (!empty($this->input->post('program'))? $this->input->post('program') : 'barbering');
@@ -1283,24 +1340,16 @@ class User extends CI_Controller{
                 $this->load->view('templates/topbar', $this->data);
                 $this->load->view('pageContent/programSetup', $this->data);
                 $this->load->view('templates/footer', $this->data);
-                // echo 'does not send the post';
-                // echo '<pre>';
-                // print_r($this->input->post());
-                // echo '</pre>';
+                
 
 
             }
-            // echo "<pre>";
-            // print_r($this->data['programInfo']);
-            // echo "</pre>";
-
-
-
+           
         }else{
             redirect('login');
         }
     }
-    /* save_assesments_name will save the names of the assesments listed
+    /* save_assesments_name() will save the names of the assesments listed
      *
      * @access    public
      * @param     NONE 
@@ -1314,7 +1363,10 @@ class User extends CI_Controller{
             if(!empty($this->input->post()) && !empty($this->input->post('program'))){
 
                 $result = $this->client_model->set_program_asses_name($this->input->post(NULL, TRUE));
- 
+    
+                // echo "<pre>";
+                // print_r($this->input->post());
+                // echo "</pre>";
                 if ($result === FALSE){
 
                     $this->data['message'] = '

@@ -165,63 +165,6 @@
       </div>
     </div>
   </div>
-
-
-
-<!-- Register a Client  -->
- <!-- <div class="modal fade" id="registerClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title text-dark" id="exampleModalLabel">Add a Client</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close" >
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <form role="form" action="<?php //echo base_url()?>register-client" method="POST">
-        <div class="modal-body">
-          <div class="row">
-            <div class="col col-md-6">
-              <div class="form-group">
-                <label for="fname">First Name:</label>
-                <input type="text" class="form-control" name="fname" id="fname" placeholder="John">
-              </div>
-
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" name="email" id="email" placeholder="johndoe@...">
-              </div>
-              
-              <div class="form-group">
-                <label for="fname">Training:</label>
-                <input type="text" class="form-control" name="training" id="training" placeholder="Time Management">
-              </div>
-            </div>
-            <div class="col col-md-6">
-              <div class="form-group">
-                <label for="lname">Last Name:</label>
-                <input type="email" class="form-control" name="lname" id="lname" placeholder="Doe">
-              </div>
-
-              <div class="form-group">
-                <label for="phone">Phone Number:</label>
-                <input type="tel" class="form-control" name="phone" id="phone" placeholder="668-7434">
-              </div>
-              
-              
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <button class="btn btn-primary" type="submit">Register Client</a>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div> -->
-
-
 <!-- Logout Modal-->
  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

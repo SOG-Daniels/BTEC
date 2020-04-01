@@ -1,4 +1,5 @@
 <?php 
+// uncomment the print_r() below to see the program data being passed for the user
 // echo "<pre>";
 //     print_r($programInfo); 
 // echo "</pre>";
@@ -116,7 +117,6 @@
                   <input type="hidden" name="slug" value="<?php echo (isset($programInfo[0]['slug'])? $programInfo[0]['slug'] : '');?>">
                     <div id="assesments">
                       <div class="row pl-3 pr-3 pt-3">
-                    <!-- <input type="hidden" name="assesment[]" value=""> -->
                     <?php 
                     if (!empty($programInfo[0]['Assesment1'])){
                       for ($i = 1;$i <= 5; $i++){
@@ -143,14 +143,12 @@
                         
                       }
                     }else{
+                      
                       echo '
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
                         <h5>
-                        <strong><i class="fa fa-2x fa-exclamation-mark"></i> Notice: </strong> Please create some grade names first inorder to be able to enter grades.
-                        <a href="'.base_url().'program-setup"> click here to do so.</a>
+                        <strong><i class="fa fa-2x fa-exclamation-mark"></i>Notice: </strong> Grade names must be created first in order to be able to enter grades.
+                        '.(in_array(9, $this->session->userdata('action'))? '<a href="'.base_url().'program-setup"> click here </a>to do so.' : 'Ask IT personnel to add the grade names.').'
                         <h5>
                         </div>
                       

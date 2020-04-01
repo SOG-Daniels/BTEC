@@ -1,6 +1,8 @@
 <?php 
     $imgPath = $this->session->userdata('imgPath');
     echo (isset($message))? $message : '';
+    // echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : ' ');
+
 ?>
 <div class="card shadow-lg mb-3">
     <div class="card-header py-3">
@@ -50,30 +52,31 @@
                     <br>
             <form class="form" action="<?php echo base_url()?>update-profile" method="post" id="profileForm">
                         
-                        <div class="row ">
-                            <div class="col col-md-6">
-                                <label for="first_name">First Name:</label>
+                        <div class="row form-group">
+                            <div class="col-12 col-md-6">
+                                <label for="first_name" class="font-weight-bold">First Name:</label>
                                 <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="<?php echo (isset($profileData['fname']))? $profileData['fname'] : ''; ?>">
                             </div>
-                            <div class="col col-md-6">
-                                <label for="last_name">Last Name:</label>
+                            <div class="col-12 col-md-6 ">
+                                <label for="last_name" class="font-weight-bold">Last Name:</label>
                                 <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo (isset($profileData['lname']))? $profileData['lname'] : ''; ?>">
                             </div>
                         </div>
-                        <div class="row ">
-                            <div class="col col-md-6">
-                                <label for="first_name">Username:</label>
+                        
+                        <div class="row form-group">
+                            <div class="col-12 col-md-6">
+                                <label for="first_name" class="font-weight-bold">Username:</label>
                                 <input type="text" class="form-control" name="username" id="address" value="<?php echo (isset($profileData['username']))? $profileData['username'] : ''; ?>">
                             </div>
-                            <div class="col col-md-6">
-                                <label for="last_name">Email:</label>
-                                <p><?php echo(isset($profileData['email'])? $profileData['email']: '');?></p>
+                            <div class="col-12 col-md-6">
+                                <label for="last_name" class="font-weight-bold d-block" >Email:</label>
+                                <span><?php echo(isset($profileData['email'])? $profileData['email']: '');?></span>
                                 <!-- <input type="text" class="form-control" name="email" id="last_name" placeholder="someEmail@sog.com..." title="enter your email if any."> -->
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col col-md-6">
-                                <label for="first_name">Phone #:</label>
+                        <div class="row form-group">
+                            <div class="col-12 col-md-6">
+                                <label for="first_name" class="font-weight-bold">Phone #:</label>
                                 <input type="number" class="form-control" name="phone" id="phone" value="<?php echo (isset($profileData['phone']))? $profileData['phone'] : ''; ?>">
                             </div>
                             
@@ -98,26 +101,26 @@
                            New password length must be 8 characters including a upper, lower case letter and a number
                            
                        </div>
-                        <div class="row col col-md-6 offset-md-1">
-                            <label for="password">Old Password:</label>
+                        <div class="row col-12 col-md-6 offset-md-1">
+                            <label for="password" class="font-weight-bold">Old Password:</label>
                             <input type="password" class="form-control" name="oldPass" id="oldPass" placeholder="*******" title="enter your password." required>
                         </div>
                         <br>                        
-                        <div class="row col col-md-6 offset-md-1">
-                            <label for="password2">New Password:</label>
+                        <div class="row col-12 col-md-6 offset-md-1">
+                            <label for="password2" class="font-weight-bold">New Password:</label>
                             <input type="password" class="form-control" name="newPass" id="newPass" placeholder="*******" title="enter your password2." required>
                         </div>
                         <div id="passRequirement" class=" row col col-md-6 ml-md-5"></div>
                         <br>
-                        <div class="row col col-md-6 offset-md-1">
-                            <label for="password2">Confirm New Password:</label>
+                        <div class="row col-12 col-md-6 offset-md-1">
+                            <label for="password2" class="font-weight-bold">Confirm New Password:</label>
                             <input type="password" class="form-control" name="confirmPass" id="confirmPass" placeholder="*******" title="enter your password2." required>
                         </div>
                         <div class="registrationFormAlert row col col-md-6 ml-md-5" id="divCheckPasswordMatch">
 
                         </div>
                         <br>
-                        <div class="row col offset-md-1">
+                        <div class="row col-12 offset-md-1">
                             <button class="btn btn-md btn-primary " id="change-pass-btn" type="submit" disabled><i class=""></i> Change Password</button>
                         </div>
                             

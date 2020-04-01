@@ -1,16 +1,11 @@
 <?php 
-    // echo "<pre>";
-    // // print_r($clientData);
-    // print_r($this->session->userdata());
-    // echo "</pre>";
-    // echo "<pre>";
-    // print_r($programList);
-    // echo "</pre>";
+    // displaying a message
     echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : '');
     $actions = $this->session->userdata('action');
 
     // echo validation_errors();
-    // echo (isset($addClientMessage))? $addClientMessage : ' ';?>
+    // echo (isset($addClientMessage))? $addClientMessage : ' ';
+ ?>
 <div class="card shadow-lg mb-3">
     <div class="card-header py-3">
     <?php
@@ -23,7 +18,7 @@
     <h1 class="h4 mb-2 text-gray-800">Update Client</h1>
         </div>
         <div class="col-12 col-md-6 d-flex justify-content-end">
-            <button  id="updateClient" class="btn btn-sm btn-primary " type="submit"><i class=" fa fa-check"></i> Apply Changes</button>
+            <button  id="updateClient" class="btn btn-sm btn-success " type="submit"><i class=" fa fa-check"></i> Apply Changes</button>
         </div>
     </div>
     </div>
@@ -33,7 +28,7 @@
                 <div class="text-center">
                     <img src="<?php echo base_url().((isset($clientData[0]['imgPath']))? $clientData[0]['imgPath'] : 'upload/default_profile_img.png'); ?>" class="avatar rounded img-thumbnail" alt="avatar">
                     <br>
-                    <?php //echo isset($clientName)? '<h3 class=" ">'.$clientName.'</h3>' : 'Client Image'; ?>
+                    
                     <div class="p-image pt-2">
                         <a href="#" id="upload-client-img">
                         <i class="fa fa-camera "></i> Upload Image

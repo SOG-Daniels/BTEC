@@ -1040,38 +1040,34 @@ class Client_model extends CI_Model{
         $set = array();
         $table = $data['program'];
 
+        // clearing all the assesments 
+        $set['Assesment1'] = NULL;
+        $set['Assesment2'] = NULL;
+        $set['Assesment3'] = NULL;
+        $set['Assesment4'] = NULL;
+        $set['Assesment5'] = NULL;
+
         // in the query for assesmets 1-5 we are checking to see if the input exist by means of checking array keys
         if (array_key_exists('assesmentName', $data)){
 
-            for($i = 0; $i < 5; $i++){
+            $assesNum = 1;
+            $i = 0;
+            
+            while( $i < count($data['assesmentName']) ){
 
-                if (array_key_exists($i, $data['assesmentName'])){
-                    // pushing to the set array the assesment names
-                    $set['Assesment'.($i + 1)] = $data['assesmentName'][$i].',';
-                
-                }else{
-                    // setting the assesment to null if no grades were entered
-                    $set['Assesment'.($i + 1)] = NULL;
-                
+                if (array_key_exists($i, $data['assesmentName']) && trim($data['assesmentName'][$i]) != ''){
+                    
+                    // pushing input data that are not empty
+                    $set['Assesment'.$assesNum] = trim($data['assesmentName'][$i]).',';
+                    $assesNum++;
                 }
+                $i++;
 
             }
 
-        }else{
-
-            //there were no assesments entered therefore all assesments will be set to null
-
-            $set['Assesment1'] = NULL;
-            $set['Assesment2'] = NULL;
-            $set['Assesment3'] = NULL;
-            $set['Assesment4'] = NULL;
-            $set['Assesment5'] = NULL;
-            
-        }            
+        }        
         $this->db->trans_start();
         
-        // $this->db->where();
-        // $this->db->where();
         $this->db->update($table, $set, array('status' => 'Enrolled'));
 
         $affectedRows = $this->db->affected_rows();
