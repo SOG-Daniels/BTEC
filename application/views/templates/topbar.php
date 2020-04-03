@@ -143,11 +143,9 @@
                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
               </div>
             </li> -->
-            <form class="form-group my-2 my-lg-0 pt-3">
-              <p>
-              <input class="form-control mr-sm-2" name="applicant" type="text" placeholder="Search" aria-label="Search" id="auto" >
-              <!-- <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button> -->
-              </p>
+            <form class="form-group" method="POST" action="<?php echo base_url();?>search">
+               <input type="hidden" name="action" value="search">
+               <input type="text" class="form-control" name="name" id="applicant" placeholder="Search for a Client" style="width:100%;">
             </form>
             <div class="topbar-divider d-none d-sm-block"></div>
 

@@ -248,45 +248,32 @@
   <script src="assets/js/demo/chart-area-demo.js"></script>
   <script src="assets/js/demo/chart-pie-demo.js"></script> -->
   
+  <!-- JQuery JS file used for autocomplete feature -->
+  <script src="<?php echo base_url()?>assets/js/jquery-3.4.1.min.js"></script>
   
-  <!-- JQuery plugins for autocomplete feature -->
-  <!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-  <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.min.js"></script>
-   -->
   <!-- Data Tables plugins -->
   <script src="<?php echo base_url()?>assets/vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="<?php echo base_url()?>assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
   
   <!-- data picker custom javascript -->
-  <script src="<?php echo base_url()?>assets/js/bootstrap-datepicker.js"></script>
+  <!-- <script src="<?php //echo base_url()?>assets/js/bootstrap-datepicker.js"></script> -->
+  
   
   <!-- Summernote plugin -->
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-bs4.min.js"></script>
-
-    
+  
+  
+  <!-- JQuery plugins JS file for autocomplete feature -->
+  <script src="<?php echo base_url()?>assets/js/jquery-ui.js"></script>
+  
   <script type="text/javascript">
-    //declaring variable for global use
-    // $(function() {
-    // $("#auto").autocomplete({
-    //     source: "<?php //echo base_url('autocomplete'); ?>",
-    //     minLength: 1,
-    //     select: function( event, ui ) {
-    //         event.preventDefault();
-    //         $("#skill_input").val(ui.item.id);
-    //     }
-    //     // source: function(request, response) {
-    //     //   var results = $.ui.autocomplete.filter(src, request.term);
-          
-    //     //   response(results.slice(0, 10));
-    //     // }
-    // });
-// });
+      $(document).ready(function(){
+          $( "#applicant" ).autocomplete({
+            source: "<?php echo site_url('search?');?>"
+          });
+      });
+  
   </script>
-
-  <!-- Data Tables custom scripts -->
-  <!-- <script src="<php echo base_url()?>assets/js/demo/datatables-demo.js"></script>
-  <!- <!- my custom jquery -->
-  <!-- <script src="<php echo base_url()?>assets/js/demo/customJS.js"></script> -->
-
+    
 </body>
 </html>

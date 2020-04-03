@@ -8,7 +8,7 @@
 $personalInfo = ((isset($clientData[0]))? $clientData[0] : array());
 $programs = ((isset($clientData['programs']))? $clientData['programs'] : array());
 $mname = (isset($personalInfo['middle_name']))? $personalInfo['middle_name'].' ': '';
-$name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name']))? $personalInfo['first_name'].' '.$mname.$personalInfo['last_name'] : '' ;
+$name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name']))? ucfirst($personalInfo['first_name']).' '.ucfirst($mname).ucfirst($personalInfo['last_name']) : '' ;
 ?>
 <div class="card shadow-lg mb-3">
     <div class="card-header py-3">
@@ -36,10 +36,10 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
         <div class="row">
             <div class="col-12 col-md-6"><!--left col-->
                 <div class="text-center">
-                <img src="<?php echo isset($personalInfo['imgPath'])? base_url().$personalInfo['imgPath'] : base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="300" height="400">
+                <img src="<?php echo isset($personalInfo['imgPath'])? base_url().$personalInfo['imgPath'] : base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="40%" height="40%">
                 <br>
                 </div>
-                <?php echo '<h3 class="text-center pt-2">'.$name.'</h3>';?>
+                <?php echo '<h4 class="text-center pt-2">'.$name.'</h4>';?>
 
             <h6>
                 <small class="font-weight-bold text-primary">

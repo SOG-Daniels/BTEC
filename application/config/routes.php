@@ -114,3 +114,6 @@ $route['change-password/(:any)'] = 'verification/change_password/$1';
 $route['forgot-password'] = 'email/request_email';
 $route['reset-request'] = 'email/send_reset_request';
 
+//autocomplete route
+$route['search'] = 'user/autocomplete_search';
+

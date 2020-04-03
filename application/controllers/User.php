@@ -1285,26 +1285,71 @@ class User extends CI_Controller{
      *
      * @return    jasonEncode data that was found to be a match
      */    
-    public function auto_complete(){
+    public function autocomplete_search(){
 
         // if($this->client_model->)
         if( $this->is_session_set() ){
 
-            if ($this->input->get('term')){
+            if (isset($_GET['term'])){
+                // echo $_GET['term'];
                 
-            }
-            
-            // echo '<script>alert("test");</script>';
-            // echo '<script>alert('.$this->input->get('term', TRUE).');</script>';
-            $result = $this->user_model->autocomplete_search( $this->input->get('term', TRUE));
+                $result = $this->user_model->get_autocomplete($_GET['term']);
 
-            if ($result === FALSE){
-                log_message('debug', 'Auto complete query returned false');
+                if ($result !== FALSE){
+                   
+                    //looping to repart record for autocomplete
+                    foreach ($result as $row)
+                        $arr_result[] = $row['full_name'];//appending to array all the full_names recieved as result
+                    
+                    echo json_encode($arr_result);// sending results back to autocomplete plugin
+
+                }else{
+                    log_message('debug', 'Auto complete query returned false');
+
+                }
             }else{
-                echo jason_encode($result); 
-                // echo "<pre>";
-                // print_r($result);
-                // echo "</pre>";
+
+                //search request was submitted 
+                if(!empty($this->input->post()) && $this->input->post('action') === 'search'){
+                    
+                    //requesting client info by passing the name with xxs filtering enabled
+                    $result = $this->client_model->get_client($this->input->post('name', TRUE));
+                    
+                    if($result === FALSE){
+                        
+                        log_message('debug', 'Client_model->get_client() returned false');
+                        
+                        $this->data['message'] = '
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h5>
+                            <strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong> Something went wrong with getting the search result. 
+                            <h5>
+                            </div>
+                        ';
+
+                        $this->session->set_flashdata('message', $this->data['message']);//setting a message that will only be flashed once to the UI
+                        
+                        redirect('dashboard');
+                    }else{
+
+                        $this->data['title'] = 'Search';
+                        $this->data['clientInfo'] = $result;
+                        $this->data['searchValue'] = $this->input->post('name', TRUE);
+
+                        //loading search view
+                        $this->load->view('templates/header', $this->data);
+                        $this->load->view('templates/sidebar', $this->data);
+                        $this->load->view('templates/topbar', $this->data);
+                        $this->load->view('pageContent/search', $this->data);
+                        $this->load->view('templates/footer', $this->data);
+                            
+
+                    }
+
+                }
             }
 
         }else{

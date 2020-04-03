@@ -1,15 +1,15 @@
-$(document).ready(function(){
+// $(document).ready(function(){
 
-    $('#graduatedOn').datepicker({
+//     $('#graduatedOn').datepicker({
 
-        viewMode: 'years',
-        format: 'mm-yyyy'
+//         viewMode: 'years',
+//         format: 'mm-yyyy'
 
-    });
-
-
+//     });
 
 
 
 
-});
+
+
+// });

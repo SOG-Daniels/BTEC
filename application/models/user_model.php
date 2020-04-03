@@ -172,6 +172,7 @@ class User_model extends CI_Model{
         if (isset($userid) && $data !== NULL){
 
             $this->db->trans_start();
+
             $query = $this->db->query('
             UPDATE users 
             SET fname = "'.$data['fname'].'", 
@@ -447,25 +448,30 @@ class User_model extends CI_Model{
      * 
      * @return    Array containing all the data that matched the word
      */    
-    public function autocomplete_search($word = NULL) {
-
+    public function get_autocomplete($search = NULL) {
+      
         $this->db->trans_start();
-          
+        
            $sql = $this->db->query('
-            SELECT CONCAT (first_name," ",last_name) as full_name
-            FROM applicants
-            WHERE 
-                first_name = "%'.$word.'%" or last_name = "%'.$word.'%"
+           SELECT 
+               CONCAT(first_name," ",last_name) as full_name 
+           FROM applicants a
+           WHERE 
+               a.is_client = 1 and CONCAT(first_name, last_name) LIKE "%'.trim($search).'%" 
+           ORDER BY full_name ASC 
+           LIMIT 
+               10 
            ');
-            $query = $this->db->get();
 
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE){
+            
+            log_message('debug', 'get_autocomplete user model function returned false');
             return FALSE;
         }
-        
-        return $query->result_array();
+
+        return $sql->result_array();
 
     
     }

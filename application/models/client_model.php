@@ -727,72 +727,73 @@ class Client_model extends CI_Model{
     public function get_program_list ($clientId = NULL){
 
         if ($clientId !== NULL){
+            
             $this->db->trans_start();
 
-            $sql1 = $this->db->query("
-            SELECT * FROM barbering WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
-            ");
-            $data['barbering'] = (($sql1->num_rows() > 0 )? $sql1->result_array() : '' );
-           
-            $sql2 = $this->db->query("
-            SELECT * FROM bartending WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
-            ");
-            $data['bartending'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
+                $sql1 = $this->db->query("
+                SELECT * FROM barbering WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+                ");
+                $data['barbering'] = (($sql1->num_rows() > 0 )? $sql1->result_array() : '' );
             
-            $sql3 = $this->db->query("
-            SELECT * FROM bpo  WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
-            ");
-            $data['bpo'] = (($sql3->num_rows() > 0 )? $sql3->result_array() : '' );
+                $sql2 = $this->db->query("
+                SELECT * FROM bartending WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+                ");
+                $data['bartending'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
+                
+                $sql3 = $this->db->query("
+                SELECT * FROM bpo  WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+                ");
+                $data['bpo'] = (($sql3->num_rows() > 0 )? $sql3->result_array() : '' );
+                
+                $sql4 = $this->db->query("
+                SELECT * FROM child_care WHERE client_id = ".$clientId."
+                ");
+                $data['child_care'] = (($sql4->num_rows() > 0 )? $sql4->result_array() : '' );
+                
+                $sql5 = $this->db->query("
+                SELECT * FROM computer_basics WHERE client_id = ".$clientId." 
+                ");
+                $data['computer_basics'] = (($sql5->num_rows() > 0 )? $sql5->result_array() : '' );
+                
+                $sql6 = $this->db->query("
+                SELECT * FROM event_planning WHERE client_id = ".$clientId."
+                ");
+                $data['event_planning'] = (($sql6->num_rows() > 0 )? $sql6->result_array() : '' );
+                
+                $sql7 = $this->db->query("
+                SELECT * FROM front_desk WHERE client_id = ".$clientId." 
+                ");
+                $data['font_desk'] = (($sql7->num_rows() > 0 )? $sql7->result_array() : '' );
             
-            $sql4 = $this->db->query("
-            SELECT * FROM child_care WHERE client_id = ".$clientId."
-            ");
-            $data['child_care'] = (($sql4->num_rows() > 0 )? $sql4->result_array() : '' );
-            
-            $sql5 = $this->db->query("
-            SELECT * FROM computer_basics WHERE client_id = ".$clientId." 
-            ");
-            $data['computer_basics'] = (($sql5->num_rows() > 0 )? $sql5->result_array() : '' );
-            
-            $sql6 = $this->db->query("
-            SELECT * FROM event_planning WHERE client_id = ".$clientId."
-            ");
-            $data['event_planning'] = (($sql6->num_rows() > 0 )? $sql6->result_array() : '' );
-            
-            $sql7 = $this->db->query("
-            SELECT * FROM front_desk WHERE client_id = ".$clientId." 
-            ");
-            $data['font_desk'] = (($sql7->num_rows() > 0 )? $sql7->result_array() : '' );
-           
-            $sql8 = $this->db->query("
-            SELECT * FROM home_health WHERE client_id = ".$clientId." 
-            ");
-            $data['home_health'] = (($sql8->num_rows() > 0 )? $sql8->result_array() : '' );
+                $sql8 = $this->db->query("
+                SELECT * FROM home_health WHERE client_id = ".$clientId." 
+                ");
+                $data['home_health'] = (($sql8->num_rows() > 0 )? $sql8->result_array() : '' );
 
-            $sql9 = $this->db->query("
-            SELECT * FROM house_keeping WHERE client_id = ".$clientId." 
-            ");
-            $data['house_keeping'] = (($sql9->num_rows() > 0 )? $sql9->result_array() : '' );
+                $sql9 = $this->db->query("
+                SELECT * FROM house_keeping WHERE client_id = ".$clientId." 
+                ");
+                $data['house_keeping'] = (($sql9->num_rows() > 0 )? $sql9->result_array() : '' );
 
-            $sql10 = $this->db->query("
-            SELECT * FROM landscaping WHERE client_id = ".$clientId." 
-            ");
-            $data['landscaping'] = (($sql10->num_rows() > 0 )? $sql10->result_array() : '' );
+                $sql10 = $this->db->query("
+                SELECT * FROM landscaping WHERE client_id = ".$clientId." 
+                ");
+                $data['landscaping'] = (($sql10->num_rows() > 0 )? $sql10->result_array() : '' );
 
-            $sql11 = $this->db->query("
-            SELECT * FROM life_guard WHERE client_id = ".$clientId." 
-            ");
-            $data['life_guard'] = (($sql11->num_rows() > 0 )? $sql11->result_array() : '' );
+                $sql11 = $this->db->query("
+                SELECT * FROM life_guard WHERE client_id = ".$clientId." 
+                ");
+                $data['life_guard'] = (($sql11->num_rows() > 0 )? $sql11->result_array() : '' );
 
-            $sql12 = $this->db->query("
-            SELECT * FROM nail_tech WHERE client_id = ".$clientId." 
-            ");
-            $data['nail_tech'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
+                $sql12 = $this->db->query("
+                SELECT * FROM nail_tech WHERE client_id = ".$clientId." 
+                ");
+                $data['nail_tech'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
 
-            $sql13 = $this->db->query("
-            SELECT * FROM wait_staff WHERE client_id = ".$clientId." 
-            ");
-            $data['wait_staff'] = (($sql13->num_rows() > 0 )? $sql13->result_array() : '' );
+                $sql13 = $this->db->query("
+                SELECT * FROM wait_staff WHERE client_id = ".$clientId." 
+                ");
+                $data['wait_staff'] = (($sql13->num_rows() > 0 )? $sql13->result_array() : '' );
 
             $this->db->trans_complete();
 
@@ -801,53 +802,7 @@ class Client_model extends CI_Model{
                 
             }
 
-            //print_r($data);
             return $data;
-            //combining data together
-            // $this->db->trans_start();
-            // $sql = $this->db->query('
-            // select a.id,
-            // bpo.programme as bpo, bpo.status as bpo_status, bpo.enrolled_in as bpo_enrolled, bpo.comments as bpo_comment, bpo.pre_test_avg as bpo_preTestAvg,
-            // bar.programme as bartending, bar.status as bar_status, bar.enrolled_in as bar_enrolled, bar.comments as bar_comment, bar.pre_test_avg as bar_preTestAvg,
-            // ba.programme as barbering, ba.status as ba_status, ba.enrolled_in as ba_enrolled, ba.comments as bar_comment ,  ba.pre_test_avg as ba_preTestAvg,
-            // cc.programme as child_care, cc.status as cc_status, cc.enrolled_in as cc_enrolled, cc.comments as cc_comment, cc.pre_test_avg as cc_preTestAvg,
-            // cb.programme as computer_basics, cb.status as cb_status, cb.enrolled_in as cb_enrolled, cb.comments as cb_comment, cb.pre_test_avg as cb_preTestAvg, 
-            // ep.programme as event_planning, ep.status as ep_status, ep.enrolled_in as ep_enrolled, ep.comments as ep_comment, ep.pre_test_avg as ep_preTestAvg,
-            // fd.programme as front_desk, fd.status as fd_status, fd.enrolled_in as fd_enrolled, fd.comments as fd_comment, fd.pre_test_avg as fd_preTestAvg,
-            // hh.programme as home_health, hh.status as hh_status, hh.enrolled_in as hh_enrolled, hh.comments as hh_comment, hh.pre_test_avg as hh_preTestAvg,
-            // hk.programme as house_keeping, hk.status as hk_status, hk.enrolled_in as hk_enrolled, hk.comments as hk_comment, hk.pre_test_avg as hk_preTestAvg,
-            // l.programme as landscaping,  l.status as l_status, l.enrolled_in as l_enrolled, l.comments as l_comment,  l.pre_test_avg as l_preTestAvg,
-            // lg.programme as life_guard, lg.status as lg_status, lg.enrolled_in as lg_enrolled, lg.comments as lg_comment, lg.pre_test_avg as l_preTestAvg,
-            // nt.programme as nail_tech, nt.status as nt_status, nt.enrolled_in as nt_enrolled, nt.comments as nt_comment , nt.pre_test_avg as nt_preTestAvg,
-            // ws.programme as wait_staff, ws.status as ws_status, ws.enrolled_in as ws_enrolled, ws.comments as ws_comment, ws.pre_test_avg as ws_preTestAvg,
-            // st.organization as specialized_trainings, st.date_offered as st_date_offered
-            // from applicants a 
-            // left join bpo on bpo.client_id = a.id 
-            // left join bartending bar on bar.client_id = a.id 
-            // left join barbering ba on ba.client_id = a.id
-            // left join child_care cc on cc.client_id = a.id
-            // left join computer_basics cb on cb.client_id = a.id
-            // left join event_planning ep on ep.client_id = a.id
-            // left join front_desk fd on fd.client_id = a.id
-            // left join home_health hh on hh.client_id = a.id
-            // left join house_keeping hk on hk.client_id = a.id
-            // left join landscaping l on l.client_id = a.id
-            // left join life_guard lg on lg.client_id = a.id
-            // left join nail_tech nt on nt.client_id = a.id
-            // left join wait_staff ws on ws.client_id = a.id
-            // left join specialized_trainings st on a.id = st.client_id
-            // where 
-            // a.id = '.$clientId.'
-            
-            // ');
-
-            // $this->db->trans_complete();
-            // if ($this->db->trans_status() === FALSE){
-            //     return FALSE;
-            // }
-
-            // return $sql->result_array();
-
         }
 
 
@@ -916,8 +871,9 @@ class Client_model extends CI_Model{
 
             $set = array();
             $set['status'] = ($data['status'] == "1" )? 'Enrolled' : $data['status'];
-            // $set['final_Assesment'] = isset($data['final_assesment'])? $data['final_assesment'] : NULL;
             $set['comments'] = isset($comment)? $comment : NULL;
+            // $set['updated_on'] = date("Y-m-d H:i:sa");
+            // $set['updated_by'] = $this->session->userdata('userIdentity');
             
            
             // in the query for assesmets 1-5 we are checking to see if the input exist by means of checking array keys
@@ -932,15 +888,8 @@ class Client_model extends CI_Model{
                         $assCount++;
 
                     }
-                    // else{
-                    //     $set['Assesment'.($i + 1)] = NULL;
-                    // }
 
                 }
-                // $set['Assesment2'] = array_key_exists(1,$data['assesment']) ? $data['assesment'][1]: NULL;
-                // $set['Assesment3'] = array_key_exists(2,$data['assesment']) ? $data['assesment'][2]: NULL;
-                // $set['Assesment4'] = array_key_exists(3,$data['assesment']) ? $data['assesment'][3]: NULL;
-                // $set['Assesment5'] = array_key_exists(4,$data['assesment']) ? $data['assesment'][4]: NULL;
 
             }else{
 
@@ -953,14 +902,8 @@ class Client_model extends CI_Model{
             }            
             $set['final_grade'] = ($assSum / $assCount);
 
-            // echo $endSql;
             $this->db->trans_start();
 
-            // echo "<pre>";
-            // print_r($set);
-            // echo "</pre>";
-            
-            //  $this->db->query($sql);
             $this->db->update($data['program'], $set, 'client_id= '.$data['clientId'].'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
             
             $this->db->trans_complete();
@@ -1083,7 +1026,34 @@ class Client_model extends CI_Model{
         
         return TRUE;
     }
+    /**
+     * get_client() gets all the clients info tha have the first and last name equal to name
+     *
+     * @access    public
+     * @param     name of the clients entered in the search  
+     * 
+     * @return    Boolean/Array array of records if successful, false if transaction failed
+     */    
+    public function get_client($name = NULL) {
+   
+        $this->db->trans_start();
+        
+        $sql = $this->db->query('
+            SELECT a.id, a.first_name, a.middle_name, a.last_name, a.gender, email, mobile_phone,
+            CONCAT(a.street,", ",a.ctv, ", ",a.district) as address, a.ec_name, a.ec_number, a.ec_relation,  
+            (SELECT p.path FROM profile_img p WHERE p.id = a.profile_img_id) as img_path
+            FROM applicants a
+            WHERE is_client = 1 and CONCAT(first_name, " ", last_name) LIKE "%'.trim($name).'%"
+        ');
+        $this->db->trans_complete();
 
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+        
+        return $sql->result_array();
+    
+    }
 }
 
 ?>

@@ -11,7 +11,7 @@
             <div class="card-header py-3">
               <div class="row">
                 <div class=" col-6 col-md-9">
-                  <h5 class="m-0 font-weight-bold text-primary">Settings</h5>
+                  <h5 class="m-0 font-weight-bold text-primary">Grade Settings</h5>
                 </div>
                 <div class="col-6 col-md-3 d-flex justify-content-end">
                 <button id="saveProSettings" class="btn btn-success btn-sm " type="submit" form="assesNames">
@@ -24,7 +24,7 @@
             </div>
             <div class="card-body">
               <div class="row">
-                  <div class="col-12 col-md-8">
+                  <!-- <div class="col-12 col-md-8">
                     <h6>
                         <small class="font-weight-bold text-dark">
                         PROGRAM AVAILABLE 
@@ -32,7 +32,7 @@
                         </small>        
                     </h6>
                     
-                  </div>
+                  </div> -->
                   <div class="col-12 col-md-4">
                     <h6>
                         <small class="font-weight-bold text-dark">
