@@ -17,13 +17,14 @@
         <div class="row">
             <div class="col col-md-6"><!--left col-->
                 <div class="text-center">
-                    <img src="<?php echo base_url()?>upload/default_profile_img.png" class="avatar rounded img-thumbnail" alt="avatar">
+                    <img id="appli-img" src="<?php echo base_url()?>upload/default_profile_img.png" class="avatar rounded img-thumbnail" alt="avatar" width="55%" height="60%">
                     <br>
                     <?php //echo isset($clientName)? '<h3 class=" ">'.$clientName.'</h3>' : 'Client Image'; ?>
-                    <div class="p-image">
+                    <div class="p-image pt-2">
                         <a href="#" id="upload-client-img">
                         <i class="fa fa-camera "></i> Upload Image
                         </a>
+                        <a class="btn btn-ink text-danger" id="remove-appli-img" style="display: none"><i class="fa fa-trash"></i> Remove Image</a>
                         <input class="client-img-upload" name="clientImg" type="file" accept="image/*" style="display: none;"/>
                         
                     </div>

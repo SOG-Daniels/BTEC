@@ -1,14 +1,14 @@
 <?php 
 // if ($clientData === FALSE){
 // }
-// echo "<pre>";
-//  print_r($clientData);
-// echo"</pre>";
 // // getting data from array 
 $personalInfo = ((isset($clientData[0]))? $clientData[0] : array());
 $programs = ((isset($clientData['programs']))? $clientData['programs'] : array());
 $mname = (isset($personalInfo['middle_name']))? $personalInfo['middle_name'].' ': '';
 $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name']))? ucfirst($personalInfo['first_name']).' '.ucfirst($mname).ucfirst($personalInfo['last_name']) : '' ;
+// echo "<pre>";
+//  print_r($programs);
+// echo"</pre>";
 ?>
 <div class="card shadow-lg mb-3">
     <div class="card-header py-3">
@@ -142,6 +142,30 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
             <br>
             <h6>
                 <small class="font-weight-bold text-primary">
+                WORK INFORMATION
+                <hr>    
+                </small>        
+            </h6>
+            <div class="rounded" style="background-color: #F5F5F5 ;" >
+            <div class="row pl-4 pt-3">
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                            <label for="companyName" class="font-weight-bold d-block " >Company Name:</label>
+                        <?php echo (isset($clientData[0]['employed_at']) && $clientData[0]['employed_at'] != '')? $clientData[0]['employed_at'] : 'None' ;?>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="form-group">
+                            <label for="position" class="font-weight-bold d-block ">Position/Job Title:</label>
+                        <?php echo (isset($clientData[0]['em_position']) &&  $clientData[0]['em_position'] != '')? $clientData[0]['em_position'] : 'None' ;?>
+                    </div>
+                </div>
+  
+            </div>
+            </div>
+            <br>
+            <h6>
+                <small class="font-weight-bold text-primary">
                 EDUCATION INFORMATION
                 <hr>    
                 </small>        
@@ -166,29 +190,6 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
             </div><!--/col-12 col-md-6-->
             <div class="col-12 col-md-6 ">
             
-            <h6>
-                <small class="font-weight-bold text-primary">
-                WORK INFORMATION
-                <hr>    
-                </small>        
-            </h6>
-            <div class="rounded" style="background-color: #F5F5F5 ;" >
-            <div class="row pl-4 pt-3">
-                <div class="col-12 col-md-6">
-                    <div class="form-group">
-                            <label for="companyName" class="font-weight-bold d-block " >Company Name:</label>
-                        <?php echo (isset($clientData[0]['employed_at']) && $clientData[0]['employed_at'] != '')? $clientData[0]['employed_at'] : 'None' ;?>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <div class="form-group">
-                            <label for="position" class="font-weight-bold d-block ">Position/Job Title:</label>
-                        <?php echo (isset($clientData[0]['em_position']) &&  $clientData[0]['em_position'] != '')? $clientData[0]['rm_position'] : 'None' ;?>
-                    </div>
-                </div>
-  
-            </div>
-            </div>
             <br>
             <h6>
                 <small class="font-weight-bold text-primary">
@@ -322,6 +323,7 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
             </div>
             </div><!--/col-8-->
         </div><!--/row-->
+        <br>
         <div class="row">
             <div class="col col-md ml-2">
                 <!-- <ul class="list-group">
@@ -334,19 +336,22 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
                     </li> ->
                 </ul>   -->
                 <div id="programs">
-                <?php 
+                <?php
+                
+                    // preparing to list all the tables that are the programs the client has taken 
+
                     $tableName = '';
                     $tableHead = '
                     <table class="table table-striped table-responsive">
                     <thead class="thead-dark">
                         <tr>
                             <th>#</th>
-                            <th>Final Assesment Grade</th>
+                            <th>Pre Test Avg.</th>
                             <th>Final Grade</th>
                             <th>Enrolled On</th>
                             <th>Program Status</th>
-                            <th>Comments</th>
                             <th>Graduated On</th>
+                            <th>Comments</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -363,17 +368,18 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
                                     <h4 class="font-wieght-bold">
                                     '.$val['programme'].'
                                     </h4>
+                                    <hr>
                                 ';
                                 $tableContent.=' 
                                 
                                 <tr>
                                 <td>'.$val['client_id'].'</td>
-                                <td>'.$val['final_Assesment'].'</td>
+                                <td>'.$val['pre_test_avg'].'</td>
                                 <td>'.$val['final_grade'].'</td>
                                 <td>'.$val['enrolled_in'].'</td>
                                 <td>'.$val['status'].'</td>
-                                <td>'.$val['comments'].'</td>
                                 <td>'.$val['graduated_on'].'</td>
+                                <td>'.$val['comments'].'</td>
                                 </tr>
                                 
                                 ';

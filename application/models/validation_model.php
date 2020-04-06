@@ -8,7 +8,7 @@ class Validation_model extends CI_Model{
     }
     public function get_user($email, $pass){
         
-        $sql = $this->db->query('SELECT u.id, fname, lname, email, p.path FROM users u, profile_img p WHERE u.email = "'.$email.'" and u.password = "'.md5($pass).'" and u.profile_img_id = p.id and u.status = 1');
+        $sql = $this->db->query('SELECT u.id, fname, lname, email, p.path, u.profile_img_id FROM users u, profile_img p WHERE u.email = "'.$email.'" and u.password = "'.md5($pass).'" and u.profile_img_id = p.id and u.status = 1');
         $row = $sql->num_rows();
         if ($row === 1){
             

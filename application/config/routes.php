@@ -57,6 +57,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 //view my profile routes
 $route['profile'] = 'user/profile';
+$route['remove-profile-picture'] = 'user/remove_my_profile_pic';
 
 // Home/Dashboard page routes
 $route['dashboard'] = 'user/get_dashboard';

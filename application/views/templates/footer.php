@@ -267,6 +267,9 @@
   <script src="<?php echo base_url()?>assets/js/jquery-ui.js"></script>
   
   <script type="text/javascript">
+      //declaring global variable
+      var base_url = "<?php echo base_url(); ?>";
+
       $(document).ready(function(){
           $( "#applicant" ).autocomplete({
             source: "<?php echo site_url('search?');?>"

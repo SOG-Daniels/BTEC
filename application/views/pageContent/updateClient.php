@@ -3,7 +3,10 @@
     echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : '');
     $actions = $this->session->userdata('action');
 
-    // echo validation_errors();
+    // echo "<pre>";
+    // print_r($clientData);
+    // echo "</pre>";
+    // echo validation_errors();// echo's validation errors made that were stated in the controller for the form
     // echo (isset($addClientMessage))? $addClientMessage : ' ';
  ?>
 <div class="card shadow-lg mb-3">
@@ -11,7 +14,7 @@
     <?php
         //@param 1 action location one form is submitted
         //@param 2 attributes for the form tag
-        echo form_open_multipart('update-client-info/'.$clientData[0]['id'].'');
+        echo form_open_multipart('update-client-info/'.$clientData[0]['id'].'');//so the validations stated in the controller take effect
     ?>    
     <div class="row">
         <div class="col-12 col-md-6">
@@ -26,14 +29,20 @@
         <div class="row">
             <div class="col col-md-6"><!--left col-->
                 <div class="text-center">
-                    <img src="<?php echo base_url().((isset($clientData[0]['imgPath']))? $clientData[0]['imgPath'] : 'upload/default_profile_img.png'); ?>" class="avatar rounded img-thumbnail" alt="avatar">
+                    <img id="profilePic" src="<?php echo base_url().((isset($clientData[0]['imgPath']))? $clientData[0]['imgPath'] : 'upload/default_profile_img.png'); ?>" class="avatar rounded img-thumbnail" alt="avatar">
                     <br>
                     
                     <div class="p-image pt-2">
-                        <a href="#" id="upload-client-img">
+                        <button  id="upload-client-img" class="btn btn-link">
                         <i class="fa fa-camera "></i> Upload Image
-                        </a>
+                        </button>&nbsp;
+                        <span id="remove-img">
+                            <button  id="remove-client-img" class="btn btn-link text-danger" style="<?php echo (($clientData[0]['profile_img_id'] == 1)? 'display: none': '' ); ?>" >
+                            <i class="fa fa-trash"></i> Remove Image
+                            </button>
+                        </span>
                         <input class="client-img-upload" name="clientImg" type="file" accept="image/*" style="display: none;"/>
+                        <input type="hidden" id="imgId" name="imageId" value="<?php echo (($clientData[0]['profile_img_id'] != 1)? $clientData[0]['profile_img_id'] : 1);?>"/>
                     </div>
                 </div>
                 <br>
@@ -161,7 +170,7 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="position" class="font-weight-bold">Position/Job Title:</label>
-                            <input type="text" class="form-control" name="postion" id="" value="<?php echo (isset($clientData[0]['em_postion'])? $clientData[0]['em_position']: '')?>" required>
+                            <input type="text" class="form-control" name="postion" id="" value="<?php echo (isset($clientData[0]['em_position'])? $clientData[0]['em_position']: '')?>" required>
                         </div>
                     </div> 
                   
@@ -175,11 +184,11 @@
                     <div class="row form-group">
                         <div class="col-12 col-md-6">
                             <label for="edName" class="font-weight-bold">Institution Name:</label>
-                            <input type="text" class="form-control" name="ed_name" id="" value="<?php echo (isset($clientData[0]['home_phone'])? $clientData[0]['home_phone']: '')?>" >
+                            <input type="text" class="form-control" name="ed_name" id="" value="<?php echo (isset($clientData[0]['ed_name'])? $clientData[0]['ed_name']: '')?>" >
                         </div>
                         <div class="col-12 col-md-6">
                             <label for="schoolLevel" class="font-weight-bold">Highest Level of Education:</label>
-                            <input type="text" class="form-control" name="ed_degree" id="" value="<?php echo (isset($clientData[0]['mobile_phone'])? $clientData[0]['mobile_phone']: '')?>" required>
+                            <input type="text" class="form-control" name="ed_degree" id="" value="<?php echo (isset($clientData[0]['ed_degree'])? $clientData[0]['ed_degree']: '')?>" required>
                         </div>
                     </div> 
                     

@@ -1,6 +1,9 @@
 <?php 
     // flashdata('message') will only be available once, i.e. its a temporary variable that will be deleted if 
     // the page is reloaded again
+    // echo "<pre>";
+    // print_r($this->session->userdata());
+    // echo "</pre>";
     echo (!empty($this->session->flashdata('message')))? $this->session->flashdata('message') : ' '; 
 ?>
 <!-- Page Heading -->
@@ -87,6 +90,11 @@
     </div>
     </div>
 </div>
+</div>
+<div class="row">
+    <div class="col-12" style="position: relative; padding-bottom: 75%; height: 0; overflow: hidden;">
+    <iframe style="position: absolute; top:0; left: 0; width: 100%; height: 100%;" class="p-md-5 " src="https://calendar.google.com/calendar/embed?height=550&amp;wkst=1&amp;bgcolor=%23039BE5&amp;ctz=America%2FBelize&amp;src=ZGFuaWVsc29uY29ycmVhQGdtYWlsLmNvbQ&amp;src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;src=ZW4uYnojaG9saWRheUBncm91cC52LmNhbGVuZGFyLmdvb2dsZS5jb20&amp;color=%237986CB&amp;color=%2333B679&amp;color=%230B8043&amp;showPrint=0&amp;showTz=0&amp;showCalendars=1&amp;showTitle=1&amp;title=BTEC" style="border:solid 1px #777" width="600" height="550" frameborder="0" scrolling="no"></iframe>
+    </div>
 </div>
 
 <!-- End of Content Row -->

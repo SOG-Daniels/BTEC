@@ -10,9 +10,16 @@
         // echo "<pre>";
         // print_r($clientInfo);
         // echo "</pre>";
-
+        
         // getting each idividual array inside of $clientInfo
         foreach($clientInfo as $array){
+
+            $view = (in_array(2, $this->session->userdata('action'))? '        
+                <a class="btn btn-secondary btn-sm" href="'.base_url().'client-info/'.$array['id'].'"><i class="fa fa-eye"></i> View</a>
+                ': '');
+            $edit = (in_array(7, $this->session->userdata('action'))? '
+                <a class="btn btn-primary btn-sm" href="'.base_url().'edit-client-info/'.$array['id'].'"><i class="fa fa-edit"></i> Edit</a>
+            ' : '');
 
             echo ' 
             
@@ -20,8 +27,7 @@
                     <div class="card-header">
                         <h5 class="pt-2 d-md-inline">'.ucfirst($array['first_name']).' '.ucfirst($array['last_name']).'</h5>
                         <span class="float-right">
-                            <a class="btn btn-secondary btn-sm" href="'.base_url().'client-info/'.$array['id'].'"><i class="fa fa-eye"></i> View</a>
-                            <a class="btn btn-primary btn-sm" href="'.base_url().'edit-client-info/'.$array['id'].'"><i class="fa fa-edit"></i> Edit</a>
+                        '.$view.$edit.'
                         <span>
                     </div>
                     <div class="card-body">

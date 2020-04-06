@@ -96,7 +96,7 @@ class User extends CI_Controller{
      *
      * @return    NONE 
      */ 
-    public function profile($slug = NULL){
+    public function profile(){
 
         if($this->is_session_set()){
 
@@ -117,7 +117,7 @@ class User extends CI_Controller{
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h5><strong><i class="fa fa-2x fa-frown"></i>Error:</strong>
+                    <h5><strong><i class="fa fa-2x fa-frown"></i> Error:</strong>
                     Cannot get your info from the system, please try again later or ask an IT personnel for help.<h5>
                     </div>
                 
@@ -420,8 +420,18 @@ class User extends CI_Controller{
         
         
     }
-    public function set_client_pic($hasImgFile = 0, $post = NULL, $clientId = NULL){
-            if ($hasImgFile){
+     /** 
+     * set_client_pic() saves the image file uploaded and updates clients image profile id
+     *
+     * @access    public
+     * @param     post cotains input data from form submittion
+     * @param     clientId the id of the client we are setting a profile pic for
+     *
+     * @return    NONE 
+     */ 
+
+    public function set_client_pic($post = NULL, $clientId = NULL){
+            if (!empty($post)){
                 //print_r($post);
 
                 $newFileName = $post['fname'].'_'.$post['lname'].'_'.time();
@@ -429,9 +439,6 @@ class User extends CI_Controller{
                 $config['upload_path'] = './upload/';
                 $config['allowed_types'] = 'jpg|png';
                 $config['file_name'] = $newFileName;
-                // $config['max_size'] = 2000;
-                // $config['max_width'] = 1500;
-                // $config['max_height'] = 1500;
         
                 $this->load->library('upload', $config);
 
@@ -443,30 +450,18 @@ class User extends CI_Controller{
                     $result = $this->client_model->update_client_profile_pic($clientId, $filename);
 
                     if ($result === FALSE){
+                        //update was not successful
                         
-                        $this->data['addClientMessage'] = '
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h5><strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong>
-                        Client was added but was unable to upload image!<h5>
-                        </div>
-                        ';
-
+                        log_message('debug','update_client_profile_pic returned false when updating client profile');
+                        return FALSE;
+            
                     }
 
+                    return TRUE;
+
                 }else{
-                        $this->data['addClientMessage'] = '
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h5><strong><i class="fa fa-2x fa-frown"></i> We\'re sorry!</strong>
-                        Client was added but was unable to upload image!<h5>
-                        </div>
-                        ';
-                //    echo $this->upload->display_errors();
+                    log_message('debug', 'Unable to upload image file to upload folder');
+                    return FALSE;
                 }
             }
 
@@ -489,15 +484,29 @@ class User extends CI_Controller{
             if ($this->input->post('action') === 'updateClient'){
                 
                 
-                $post = $this->input->post(NULL, TRUE);
+                $post = $this->input->post(NULL, TRUE);//filtering the post, enabling XSS filtering 
 
-                $hasImgFile = (!empty($_FILES['clientImg']['name']))? 1 : 0;//checking if image was uploaded
-                $result = $this->client_model->update_client_info($clientId, $post, $hasImgFile);
-                $result2 = $this->client_model->update_client_program_list($clientId, $this->input->post('programList', TRUE)); 
-                $result3 = $this->set_client_pic($hasImgFile, $post, $clientId);
+                // $hasImgFile = (!empty($_FILES['clientImg']['name']))? 1 : 0;//checking if image was uploaded
                 // echo "<pre>";
                 // print_r($this->input->post());
+                // print_r($_FILES);//checking if image was uploaded
                 // echo "</pre>";
+                
+                $hasImgFile = 0;
+                //image was uploaded
+                if (!empty($_FILES['clientImg']['name']) ){
+                    
+                    $result3 = $this->set_client_pic($post, $clientId);
+
+                }else{
+                
+                    $hasImgFile = $this->input->post('imageId');
+                }
+                
+                //calling models to update applicant information 
+                $result = $this->client_model->update_client_info($clientId, $post, $hasImgFile);
+                $result2 = $this->client_model->update_client_program_list($clientId, $this->input->post('programList', TRUE)); 
+                
                 if ($result){
                     $message = '
                     
@@ -524,8 +533,8 @@ class User extends CI_Controller{
                     
                     ';
                 }
-                    $this->session->set_flashdata('message',$message);
-                    redirect('edit-client-info/'.$clientId) ;
+                   $this->session->set_flashdata('message',$message);
+                   redirect('edit-client-info/'.$clientId) ;
 
             }else{
 
@@ -668,7 +677,7 @@ class User extends CI_Controller{
                         $mess ='';
                         
                         if ($this->user_model->set_user_default_pass($result) === TRUE){
-                            $mess = 'User defualt password is: <strong>Passw0rd</strong>';
+                            $mess = 'User default password is: <strong>Passw0rd</strong>';
                         }
                         $this->message = '   
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -888,6 +897,44 @@ class User extends CI_Controller{
      *
      * @return    NONE 
      */    
+    public function remove_my_profile_pic(){
+        
+        if( $this->is_session_set()){
+            
+            //Checking if the user does not have the default image set as their profile pic
+            if ($this->session->userdata('imgId') !== 1){
+
+                $result = $this->user_model->set_default_profile_pic($this->session->userdata('userid'), $this->session->userdata('imgId'));
+                
+                if ($result === FALSE){
+                    echo 'Unable to remove your profile image. Try again later.';
+                }else{
+
+                    //re-initializing the session
+                    $this->session->set_userdata('imgPath','upload/default_profile_img.png');
+                    $this->session->set_userdata('imgId', 1);
+
+                    log_message('debug','Success! Profile picture removed.');
+                }
+
+            }else{
+
+                log_message('debug','No profile pic is set to remove');
+            }
+
+        }else{
+            redirect('login');
+        }
+    
+    }
+    /**
+     * Will update the current users profile 
+     *
+     * @access    public
+     * @param     NONE
+     *
+     * @return    NONE 
+     */    
     public function update_my_profile(){
        
         if( $this->is_session_set()){
@@ -899,11 +946,11 @@ class User extends CI_Controller{
 
             if ($result === FALSE){
 
-                echo "Failed to make changes";
+                echo "Failed to save changes";
 
             }else{
 
-                echo "Success! Changes were made.";
+                echo "Successfully updated your profile!";
             }
 
             
@@ -955,6 +1002,8 @@ class User extends CI_Controller{
                     }else{
 
                         $this->session->set_userdata('imgPath', 'upload/'.$filename);
+                        $this->session->set_userdata('imgId', $result);//result hold the id of the new profile pic 
+
                         echo "Profile Image was updated!";
 
                     }

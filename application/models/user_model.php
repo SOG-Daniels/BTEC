@@ -44,7 +44,7 @@ class User_model extends CI_Model{
     public function get_user_info($userId){
 
         $sql = $this->db->query(
-        'SELECT u.id, fname, lname, email, username, u.status, phone, p.path as imgPath
+        'SELECT u.id, fname, lname, email, username, u.status, phone, profile_img_id, p.path as imgPath
         FROM users u, profile_img p WHERE u.id = '.$userId.' and u.profile_img_id = p.id and p.status = 1'
         );
         $row = $sql->num_rows();
@@ -309,7 +309,33 @@ class User_model extends CI_Model{
             return FALSE;
         }
     }
+    /**
+     * Sets a the profile pic of the user to default and sets the old pic's status to 1;
+     *
+     * @access    public
+     * @param     userId the id of the users in which the profile image belongs to
+     * @param     oldImgId the old profile pic ID 
+     * 
+     * @return    Boolean true/false if the query was successful
+     */    
+    public function set_default_profile_pic($userId = NULL, $oldImgId = NULL){
+        
+        $this->db->trans_start();
 
+            //setting old img status to 0 - no longer in use
+            $this->db->update('profile_img',array('status' => 0), array('id' => $oldImgId));
+            //setting user profile pic to default 
+            $this->db->update('users',array('profile_img_id' => 1), array('id' => $userId));
+
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            //if a query fails then it will automatically rollback the query's
+            return FALSE;
+        }
+        return TRUE;
+    }
     /**
      * Sets the profile pic in the database's profile_img table
      *
@@ -328,33 +354,25 @@ class User_model extends CI_Model{
             'SELECT u.id, profile_img_id as p_id FROM users u WHERE u.id = '.$userid.''
             );
             $result = $sql->row_array();
-
-            if ($result['p_id'] === 1){
-
-                $input = array(
-                    'path' => 'upload/'.$filename ,
-                    'status' => 1
-                );
-                $this->db->insert('profile_img', $input);
-                $pId = $this->db->insert_id();//getting last inserted ID i.e. id of profile_image 
-
-                $this->db->update('users',array('profile_img_id'=>$pId), 'id= '.$userid.'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
-
-            }else{
-                //it's not the default img we'll set that p_id status to zero an insert a new image or the user
-               
-                // creating a new profile_image 
-                $input = array(
-                    'path' => 'upload/'.$filename ,
-                    'status' => 1
-                );
-                $this->db->insert('profile_img', $input);
-                $pId = $this->db->insert_id();//getting last inserted ID i.e. id of profile_image 
-
-                $this->db->update('users',array('profile_img_id'=>$pId), 'id= '.$userid.'');
+           
+            //creating input values for query
+            $input = array(
+                'path' => 'upload/'.$filename ,
+                'status' => 1
+            );
+            
+            $this->db->insert('profile_img', $input);//inserting the new image 
+            
+            $pId = $this->db->insert_id();//getting last inserted ID i.e. id of profile_image 
+            
+            //assigning new image to user
+            $this->db->update('users',array('profile_img_id'=>$pId), 'id= '.$userid.'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
+            
+            if ($result['p_id'] != 1){
                 
                 //deleting the old image by setting old image status to 0 meaning false 
                 $this->db->update('profile_img',array('status'=>0), 'id= '.$result['p_id'].'');
+
             }
 
             $this->db->trans_complete();
@@ -362,7 +380,7 @@ class User_model extends CI_Model{
             if ($this->db->trans_status() === FALSE){
                 return FALSE;
             }else{
-                return TRUE;
+                return $pId;
             }
 
 

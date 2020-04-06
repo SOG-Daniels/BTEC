@@ -284,13 +284,10 @@ class Client_model extends CI_Model{
      *
      * @return    Bool if the query fails then it returns false else it will return true
      */   
-    public function update_client_info($clientId = NULL, $data = NULL, $hasImgFile = 1){
+    public function update_client_info($clientId = NULL, $data = NULL, $hasImgFile = NULL){
 
         if (isset($data) && isset($clientId)){
-        
-            $profileImgId = ($hasImgFile === 1)? NULL : 1;// One means that we will load the default profile pic that is in the database.
 
-            
             $homePhone = ($data['homePhone'] !== '')? $data['homePhone'] : NULL;
 
             // loading array with all the data from post
@@ -325,7 +322,6 @@ class Client_model extends CI_Model{
                 'ref_address3'  => (isset($data['refAddress3'])? trim($data['refAddress3']) : NULL),
                 'ref_city3'  => (isset($data['refCity3'])? trim($data['refCity3']) : NULL),
                 'ref_phone3'  => (isset($data['refPhone3'])? $data['refPhone3'] : NULL),
-                'profile_img_id' => $profileImgId,
                 'updated_on' => date("Y-m-d H:i:s"),
                 'updated_by' => $data['userIdent'],
                 'ed_degree' => trim($data['ed_degree']),
@@ -334,18 +330,34 @@ class Client_model extends CI_Model{
                 'em_position' => trim($data['postion'])
                                 
             );
-
+            
             $this->db->trans_start();//starting transaction
+            
+            if($hasImgFile != 0){
+                
+                //setting existing image file
+                $input['profile_img_id'] = $hasImgFile;
+                
+                //selecting current profile_img_id
+                $sql = $this->db->query('SELECT profile_img_id as imgID FROM applicants WHERE id = '.$clientId.'');
+                $result = $sql->row();
+
+                // setting image status to 0 if its not the default profile pic
+                if ($result->imgID != 1){
+                    $this->db->update('profile_img', array('status' => 0), array('id' => $result->imgID));
+                }
+            }
+
             $this->db->update('applicants', $input, array('id'=>$clientId));
 
             $this->db->trans_complete();//ending transaction
 
             if($this->db->trans_status() === FALSE){//checking to see if an error occured during transaction
-
+                
                 return FALSE;
 
             }else{
-
+                
                 return $clientId;
 
             }
@@ -478,9 +490,9 @@ class Client_model extends CI_Model{
             $this->db->insert('profile_img', $input);
             $pId = $this->db->insert_id();//getting last inserted ID i.e. id of profile_image 
             
-            print_r($row);
+            //print_r($row);
            
-            if ($row[0]['imgId'] !== 1){
+            if ($row[0]['imgId'] != 1){
 
                 $this->db->update('profile_img',array('status' => 0), 'id= '.$row[0]['imgId'].'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
             }

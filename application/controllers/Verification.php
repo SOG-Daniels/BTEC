@@ -60,6 +60,7 @@ class Verification extends CI_Controller{
                     $this->session->set_userdata('name', $name);
                     $this->session->set_userdata('email', $result['email']);
                     $this->session->set_userdata('imgPath', $result['path']);
+                    $this->session->set_userdata('imgId', $result['profile_img_id']);
                    
                     // print_r($result);
                     

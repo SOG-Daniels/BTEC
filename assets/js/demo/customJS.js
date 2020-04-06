@@ -57,10 +57,86 @@ function checkPasswordMatch() {
         }
     }
 }
+// function creates the enrolled structuring it into an object and so that it can be used by the datatable
+function createList (jsonData, base_url, hasGradeEdit, hasEdit, hasView){
+  eList = [];
+  console.log(jsonData);
+
+    if (jsonData[0].length > 0){
+
+        var eTempList = { "data" : jsonData};
+        var i;
+
+        // loops used to get inner array data  
+        for (var i in eTempList.data){
+            for (var sub in eTempList.data[i]){
+                eTempList.data[i][sub].full_name = eTempList.data[i][sub].first_name + ' ' + eTempList.data[i][sub].last_name;
+                eTempList.data[i][sub].pActions = ((hasView == 1)? '<a href ="'+base_url+'client-info/'+eTempList.data[i][sub].id+'">View</a>':"")+
+                ((hasEdit == 1)? '&nbsp'+'<a href ="'+base_url+'edit-client-info/'+eTempList.data[i][sub].id+'"> Edit</a>' : ""); 
+                
+                eTempList.data[i][sub].gView =((hasGradeEdit == 1)? '<a href ="'+base_url+'view-client-grade/'+(eTempList.data[i][sub].programme.replace(/\s/g , "-")).replace(/'/g,"")+'/'+eTempList.data[i][sub].id+'">Edit</a>' : "");
+
+                //enrolled list object
+                eList.push(eTempList.data[i][sub]);//we take the arrays that are embeded and list them out into one array 
+            }
+
+        }
+    
+        // console.log(eList); // checking if we have the correct data to display in the datatables
+        initializeDatatable(eList);
+
+    }else{
+        //No record was returned so set parameter as 0 - false
+        initializeDatatable(0);
+    }
+
+}
+// This function initializes the data table plugin with the object created from the createList function
+function initializeDatatable(data){
+
+    $(document).ready(function(){
+        if ($.fn.DataTable.isDataTable("#enrolledList")) {
+            $('#enrolledList').DataTable().clear().destroy();
+        }
+        if (data != 0){
+            let columns = [
+                { "data": "id" , "sortable" : true },
+                { "data": "full_name" , "sortable" : true},
+                { "data": "programme" , "sortable" : false, "width": "25%"},
+                { "data": "enrolled_in", "sortable" : false },
+                { "data": "dob", "sortable" : true},
+                { "data": "mobile_phone" , "sortable" : false}
+            ];
+            //we are gonna push the data for the colum if they have the privileges
+            (hasGradeEdit == 1)? columns.push({ "data": "gView", "sortable" : false }) : '';
+            (hasView == 1 || hasEdit == 1)? columns.push({ "data": "pActions", "sortable" : false }) : '';
+
+            
+            // columns.data = pAction;
+            // console.log(columns)
+            $('#enrolledList').DataTable({
+                    "data" : data,
+                    "columns" :columns,
+                    "order": [[1, 'asc']]
+
+            });    
+        }else{
+
+            $('#enrolledList').DataTable( {
+                "language": {
+                    "emptyTable":     "No records  were found!"
+                }
+            } );
+
+        } 
+        
+    });
+
+}
+
 $(document).ready(function() {
 
-
-    /////// start for custom function declaration //////////
+  /***********start of custom function declaration **************/
 
     // function declared inside $(docuemnt).ready because it uses jquery 
     get_UserInfoFormData = function() {
@@ -83,7 +159,50 @@ $(document).ready(function() {
 
     }
 
-    ////end of function declaration///////
+    //function gets the image uploaded and displayes it on the profile pic image tag
+    var readURL = function(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.avatar').attr('src', e.target.result);
+            }
+            
+            $('#remove-client-img').show();//displaying remove image button for editing a client
+            $('#remove-appli-img').show(); //displaying remove image button for adding a client
+    
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    /**************End of function declaration************/
+
+    // triggered upon clicking the remove imag link in edit-client-info page
+    $('#remove-img ').on('click', '#remove-client-img', function (e){
+        e.preventDefault();
+
+        $('#imgId').val(1);//setting default profile image ID 
+        $('#profilePic').attr('src', base_url+'upload/default_profile_img.png');//bass_url is defined in footer.php as a global variable
+        $('.client-img-upload').val('');
+        $('#remove-client-img').hide();
+       
+
+    });
+
+    // triggered in viewing my profile page when removing image
+    $('#remove-user-img').click(function (e){
+        e.preventDefault();
+
+        //sending an ajax request as post to remove profile pic
+        $.post(base_url+'remove-profile-picture', function(data){
+            
+            location.reload(true);//reloading current page from server and not from cache
+            //alerting contoller's response
+            $(this).hide();
+
+        });
+       
+
+    });
 
     // on submitting the program assesmetn form
     $('#assesNames').on('submit', function (e){
@@ -91,9 +210,10 @@ $(document).ready(function() {
 
         let modifiedFormData = $('#assesNames').serialize();
        
-        console.log(assesNameForm);
-        console.log('break');
-        console.log(modifiedFormData);
+        // console.log(assesNameForm);
+        // console.log('break');
+        // console.log(modifiedFormData);
+
         // checking to see if the form has changed
         //assesNameForm is defined in programSetup
         if(modifiedFormData !== assesNameForm){
@@ -328,19 +448,7 @@ $(document).ready(function() {
     //form for updating a user profile is set to readonly
     $("#userInfoForm :input").attr("readOnly", true);
     
-    var readURL = function(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function (e) {
-                $('.avatar').attr('src', e.target.result);
-            }
     
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-    
-    // When uploading a profile picture this code is triggered
     $(".file-upload").on('change', function(){
         readURL(this);
         var data = new FormData(document.getElementById("upload-img-form"));
@@ -352,9 +460,9 @@ $(document).ready(function() {
             type: 'POST',
             data: data,
             success:function(data){
+                location.reload(true);//reloading the current page from server not from cache
                 console.log(data);
                 alert(data);
-                location.reload(true);//reloading the current webpage we are in
             },
             cache: false,
             contentType: false,
@@ -364,11 +472,14 @@ $(document).ready(function() {
         
 
     });
-    // when uploading a profile picture of a client
-    $(".client-img-upload").on('change', function(){
-        readURL(this);
+
+    // When uploading a profile picture this code is triggered
+    $('#upload-img').click(function (e){
+        //e.preventDefault();
+        $('.file-upload').click();
 
     });
+
     // Used in the edit my profile page, makes all input fields writable
     $('#editProfile').click(function(e){
         
@@ -558,90 +669,22 @@ $(document).ready(function() {
 
     });
 
-    $('#upload-img').click(function (e){
-        //e.preventDefault();
-        $('.file-upload').click();
+    // when uploading a profile picture of a client
+    $(".client-img-upload").on('change', function(){
+        readURL(this);
 
     });
     $('#upload-client-img').click(function (e){
         //e.preventDefault();
         $('.client-img-upload').click();
+        
+
+    });
+    $('#remove-appli-img').click(function (){
+
+        $('.client-img-upload').val('');
+        $('#appli-img').attr('src', base_url+'upload/default_profile_img.png');
+        $('#remove-appli-img').hide();
 
     });
 });
-// function creates the enrolled structuring it into an object and so that it can be used by the datatable
-function createList (jsonData, base_url, hasGradeEdit, hasEdit, hasView){
-  eList = [];
-  console.log(jsonData);
-
-    if (jsonData[0].length > 0){
-
-        var eTempList = { "data" : jsonData};
-        var i;
-
-        // loops used to get inner array data  
-        for (var i in eTempList.data){
-            for (var sub in eTempList.data[i]){
-                eTempList.data[i][sub].full_name = eTempList.data[i][sub].first_name + ' ' + eTempList.data[i][sub].last_name;
-                eTempList.data[i][sub].pActions = ((hasView == 1)? '<a href ="'+base_url+'client-info/'+eTempList.data[i][sub].id+'">View</a>':"")+
-                ((hasEdit == 1)? '&nbsp'+'<a href ="'+base_url+'edit-client-info/'+eTempList.data[i][sub].id+'"> Edit</a>' : ""); 
-                
-                eTempList.data[i][sub].gView =((hasGradeEdit == 1)? '<a href ="'+base_url+'view-client-grade/'+(eTempList.data[i][sub].programme.replace(/\s/g , "-")).replace(/'/g,"")+'/'+eTempList.data[i][sub].id+'">Edit</a>' : "");
-
-                //enrolled list object
-                eList.push(eTempList.data[i][sub]);//we take the arrays that are embeded and list them out into one array 
-            }
-
-        }
-    
-        // console.log(eList); // checking if we have the correct data to display in the datatables
-        initializeDatatable(eList);
-
-    }else{
-        //No record was returned so set parameter as 0 - false
-        initializeDatatable(0);
-    }
-
-}
-// This function initializes the data table plugin with the object created from the createList function
-function initializeDatatable(data){
-
-    $(document).ready(function(){
-        if ($.fn.DataTable.isDataTable("#enrolledList")) {
-            $('#enrolledList').DataTable().clear().destroy();
-        }
-        if (data != 0){
-            let columns = [
-                { "data": "id" , "sortable" : true },
-                { "data": "full_name" , "sortable" : true},
-                { "data": "programme" , "sortable" : false, "width": "25%"},
-                { "data": "enrolled_in", "sortable" : false },
-                { "data": "dob", "sortable" : true},
-                { "data": "mobile_phone" , "sortable" : false}
-            ];
-            //we are gonna push the data for the colum if they have the privileges
-            (hasGradeEdit == 1)? columns.push({ "data": "gView", "sortable" : false }) : '';
-            (hasView == 1 || hasEdit == 1)? columns.push({ "data": "pActions", "sortable" : false }) : '';
-
-            
-            // columns.data = pAction;
-            // console.log(columns)
-            $('#enrolledList').DataTable({
-                    "data" : data,
-                    "columns" :columns,
-                    "order": [[1, 'asc']]
-
-            });    
-        }else{
-
-            $('#enrolledList').DataTable( {
-                "language": {
-                    "emptyTable":     "No records  were found!"
-                }
-            } );
-
-        } 
-        
-    });
-
-}

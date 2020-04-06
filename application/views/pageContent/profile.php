@@ -2,8 +2,12 @@
     $imgPath = $this->session->userdata('imgPath');
     echo (isset($message))? $message : '';
     // echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : ' ');
-
-?>
+    
+//     echo "<pre>";
+//     // print_r($profileData);
+//     print_r($this->session->userdata());
+//     echo "</pre>";
+// ?>
 <div class="card shadow-lg mb-3">
     <div class="card-header py-3">
         <?php echo isset($name)? '<h3 class="d-inline ">'.$name.'</h3>' : 'Profile'; ?>
@@ -13,15 +17,21 @@
             <div class="col-12 col-md-4"><!--left col-->
                 <form id="upload-img-form">
                     <div class="text-center">
-                    <img src="<?php echo isset($imgPath)? base_url().$imgPath: base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="300" height="400">
+                    <img id="user-Profile-Pic" src="<?php echo isset($imgPath)? base_url().$imgPath: base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="300px" height="400px">
                     <div class="p-image">
-                        <a href="#" id="upload-img" >
+                        <a class="btn btn-link" href="#" id="upload-img" >
                         <i class="fa fa-camera "></i> Upload Image
+                        </a>
+                        <a href="#" id="remove-user-img" class="btn btn-link text-danger" style="<?php echo (($profileData['profile_img_id'] == 1)? 'display: none': '' ); ?>" >
+                        <i class="fa fa-trash"></i> Remove Image
                         </a>
                         <input class="file-upload" name="profileImg" type="file" accept="image/*" style="display: none;"/>
                         
                     </div>
                 </form>
+                <!-- <form id="remove-my-profile-pic">
+                    <input type="hidden" name="imgId" value="<?php //echo $profileData['profile_img_id']; ?>">
+                </form> -->
                 </div>
                 <br>
 
@@ -55,11 +65,11 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-6">
                                 <label for="first_name" class="font-weight-bold">First Name:</label>
-                                <input type="text" class="form-control" name="fname" id="fname" placeholder="" value="<?php echo (isset($profileData['fname']))? $profileData['fname'] : ''; ?>">
+                                <input type="text" class="form-control" name="fname" id="fName" placeholder="" value="<?php echo (isset($profileData['fname']))? $profileData['fname'] : ''; ?>">
                             </div>
                             <div class="col-12 col-md-6 ">
                                 <label for="last_name" class="font-weight-bold">Last Name:</label>
-                                <input type="text" class="form-control" name="lname" id="lname" placeholder="" value="<?php echo (isset($profileData['lname']))? $profileData['lname'] : ''; ?>">
+                                <input type="text" class="form-control" name="lname" id="lName" placeholder="" value="<?php echo (isset($profileData['lname']))? $profileData['lname'] : ''; ?>">
                             </div>
                         </div>
                         
@@ -77,7 +87,7 @@
                         <div class="row form-group">
                             <div class="col-12 col-md-6">
                                 <label for="first_name" class="font-weight-bold">Phone #:</label>
-                                <input type="number" class="form-control" name="phone" id="phone" value="<?php echo (isset($profileData['phone']))? $profileData['phone'] : ''; ?>">
+                                <input type="number" class="form-control" name="phone" id="phoneNum" value="<?php echo (isset($profileData['phone']))? $profileData['phone'] : ''; ?>">
                             </div>
                             
                         </div>

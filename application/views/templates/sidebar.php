@@ -10,7 +10,7 @@ $active = (isset($active))? $active : ' ';
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?php echo site_url('dashboard'); ?>">
         
-        <div class="sidebar-brand-icon rounded-circle bg-white">
+        <div class="sidebar-brand-icon rounded bg-white">
           <!-- <i class="fas fa-laugh-wink"></i> -->
           <img src="<?php echo base_url();?>assets/img/BTEC_Logo.png" alt="BTEC Logo" width="57px" height="55px" overflow="hidden">
         </div>

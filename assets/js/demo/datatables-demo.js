@@ -9,6 +9,7 @@ $(document).ready(function(){
     ]
   });
 
+  //defining the column definition for datatable
   let columns =[
           {
               "className": 'details-control',
@@ -34,15 +35,24 @@ $(document).ready(function(){
         );
       }
   
+      // defining the display proporties for the datatable for client list
   var table = $('#dataTable').DataTable({
+      // dom: 'lBfrtip',
+      // buttons: [
+      //   'excel', 'pdf'
+      // ],
+      "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
       "data": clist.data,
       select:"single",
       "columns": columns,
       "order": [[1, 'asc']]
   });
-
+  // //applying bootstrap to the table
+  // table.buttons().container()
+  // .appendTo( '#dataTable_wrapper .col-md-6:eq(0)' );
 // Call the dataTables jQuery plugin
   $('#dataTableUsers').DataTable();
+
   // Add event listener for opening and closing details
   $('#dataTable tbody').on('click', 'td.details-control', function () {
       var tr = $(this).closest('tr');
@@ -71,7 +81,7 @@ $(document).ready(function(){
       }
   });
 });
-
+// formats the UI for the client list table that displays additional information
 function format(d){
  
   // `d` is the original data object for the row
