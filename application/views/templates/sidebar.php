@@ -138,7 +138,27 @@ $active = (isset($active))? $active : ' ';
 
         }
         ?>
+    <!-- displaying report option on sidebar -->
+        <?php
 
+        if (in_array(10, $actions)){
+          echo '
+          
+          <!-- Heading -->
+          <div class="sidebar-heading">
+            Generate Report
+          </div>
+              <li class="nav-item '.(($active === "report")? "active" : " ").'">
+                <a class="nav-link" href="'.site_url('report').'">
+                  <i class="fas fa-fw fa-table "></i>
+                  <span>Create Report</span></a>
+              </li>
+          <!-- Divider -->
+          <hr class="sidebar-divider">
+
+              ';
+        }
+        ?>
       <!-- Nav Item - Tables -->
       <?php 
         
@@ -158,12 +178,14 @@ $active = (isset($active))? $active : ' ';
           <hr class="sidebar-divider">
               ';
         }
+
       ?>
 
       <!-- Sidebar Toggler (Sidebar) -->
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
       </div>
+     
 
     </ul>
  <!-- End of Sidebar -->

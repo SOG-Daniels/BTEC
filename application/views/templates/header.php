@@ -25,8 +25,17 @@
     
     <!-- include summernote css -->
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.16/dist/summernote-bs4.min.css" rel="stylesheet">
-    
-    <!-- scripts are loaded below because some jquery are used within some of the pageContents and triggers error if not declared here -->
+
+    <!-- Styles for fullcalendar -->
+    <link href='<?php echo base_url()?>assets/vendor/fullcalendar/core/main.css' rel='stylesheet' />
+    <link href='<?php echo base_url()?>assets/vendor/fullcalendar/list/main.css' rel='stylesheet' />
+    <link href='<?php echo base_url()?>assets/vendor/fullcalendar/daygrid/main.css' rel='stylesheet' />
+    <link href='<?php echo base_url()?>assets/vendor/fullcalendar/timegrid/main.css' rel='stylesheet' />
+    <link href='<?php echo base_url()?>assets/vendor/fullcalendar/bootstrap/main.css' rel='stylesheet' />
+
+
+
+    <!-- scripts are loaded below because some jquery are used within some of the pageContents triggers error if not declared here -->
     <script src="<?php echo base_url()?>assets/vendor/jquery/jquery.min.js"></script>
     <script src="<?php echo base_url()?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     
@@ -36,7 +45,7 @@
     <!-- my custom jquery is loaded here because some php files require this custom script to run its
          javascript especially function definitions-->
     <script src="<?php echo base_url()?>assets/js/demo/customJS.js"></script>
-
+    
   
     
     <!-- Boostrap Datepicker plugin -->

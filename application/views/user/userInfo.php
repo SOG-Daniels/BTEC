@@ -18,25 +18,26 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12 col-md-4"><!--left col-->
-                <form id="upload-img-form">
+                <form id="upload-img-form-2">
+                    <input type="hidden" name="userId" value="<?php  echo $userData['id'] ?>"> 
+                    <input type="hidden" name="imgId" value="<?php  echo $userData['profile_img_id']; ?>"> 
+                    <input type="hidden" name="fullName" value="<?php  echo $userData['fname'].$userData['lname']; ?>"> 
+                    
                     <div class="text-center">
                     <img src="<?php echo isset($userData['imgPath'])? base_url().$userData['imgPath'] : base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="250" height="300">
                     <div class="p-image">
-                        <!-- <a href="#" id="upload-img" >
+                        <a class="btn btn-link" href="#" id="upload-img-2" >
                         <i class="fa fa-camera "></i> Upload Image
-                        </a> -->
-                        <!-- <input class="file-upload" name="profileImg" type="file" accept="image/*" style="display: none;"/> -->
+                        </a>
+                        <a href="#" id="remove-user-img-2" class="btn btn-link text-danger" style="<?php echo (($userData['profile_img_id'] == 1)? 'display: none': '' ); ?>" >
+                        <i class="fa fa-trash"></i> Remove Image
+                        </a>
+                        <input class="file-upload-2" name="profileImg" type="file" accept="image/*" style="display: none;"/>
                         
                     </div>
                 </form>
                 </div>
                 <br>
-
-            
-            
-            
-            
-            
             </div><!--/col-3-->
             <div class="col-12 col-md-8">
                 <form class="form" action="<?php echo base_url().'update-user-profile';?>" method="post" id="userInfoForm">
@@ -146,12 +147,12 @@
                                             Program Setup
                                         </label>
                                     </div>
-                                    <!-- <div class="col col-md-5 form-check">
-                                        <input class="form-check-input" id="privi6" type="checkbox" value="6" name="privileges[]" >
-                                        <label class="form-check-label" for="editGrade">
-                                            Edit Grades
-                                        </label> -->
-                                    <!-- </div> -->
+                                    <div class="col-12 col-md-5 form-check">
+                                        <input class="form-check-input action" id="privil10" type="checkbox" value="10" name="privilege[]" <?php echo (isset($action) && in_array(10, $action))? 'checked' : ' '; ?> disabled>
+                                        <label class="form-check-label" for="enrolledList">
+                                            Create Report
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

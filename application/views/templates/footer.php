@@ -61,22 +61,22 @@
                 <input type="email" class="form-control" name="email" id="email" placeholder="johndoe@..." required>
               </div>
               
-              <div class="form-group">
+              <!-- <div class="form-group">
                 <label for="fname">Username:</label>
                 <input type="text" class="form-control" name="uname" id="uname" placeholder="Pudge..." required>
-              </div>
-            </div>
-            <div class="col-12 col-md-6">
+              </div> -->
               <div class="form-group">
                 <label for="lname">Last Name:</label>
                 <input type="text" class="form-control" name="lname" id="lname" placeholder="Doe..." required>
               </div>
 
+            </div>
+            <div class="col-12 col-md-6">
               <div class="form-group">
                 <label for="phone">Phone Number:</label>
                 <input type="number" class="form-control" name="phone" id="phone" placeholder="668-74..." required>
               </div>
-                <label class="" for="last_name">Priviledge:</label>
+                <label class="" for="last_name">Privilege:</label>
               <div class="form-group offset-1">
                 <input class="form-check-input" type="checkbox" id="selectAll">
                 <label>Select All</label>
@@ -146,13 +146,13 @@
                             Program Setup
                         </label>
                     </div>
-                    <!-- <div class="col col-md-5 form-check">
-                        <input class="form-check-input" id="privi6" type="checkbox" value="6" name="privileges[]" >
+                    <div class="col col-md-5 form-check">
+                        <input class="form-check-input" id="privi10" type="checkbox" value="10" name="privileges[]" >
                         <label class="form-check-label" for="editGrade">
-                            Edit Grades
-                        </label> -->
+                            Create Reports
+                        </label>
+                    </div>
                 </div>
-                  
               </div>
             </div>
           </div>
@@ -226,6 +226,97 @@
     </div>
   </div>
 
+  <!-- event info/description  Modal -->
+<div class="modal fade" id="eventDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header ">
+        <h5 class="modal-title text-primary" id="d-modalTitle">Event Info </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="saveEventForm">
+      <div class="modal-body">
+        <input type="hidden" id="eventId" name="eventId" value="">
+
+        <label for="Description" class="font-weight-bold">Start Date: </label>
+        <span id="d-startDate" class="text-primary"> </span>
+        <br>
+
+        <label for="Description" class="font-weight-bold">End Date: </label>
+        <span id="d-endDate" class="text-primary"> </span> 
+        <br>
+
+        <label for="Title" class="font-weight-bold">Title: </label>
+        <input type="text" id="d-title" name="title" value="" class="form-control">
+
+        <br>
+        <label for="Description" class="font-weight-bold">Description: </label>
+        <!-- <input id="d-description" type="text" name="description" class="form-control" value=""> -->
+        <textarea id="d-description" type="text" name="description" class="form-control" value="">
+         </textarea>
+        <br>
+        
+        <label for="createdBy" class="font-weight-bold">Created By: </label>
+        <span id='d-createdBy'  ></span>
+        <br>
+        <label for="updatedBy" class="font-weight-bold">Updated By: </label>
+        <span id='d-updatedBy'  ></span>
+
+      </div>
+    </form>
+      <div class="modal-footer justify-content-between">
+         
+            <button type="button" id="deleteEvent" class="btn btn-danger">Delete</button>
+            <button type="button" id="saveEvent" class="btn btn-primary ">Save</button>
+          
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- calendar modal Modal-->
+ <div class="modal fade" id="calendarModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        
+          <h4 class="modal-title text-dark">Create an Event</h4>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <form id="eventForm" >
+        <div class="modal-body">
+          <div class="form-group">
+          <label for="startDate" class="font-weight-bold">Start Date: </label>
+          <span id="info-startDate" class="text-primary"> </span>
+          <br>
+
+          <label for="endDate" class="font-weight-bold">End Date: </label>
+          <span id="info-endDate" class="text-primary"> </span> 
+          <br>
+            <label class="font-weight-bold" for="eTitle">Event Title:</label>
+            <input class="form-control" type="text" id="eTitle" name="title" placeholder="Enter the an event name..." required>
+            <br>
+            <input class="form-control" id="startDate" type="hidden" name="startDate" value="">
+            <input class="form-control" id="endDate" type="hidden" name="endDate" value="">
+            <label class="font-weight-bold" for="eTitle">Event Description:</label>
+            <textarea class="form-control" id="eDescription" name="description" placeholder="Enter a description..." ></textarea>
+          
+          </div>
+        </div>
+        </form>
+        
+        <div class="modal-footer">
+          <a class="btn btn-secondary text-white" type="button" data-dismiss="modal">Cancel</a>
+          <button id="add-cal-event"  class="btn btn-primary">Add Event</button>
+        </div>
+       
+      </div>
+    </div>
+  </div>
 
 
 <!-- !END OF MODALS -->
@@ -241,15 +332,10 @@
   <!-- Custom scripts for all pages-->
   <script src="<?php echo base_url()?>assets/js/sb-admin-2.min.js"></script>
 
-  <!-- Charts plugins
-  <script src="assets/vendor/chart.js/Chart.min.js"></script>
-
-  <!- Charts custom scripts ->
-  <script src="assets/js/demo/chart-area-demo.js"></script>
-  <script src="assets/js/demo/chart-pie-demo.js"></script> -->
+ 
   
   <!-- JQuery JS file used for autocomplete feature -->
-  <script src="<?php echo base_url()?>assets/js/jquery-3.4.1.min.js"></script>
+  <!-- <script src="<?php echo base_url()?>assets/js/jquery-3.4.1.min.js"></script> -->
   
   <!-- Data Tables plugins -->
   <script src="<?php echo base_url()?>assets/vendor/datatables/jquery.dataTables.min.js"></script>
@@ -265,17 +351,45 @@
   
   <!-- JQuery plugins JS file for autocomplete feature -->
   <script src="<?php echo base_url()?>assets/js/jquery-ui.js"></script>
-  
+ 
+  <!-- FullCalendar plugins-->
+  <script src='<?php echo base_url();?>assets/vendor/fullcalendar/core/main.js'></script>
+  <script src='<?php echo base_url();?>assets/vendor/fullcalendar/daygrid/main.js'></script>
+  <script src='<?php echo base_url();?>assets/vendor/fullcalendar/interaction/main.js'></script>
+  <script src='<?php echo base_url();?>assets/vendor/fullcalendar/timegrid/main.js'></script>
+  <script src='<?php echo base_url();?>assets/vendor/fullcalendar/bootstrap/main.js'></script>
+  <script src='<?php echo base_url();?>assets/vendor/fullcalendar/list/main.js'></script>
+
+  <!-- Fullcalendar googleCalendar library -->
+  <script src="<?php echo base_url()?>assets/vendor/fullcalendar/google-calendar/main.js"></script>
+
+  <!-- Google API js file -->
+  <!-- <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script> -->
+ <!-- <script src="https://apis.google.com/js/client.js" type="text/javascript"></script> -->
+  <!-- <script src="<?php echo base_url()?>assets/vendor/googleAPI/client.js?onload=handleClientLoad" type="text/javascript"></script> -->
+  <!-- <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange ="if (this.readyState === 'complete') this.onload()">
+  </script> -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> -->
+  <!-- <script src="https://apis.google.com/js/client.js"></script> -->
+
+
+  <!-- FUllCalendar with google calendar custom script -->
+  <script src="<?php echo base_url()?>assets/js/gCalendar.js"></script>
+
   <script type="text/javascript">
       //declaring global variable
       var base_url = "<?php echo base_url(); ?>";
 
+      //setting up autocomplete by stating the controller that will perform the search
+      //the autocomplete plugin will always submit it as a GET method reason being for having the '?' after the 'search'
       $(document).ready(function(){
           $( "#applicant" ).autocomplete({
             source: "<?php echo site_url('search?');?>"
           });
       });
-  
+      // ?onload=handleClientLoad
   </script>
     
 </body>

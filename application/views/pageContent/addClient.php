@@ -98,7 +98,7 @@
                         </div>
                         <div class="col-12 col-md-6 form-group">
                             <label for="exampleFormControlSelect1" class="font-weight-bold">District</label>
-                            <select class="form-control" name="district" id="">
+                            <select class="form-control" name="district"  onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();' >
                                 <option>Corozal</option>
                                 <option>Orange Walk</option>
                                 <option>Cayo</option>
@@ -275,7 +275,7 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label  for="trainings" class="font-weight-bold">Trainings:</label>
-                                <select class="form-control" name="program" id="trainings">
+                                <select class="form-control" name="program" id="trainings" onfocus='this.size=7;' onblur='this.size=1;' onchange='this.size=1; this.blur();' >
                                 <option  value="barbering">Introduction to Barbering</option>
                                 <option  value="bartending">Bartending</option>
                                 <option  value="bpo">Business Process Outsourcing</option>

@@ -267,7 +267,7 @@ class User_model extends CI_Model{
                 $input = array(
                     'fname'  => $fname,
                     'lname'  => $lname,
-                    'username'  => $uname,
+                    // 'username'  => $uname,
                     'email'  => $email,
                     'password'  => md5("Passw0rd"),
                     'phone'  => $phone,
@@ -492,6 +492,141 @@ class User_model extends CI_Model{
         return $sql->result_array();
 
     
+    }
+    /**
+     * function querys the event and user table to get data for the calendar 
+     *
+     * @access    public
+     * @param     NONE
+     * 
+     * @return    array of data for the calendar
+     */    
+    public function get_cal_events() {
+    
+        $this->db->trans_start();
+        
+        $sql = $this->db->query('
+        SELECT e.id as id, concat(u.fname," ", u.lname) as created_by, (SELECT CONCAT(us.fname, " ", us.lname) FROM users us WHERE us.id = e.updated_by) as updated_by, e.title, e.description, e.startDate as start, e.endDate as end 
+        FROM events e, users u
+        WHERE e.created_by = u.id and e.status = 1
+        ');
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+           
+            log_message('debug', 'get_cal_events user_model function returned false');
+            return FALSE;
+        }
+        
+        return $sql->result_array();
+        
+    }
+    /**
+     * Inserts into the database a new event added to the calendar 
+     *
+     * @access    public
+     * @param     eventData an array containing the event data
+     * 
+     * @return    boolean 
+     */    
+    public function add_cal_event($eventData) {
+    
+        $input = array (
+            'created_by' => $this->session->userdata('userid'),
+            'title ' => $eventData['title'],
+            'description' => $eventData['description'],
+            'startDate' => $eventData['startDate'],
+            'endDate' => $eventData['endDate'],
+            'status' => 1
+
+        );
+
+        $this->db->trans_start();
+        
+        $this->db->insert('events', $input);
+        
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+           
+            log_message('debug', 'add_cal_event user_model function returned false');
+            return FALSE;
+        }
+        
+        return TRUE;
+        
+    }
+    /**
+     * Sets the status of the event to zero, meaning it is no longer a valid event
+     *
+     * @access    public
+     * @param     eventId id of the event 
+     * 
+     * @return    boolean 
+     */    
+    public function delete_cal_event($eventId) {
+
+        $this->db->trans_start();
+        
+        $this->db->update('events', array('status' => 0), array('id' => $eventId));
+        
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+           
+            log_message('debug', 'add_cal_event user_model function returned false');
+            return FALSE;
+        }
+        
+        return TRUE;
+        
+    }
+    /**
+     * updates and event 
+     *
+     * @access    public
+     * @param     eventData post data, concerning the modifications made
+     * 
+     * @return    boolean 
+     */    
+    public function update_cal_event($eventData) {
+
+        $set = array();
+
+        // will be triggered if a drag and drop occurs
+        if (isset($eventData['startDate']) && isset($eventData['endDate'])){
+
+            $set['startDate'] = $eventData['startDate'];
+            $set['endDate'] = $eventData['endDate'];
+
+
+        }
+
+        //merging both arrays 
+        $set = array_merge( $set ,  array(
+            'updated_by' => $this->session->userdata('userid'),
+            'title ' => $eventData['title'],
+            'description' => $eventData['description']
+            //'status' => 1
+        ));
+        
+      
+        $this->db->trans_start();
+        
+        $this->db->update('events', $set, array('id' => $eventData['eventId']));
+        
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+           
+            log_message('debug', 'add_cal_event user_model function returned false');
+            return FALSE;
+        }
+        
+        return TRUE;
+        
     }
 }
 

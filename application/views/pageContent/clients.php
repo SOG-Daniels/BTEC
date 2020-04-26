@@ -25,7 +25,7 @@
       <div  class="col-7 col-md-6 d-flex justify-content-end">
         <?php 
           echo (in_array(1, $this->session->userdata('action'))?' 
-          <a class="btn btn-primary btn-sm" href="<?php echo base_url()?>register-applicant" >
+          <a class="btn btn-primary btn-sm" href="'.base_url().'register-applicant" >
             <i class="fas fa-fw fa-user-plus"></i>
             Add Client
           </a>

@@ -57,10 +57,15 @@ $route['translate_uri_dashes'] = FALSE;
 
 //view my profile routes
 $route['profile'] = 'user/profile';
-$route['remove-profile-picture'] = 'user/remove_my_profile_pic';
+$route['remove-profile-picture'] = 'user/remove_profile_pic';
 
 // Home/Dashboard page routes
 $route['dashboard'] = 'user/get_dashboard';
+$route['get-events'] = 'user/get_cal_events';
+$route['add-event'] = 'user/add_cal_event';
+$route['remove-event'] = 'user/delete_cal_event';
+$route['update-event'] = 'user/update_cal_event';
+
 
 // Routes used for the Enrolled list 
 $route['enrolled-list'] = 'user/view_enrolled_list';
@@ -92,9 +97,15 @@ $route['update-profile'] = 'user/update_my_profile';
 $route['change-my-password'] = 'user/change_pass';
 $route['update-profile-picture'] = 'user/change_profile_pic';
 
+// routes for creating report
+$route['report'] = 'user/report_settings';
+$route['program-summary-report'] = 'user/generate_program_summary';
+
 //Additional routes
 $route['activate-user'] = 'user/activate_user';
 $route['autocomplete'] = 'user/auto_complete';
+
+
 
 //////////////////////User controller routes end///////////////////////
 

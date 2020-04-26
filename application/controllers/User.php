@@ -67,10 +67,11 @@ class User extends CI_Controller{
     // setting session so only logged in users have access
         if( $this->is_session_set()){
 
+
             $this->data['title'] = 'Dashboard';// title of page
             $this->data['active'] = 'dashboard';// setting the dashboard as current option on sidebar
-            $this->data['name'] = $this->session->userdata('name');// name of the users that logged in
-            
+            $this->data['name'] = $this->session->userdata('name');// name of the users that logged 
+
             //displaying the homepage
             $this->load->view('templates/header', $this->data);
             $this->load->view('templates/sidebar', $this->data);
@@ -890,36 +891,51 @@ class User extends CI_Controller{
 
     }
     /**
-     * Will update the current users profile 
+     * Will  remove the profile image of a users based on the userId coming in from the post method
      *
      * @access    public
      * @param     NONE
      *
      * @return    NONE 
      */    
-    public function remove_my_profile_pic(){
+    public function remove_profile_pic(){
         
         if( $this->is_session_set()){
             
-            //Checking if the user does not have the default image set as their profile pic
-            if ($this->session->userdata('imgId') !== 1){
 
-                $result = $this->user_model->set_default_profile_pic($this->session->userdata('userid'), $this->session->userdata('imgId'));
-                
-                if ($result === FALSE){
-                    echo 'Unable to remove your profile image. Try again later.';
+            if (!empty($this->input->post('imgId')) && !empty($this->input->post('userId')) ){
+                //post is sending the data we want
+
+                //Checking if the user does not have the default image set as their profile pic
+                if ($this->input->post('imgId') !== 1){
+
+                    $result = $this->user_model->set_default_profile_pic($this->input->post('userId'), $this->input->post('imgId'));
+                    
+                    if ($result === FALSE){
+                        echo 'Unable to remove your profile image. Try again later.';
+                    }else{
+                        
+                        // checking if user is changing their profile pic 
+                        if ($this->input->post('userId') === $this->session->userdata('userid')){
+
+                            //re-initializing the session
+                            $this->session->set_userdata('imgPath','upload/default_profile_img.png');
+                            $this->session->set_userdata('imgId', 1);
+
+                        }
+                        echo 1;
+                        log_message('debug','Success! Profile picture removed.');
+                    }
+
                 }else{
 
-                    //re-initializing the session
-                    $this->session->set_userdata('imgPath','upload/default_profile_img.png');
-                    $this->session->set_userdata('imgId', 1);
-
-                    log_message('debug','Success! Profile picture removed.');
+                    log_message('debug','No profile pic is set to remove');
                 }
 
             }else{
-
-                log_message('debug','No profile pic is set to remove');
+                // no post data sent
+                log_message('debug','No post data sent to remove_profile_pic inside User controller');
+                
             }
 
         }else{
@@ -973,10 +989,10 @@ class User extends CI_Controller{
         if ($this->is_session_set()){
 
 
-            if(!empty($_FILES['profileImg']['name'])){
+            if(!empty($_FILES['profileImg']['name']) && !empty($this->input->post('userId')) ){
                 
                 //creating a file name for the image uploaded
-                $newFileName = trim($this->session->userdata('name'), ' ').'_'.time();
+                $newFileName = $this->input->post('fullName').'_'.time();
                 
                 $config['upload_path'] = './upload/';
                 $config['allowed_types'] = 'gif|jpg|png';
@@ -991,7 +1007,8 @@ class User extends CI_Controller{
                     $uploadInfo = $this->upload->data();
 
                     $filename = $uploadInfo['file_name'];
-                    $userId = $this->session->userdata('userid');
+
+                    $userId = $this->input->post('userId');
 
                     $result = $this->user_model->set_profile_pic($userId, $filename);
 
@@ -1000,9 +1017,11 @@ class User extends CI_Controller{
                         echo "Profile Image was not updated";
                         
                     }else{
-
-                        $this->session->set_userdata('imgPath', 'upload/'.$filename);
-                        $this->session->set_userdata('imgId', $result);//result hold the id of the new profile pic 
+                        // checking if the update is not being done by an admin i.e. user updating his/her profile pic
+                        if ($this->input->post('userId') === $this->session->userdata('userid')){
+                            $this->session->set_userdata('imgPath', 'upload/'.$filename);
+                            $this->session->set_userdata('imgId', $result);//result hold the id of the new profile pic 
+                        }
 
                         echo "Profile Image was updated!";
 
@@ -1428,6 +1447,7 @@ class User extends CI_Controller{
                 $this->data['programInfo'] = $this->client_model->get_program_grades_names();
                 
                 $this->data['title'] = "Program Setup";
+                $this->data['active'] = "programSetup";
                 
                 $this->load->view('templates/header', $this->data);
                 $this->load->view('templates/sidebar', $this->data);
@@ -1515,6 +1535,257 @@ class User extends CI_Controller{
             redirect('login');
         }
     }
+    /* report_settings() displays the view for report setting (report.php in view)
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE 
+     */    
+    public function report_settings(){
+    
+        if ($this->is_session_set()){
+                
+            $this->data['title'] = "Report settings";
+            $this->data['active'] = "report";
+            
+            $this->load->view('templates/header', $this->data);
+            $this->load->view('templates/sidebar', $this->data);
+            $this->load->view('templates/topbar', $this->data);
+            $this->load->view('pageContent/report', $this->data);
+            $this->load->view('templates/footer', $this->data);
+        }else{
+            redirect('login');
+        }
+    }
+    /* report_settings() displays the view for report setting (report.php in view)
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE 
+     */    
+    public function generate_program_summary(){
+    
+        if ($this->is_session_set()){
+                
+            if (!empty($this->input->post())){
+                //generate report   
+
+                print_r($this->input->post());
+
+                $grade = 'AND ';//will be appended to query for filtering grades
+
+                switch ($this->input->post('gradeFilter')) {
+                    case '100':
+                        $grade .= 'p.final_grade >= 100';
+                        break;
+                    case '90':
+                        $grade .= 'p.final_grade BETWEEN  90 AND 99.9';
+                        break;
+                    case '80':
+                        $grade .= 'p.final_grade BETWEEN  80 AND 89.9';
+                        break;
+                    case '70':
+                        $grade .= 'p.final_grade BETWEEN  70 AND 79.9';
+                        break;
+                    case '0':
+                        $grade .= 'p.final_grade BETWEEN  0 AND 69.9';
+                        break;
+                        
+                    default:
+                        $grade = '';
+                        break;
+                }
+
+                $year = (trim($this->input->post('year')) != '')? trim($this->input->post('year', TRUE)) : NULL;
+
+                
+                $result = $this->client_model->get_program_summary(
+                    $this->input->post('program', TRUE),
+                    $grade,
+                    $this->input->post('programStatus', TRUE),  
+                    $year
+                );
+
+                if ($result == FALSE){
+                    log_message('debug', 'get_program_summary() in client model returned false');
+                    $this->session->set_flashdata('message',
+                    '
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5>
+                        <strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong> An error occured while trying to create the report. 
+                        <h5>
+                        </div>
+                    ');
+                    redirect('dashboard');
+                }else{
+                    //loading page with data recieved from model
+                    $this->data['reportData'] = $result[0]; 
+                    
+                    $this->data['title'] = "Report Summary Report";
+                    // $this->data['active'] = "report";
+                    
+                    $this->load->view('templates/header', $this->data);
+                    $this->load->view('templates/sidebar', $this->data);
+                    $this->load->view('templates/topbar', $this->data);
+                    $this->load->view('pageContent/programSumReport', $this->data);
+                    $this->load->view('templates/footer', $this->data);
+
+                }
+
+            }else{
+                //try to access page without data provided
+                redirect('dashboard');
+            }
+        }else{
+            redirect('login');
+        }
+    }
+    /* get_cal_events() call the get_cal_events model and returns a json encode response
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    json_encode() of the events retrieved from the user_model 
+     */    
+    public function get_cal_events(){
+    
+        if ($this->is_session_set()){
+                
+           $result = $this->user_model->get_cal_events();
+            
+           if ($result != FALSE){
+
+            $eventList = array();
+            
+                foreach ($result as $key => $arr){
+                    
+                    // $arr = array();
+
+                    $startTime = explode(' ', $arr['start']);
+                    $endTime = explode(' ', $arr['end']);
+                  
+                    //making the event a whole day if both start and end date time are not set
+                    if ($startTime[1] == '00:00:00' && $endTime[1] == '00:00:00'){
+                        $arr['start'] = $startTime[0];
+                        $arr['end'] = $endTime[0];
+                        
+                        
+                    }
+                    // $arr['extendedProps'] = array('Submitted By: '=> $arr['fname'].' '.$arr['lname']);
+                    $arr['color'] = '#ff8000';//setting event color
+                    $eventList[$key] = $arr;
+                }
+
+                // print_r($eventList);
+               echo json_encode($eventList);
+
+           }else{
+               echo json_encode(0);//query did not run succesfully
+           }
+
+        }else{
+            redirect('login');
+        }
+    }
+    /* get_cal_events() will add an event 
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE
+     */    
+    public function add_cal_event(){
+    
+        if ($this->is_session_set()){
+            
+            if (!empty($this->input->post())){
+
+                $result = $this->user_model->add_cal_event($this->input->post(NULL, TRUE));
+                
+                if ($result === TRUE){
+                    echo 1;
+                }else{
+                    echo 0;
+                }
+                // print_r($this->input->post());
+
+            }else{
+                redirect('dashboard');
+            }
+
+        }else{
+            redirect('login');
+        }
+    }
+    /* delete_cal_events() will remove an event 
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE
+     */    
+    public function delete_cal_event(){
+    
+        if ($this->is_session_set()){
+            
+            if (!empty($this->input->post('eventId'))){
+
+               $result = $this->user_model->delete_cal_event($this->input->post('eventId', TRUE));
+                
+                if ($result === TRUE){
+                    echo 1;
+                }else{
+                    echo 0;
+                }
+                // print_r($this->input->post());
+
+            }else{
+                redirect('dashboard');
+            }
+
+        }else{
+            redirect('login');
+        }
+    }
+    
+    /* delete_cal_events() will remove an event 
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE
+     */    
+    public function update_cal_event(){
+    
+        //checking if session is set
+        if ($this->is_session_set()){
+
+            if (!empty($this->input->post())){
+
+                //send update request
+               $result = $this->user_model->update_cal_event($this->input->post(NULL, TRUE));
+                
+                if ($result === TRUE){
+                    echo 1;
+                }else{
+                    echo 0;
+                }
+
+            }else{
+                redirect('dashboard');
+            }
+
+        }else{
+            echo 'logged out';
+        }
+    }
+    
+    
     
 }
 

@@ -163,8 +163,8 @@
                     <br>
                     <div class="row pl-3 pr-3">
                     <div class="form-group col-12 col-md-6 ">
-                      <label>Course Status:</label>
-                      <select class="custom-select" name="status" id="courseStatus">
+                      <label class="font-weight-bold">Course Status:</label>
+                      <select class="custom-select" name="status" id="courseStatus" onfocus='this.size=4;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                         <option selected value="1">Enrolled</option>
                         <option value="Completed">Completed</option>
                         <option value="Dropped">Dropped</option>
@@ -172,13 +172,13 @@
                       </select>
                     </div>
                     <div class="form-group col-12 col-md-6">
-                      <label>Graduated On:</label>
+                      <label class="font-weight-bold">Graduated On:</label>
                      <input id="graduatedOn" class="form-control" type="date" name="graduated_on"> 
                     </div>
 
                     </div>
                     <div class="form-group col-12">                   
-                      <label for="my-textarea">Comment:</label>
+                      <label for="my-textarea" class="font-weight-bold">Comment:</label>
                       <textarea id="programComment" name="comment" ></textarea>
                       <br>
                     </div>

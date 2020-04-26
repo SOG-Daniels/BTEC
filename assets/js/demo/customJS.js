@@ -7,6 +7,7 @@ var hasView;
 var hasEdit;
 var inputCount = 2;
 var userInfoFormData;
+var PRIVI_SIZE = 10;
 
 // var cList = [];
 
@@ -60,7 +61,7 @@ function checkPasswordMatch() {
 // function creates the enrolled structuring it into an object and so that it can be used by the datatable
 function createList (jsonData, base_url, hasGradeEdit, hasEdit, hasView){
   eList = [];
-  console.log(jsonData);
+//   console.log(jsonData);
 
     if (jsonData[0].length > 0){
 
@@ -154,8 +155,8 @@ $(document).ready(function() {
         disabled.attr('disabled','disabled');
         
         //used for testing purposes
-        console.log(userInfoFormData);
-        console.log('userinfo');
+        // console.log(userInfoFormData);
+        // console.log('userinfo');
 
     }
 
@@ -188,15 +189,37 @@ $(document).ready(function() {
 
     });
 
-    // triggered in viewing my profile page when removing image
+    // triggered when user clicks the remove button
     $('#remove-user-img').click(function (e){
         e.preventDefault();
 
+        var data = $('#upload-img-form').serialize();
+        
         //sending an ajax request as post to remove profile pic
-        $.post(base_url+'remove-profile-picture', function(data){
+        $.post(base_url+'remove-profile-picture', data, function(data){
             
             location.reload(true);//reloading current page from server and not from cache
-            //alerting contoller's response
+            
+            //hiding the remove button
+            $(this).hide();
+
+        });
+       
+
+    });
+    // triggered when admin tries to change a user image 
+    $('#remove-user-img-2').click(function (e){
+        e.preventDefault();
+
+        var data = $('#upload-img-form-2').serialize();
+        console.log(data);
+
+        //sending an ajax request as post to remove profile pic
+        $.post(base_url+'remove-profile-picture', data, function(data){
+         
+            location.reload(true);//reloading current page from server and not from cache
+            
+            //hiding the remove button
             $(this).hide();
 
         });
@@ -410,7 +433,7 @@ $(document).ready(function() {
     $('#selectAll').change(function() {
         if($(this).is(':checked')){
             //setting all checkbox indside div to checked
-            for (i = 1; i <= 9; i++){
+            for (i = 1; i <= PRIVI_SIZE; i++){
 
                 $('#privi'+i).attr("checked", true);
         
@@ -419,7 +442,7 @@ $(document).ready(function() {
         }
         if(!$(this).is(':checked')){
             //removing checked from all checkbox inside the div
-            for (i = 1; i <= 8; i++){
+            for (i = 1; i <= PRIVI_SIZE; i++){
 
                 $('#privi'+i).attr("checked", false);
             }
@@ -448,15 +471,42 @@ $(document).ready(function() {
     //form for updating a user profile is set to readonly
     $("#userInfoForm :input").attr("readOnly", true);
     
-    
-    $(".file-upload").on('change', function(){
+    //used for admin updating user profile pic
+    $(".file-upload-2").on('change', function(){
         readURL(this);
-        var data = new FormData(document.getElementById("upload-img-form"));
-       
+        var data = new FormData(document.getElementById("upload-img-form-2"));
+        console.log('form-2');
+        console.log(data);
         //sends a request to the change_profile_pic() function in the user controller
         // to change the users profile pic
         $.ajax({
-            url: 'update-profile-picture',  
+            url: base_url+'update-profile-picture',  
+            type: 'POST',
+            data: data,
+            success:function(data){
+                // location.reload(true);//reloading the current page from server not from cache
+                location.reload(true);//reloading current page from server and not from cache
+                console.log(data);
+                alert(data);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+        
+        
+
+    });
+   
+    $(".file-upload").on('change', function(){
+        readURL(this);
+        var data = new FormData(document.getElementById("upload-img-form"));
+        console.log('form-1');
+        console.log(data);
+        //sends a request to the change_profile_pic() function in the user controller
+        // to change the users profile pic
+        $.ajax({
+            url: base_url+'update-profile-picture',  
             type: 'POST',
             data: data,
             success:function(data){
@@ -473,10 +523,18 @@ $(document).ready(function() {
 
     });
 
+    // used for user updating their profile pic
     // When uploading a profile picture this code is triggered
     $('#upload-img').click(function (e){
         //e.preventDefault();
         $('.file-upload').click();
+
+    });
+
+    //used for admin updating user profile pic
+    $('#upload-img-2').click(function (e){
+        //e.preventDefault();
+        $('.file-upload-2').click();
 
     });
 
@@ -674,12 +732,14 @@ $(document).ready(function() {
         readURL(this);
 
     });
+    // triggered when uploading a clients pic on updating their profile
     $('#upload-client-img').click(function (e){
         //e.preventDefault();
         $('.client-img-upload').click();
         
 
     });
+    //removes image uploaded to addAppliant form
     $('#remove-appli-img').click(function (){
 
         $('.client-img-upload').val('');
@@ -687,4 +747,6 @@ $(document).ready(function() {
         $('#remove-appli-img').hide();
 
     });
+    
+
 });

@@ -64,12 +64,14 @@ class Client_model extends CI_Model{
         if ($clientId !== NULL){
             $data = array();
 
+            //getting clients personal info 
             $data = $this->get_personal_info($clientId);
             if ($data === FALSE){
                 return 'Unable to get client personal info';
             }
             $this->db->trans_start();
 
+            //Query get are getting all the programs client has taken
             $sql1 = $this->db->query("
             SELECT * FROM barbering WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
@@ -810,6 +812,7 @@ class Client_model extends CI_Model{
             $this->db->trans_complete();
 
             if ($this->db->trans_status() === FALSE){
+                // one of the queries faild
                 return FALSE;
                 
             }
@@ -820,7 +823,7 @@ class Client_model extends CI_Model{
 
     }
     /**
-     * Sets the profile pic of a client in the database
+     * Gets all info of a client that is stored in the $table provied i.e. the program table   
      *
      * @access    public
      * @param     clientId the id of the client 
@@ -1057,6 +1060,43 @@ class Client_model extends CI_Model{
             FROM applicants a
             WHERE is_client = 1 and CONCAT(first_name, " ", last_name) LIKE "%'.trim($name).'%"
         ');
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+        
+        return $sql->result_array();
+    
+    }
+    /**
+     * get_client() gets all the clients info tha have the first and last name equal to name
+     *
+     * @access    public
+     * @param     name of the clients entered in the search  
+     * 
+     * @return    Boolean/Array array of records if successful, false if transaction failed
+     */    
+    public function get_program_summary($table = NULL, $grade = NULL, $status = NULL, $year = NULL) {
+   
+        $year = ($year == NULL)? '' : 'AND p.enrolled_in = '.$year;
+        $sql = '';
+        $this->db->trans_start();
+        
+
+            if ($table === 1){
+                //query all tables
+
+
+            }else{
+           
+                $sql = $this->db->query('
+                    SELECT p.programme, COUNT(p.id) as amount
+                    From '.$table.' p
+                    WHERE p.status = "'.$status.'" '.$grade.' '.$year.'');
+            
+            }
+        
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE){

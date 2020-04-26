@@ -33,13 +33,13 @@
                     <br>
                     
                     <div class="p-image pt-2">
-                        <button  id="upload-client-img" class="btn btn-link">
+                        <a href="#" id="upload-client-img" class="btn btn-link">
                         <i class="fa fa-camera "></i> Upload Image
-                        </button>&nbsp;
+                        </a>&nbsp;
                         <span id="remove-img">
-                            <button  id="remove-client-img" class="btn btn-link text-danger" style="<?php echo (($clientData[0]['profile_img_id'] == 1)? 'display: none': '' ); ?>" >
+                            <a  href="#" id="remove-client-img" class="btn btn-link text-danger" style="<?php echo (($clientData[0]['profile_img_id'] == 1)? 'display: none': '' ); ?>" >
                             <i class="fa fa-trash"></i> Remove Image
-                            </button>
+                            </a>
                         </span>
                         <input class="client-img-upload" name="clientImg" type="file" accept="image/*" style="display: none;"/>
                         <input type="hidden" id="imgId" name="imageId" value="<?php echo (($clientData[0]['profile_img_id'] != 1)? $clientData[0]['profile_img_id'] : 1);?>"/>

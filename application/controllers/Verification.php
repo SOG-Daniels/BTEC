@@ -45,9 +45,6 @@ class Verification extends CI_Controller{
 
                     $this->session->set_flashdata('message', $data['message']);//setting a message that will only be flashed once to the UI
                     redirect('login');
-                    // $this->load->view('templates/header', $data);
-                    // $this->load->view('pageContent/login', $data);
-                    // $this->load->view('templates/footer');
                    
                 }else{
 
@@ -55,6 +52,7 @@ class Verification extends CI_Controller{
                     $name = $result['fname'].' '.$result['lname'];
                     $userIdentiy = $result['fname'][0].$result['lname'];
 
+                    //setting sessions 
                     $this->session->set_userdata('userIdentity', strtoupper($userIdentiy));
                     $this->session->set_userdata('userid', $result['id']);
                     $this->session->set_userdata('name', $name);
@@ -62,9 +60,10 @@ class Verification extends CI_Controller{
                     $this->session->set_userdata('imgPath', $result['path']);
                     $this->session->set_userdata('imgId', $result['profile_img_id']);
                    
-                    // print_r($result);
                     
                     $actions = array();
+
+                    //setting the privileges to the action array
                     foreach ($result[0] as $key => $arr){
                         foreach ($arr as $key => $val){
                            array_push($actions, $val);
@@ -73,7 +72,6 @@ class Verification extends CI_Controller{
 
                     $this->session->set_userdata('action', $actions);//setting user actions/privileges as a session
                     
-                    // print_r($this->session->userdata());
                     redirect('dashboard');
                 }
             }
@@ -90,25 +88,18 @@ class Verification extends CI_Controller{
     }
     // function destroys all session 
     public function logout(){
-
+        
         // checks if there is a session in order to clear the session
         if($this->session->userdata('userid')){
            
-            $session = $this->session->all_userdata();
-            $this->session->unset_userdata($session);
+            //destroying session 
+            $this->session->unset_userdata($this->session->all_userdata());
             $this->session->sess_destroy();
 
         }
 
-        $data['title'] = 'Login';
-
         // loading the login view
         redirect('login');
-        
-        $this->load->view('templates/header', $data);
-        $this->load->view('pageContent/login', $data);
-        $this->load->view('templates/footer');
-
     }
     // Will send an email to change change password once user email is in th system
     public function change_password($token = NULL){

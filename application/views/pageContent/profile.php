@@ -3,10 +3,10 @@
     echo (isset($message))? $message : '';
     // echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : ' ');
     
-//     echo "<pre>";
-//     // print_r($profileData);
-//     print_r($this->session->userdata());
-//     echo "</pre>";
+    // echo "<pre>";
+    // print_r($profileData);
+    // print_r($this->session->userdata());
+    // echo "</pre>";
 // ?>
 <div class="card shadow-lg mb-3">
     <div class="card-header py-3">
@@ -16,6 +16,10 @@
         <div class="row">
             <div class="col-12 col-md-4"><!--left col-->
                 <form id="upload-img-form">
+                    <input type="hidden" name="userId" value="<?php  echo $this->session->userdata('userid'); ?>"> 
+                    <input type="hidden" name="imgId" value="<?php  echo $profileData['profile_img_id']; ?>"> 
+                    <input type="hidden" name="fullName" value="<?php  echo $profileData['fname'].$profileData['lname']; ?>"> 
+                    
                     <div class="text-center">
                     <img id="user-Profile-Pic" src="<?php echo isset($imgPath)? base_url().$imgPath: base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="300px" height="400px">
                     <div class="p-image">
