@@ -71,6 +71,7 @@ $route['update-event'] = 'user/update_cal_event';
 $route['enrolled-list'] = 'user/view_enrolled_list';
 $route['register-applicant'] = 'user/add_client';
 $route['view-client-grade/(:any)/(:num)'] = 'user/view_client_grade/$1/$2';
+$route['unenroll-client'] = 'user/unenroll_client';
 
 // Route used to update grades
 $route['update-grades'] = 'user/update_client_grade';
@@ -82,6 +83,7 @@ $route['client-list'] = 'user/view_clients';
 $route['client-info/(:num)'] = 'user/view_client_profile/$1';
 $route['edit-client-info/(:num)'] = 'user/update_client/$1';
 $route['update-client-info/(:num)'] = 'user/update_client/$1';
+// $route['update-client-info/'] = 'user/update_client/$1';
 
 // Adding a user route
 $route['add-user'] = 'user/add_user';

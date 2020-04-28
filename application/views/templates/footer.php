@@ -61,20 +61,20 @@
                 <input type="email" class="form-control" name="email" id="email" placeholder="johndoe@..." required>
               </div>
               
+              <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="number" class="form-control" name="phone" id="phone" placeholder="668-74..." required>
+              </div>
               <!-- <div class="form-group">
                 <label for="fname">Username:</label>
                 <input type="text" class="form-control" name="uname" id="uname" placeholder="Pudge..." required>
               </div> -->
-              <div class="form-group">
-                <label for="lname">Last Name:</label>
-                <input type="text" class="form-control" name="lname" id="lname" placeholder="Doe..." required>
-              </div>
 
             </div>
             <div class="col-12 col-md-6">
               <div class="form-group">
-                <label for="phone">Phone Number:</label>
-                <input type="number" class="form-control" name="phone" id="phone" placeholder="668-74..." required>
+                <label for="lname">Last Name:</label>
+                <input type="text" class="form-control" name="lname" id="lname" placeholder="Doe..." required>
               </div>
                 <label class="" for="last_name">Privilege:</label>
               <div class="form-group offset-1">
@@ -162,6 +162,24 @@
           <button class="btn btn-primary" type="submit">Add User</a>
         </div>
         </form>
+      </div>
+    </div>
+  </div>
+<!-- confirmation modal for removing enrolled client -->
+ <div class="modal fade" id="unenrollClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-dark" id="exampleModalLabel">Unenroll Client from the Program?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Are you sure that you want to unenroll user from the program?</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-danger" href="#" id="confirmClientUnenroll">CONFIRM</a>
+        </div>
       </div>
     </div>
   </div>

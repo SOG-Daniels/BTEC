@@ -1,14 +1,7 @@
 <?php 
-  // $session = (empty($session)? '1': '');
-  // echo "<pre>";
-  // print_r($this->session->userdata());
-  // // print_r($enrolledList);
-  // echo "</pre>";
-  // print_r($this->session->userdata());
-  // print_r($this->session->userdata());
-  // echo "</pre>";
 
   $actions = $this->session->userdata('action');
+  echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : '');
 
 
 ?>
@@ -132,11 +125,16 @@
 <script>
 var clist;
 var data = <?php echo json_encode($enrolledList, JSON_HEX_TAG); ?>;
+
+//checking privileges
 var hasGradeEdit = <?php echo (in_array(6,$this->session->userdata('action')))? 1 : 0;?>;
 var hasView = <?php echo (in_array(2,$this->session->userdata('action')))? 1 : 0;?>;
 var hasEdit = <?php echo (in_array(6,$this->session->userdata('action')))? 1 : 0; ?>;
+
+//setting base_url
 var url = "<?php echo base_url()?>";
 
+//loads data to the table
 createList(data, url, hasGradeEdit, hasEdit, hasView);
 
 

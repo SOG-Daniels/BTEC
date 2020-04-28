@@ -1,7 +1,9 @@
 // Call the dataTables jQuery plugin
 
 $(document).ready(function(){
-    console.log(clist.data);
+  console.log(clist.data);
+
+  // data table for the user list 
   $('#userDataTable').DataTable({
     
     columnDefs: [ 
@@ -9,8 +11,9 @@ $(document).ready(function(){
     ]
   });
 
-  //defining the column definition for datatable
+  //defining the column definition for datatable for client list
   let columns =[
+    // setting the more button on the client list table
           {
               "className": 'details-control',
               "orderable": false,
@@ -21,6 +24,7 @@ $(document).ready(function(){
               },
               width:"15px"
           },
+          //the columns that will be on the table
           { "data": "id"},
           { "data": "first_name" },
           { "data": "last_name" },
@@ -29,6 +33,7 @@ $(document).ready(function(){
           { "data": "mobile_phone", "sortable" : false},
           
       ];
+      // setting view and edit if user has the privilege
       if ((hasView == 1 || hasEdit == 1)){
         columns.push(
           { "data": "profile" , "sortable" : false},
@@ -36,7 +41,7 @@ $(document).ready(function(){
       }
   
       // defining the display proporties for the datatable for client list
-  var table = $('#dataTable').DataTable({
+    var table = $('#dataTable').DataTable({
       // dom: 'lBfrtip',
       // buttons: [
       //   'excel', 'pdf'
@@ -47,11 +52,9 @@ $(document).ready(function(){
       "columns": columns,
       "order": [[1, 'asc']]
   });
-  // //applying bootstrap to the table
-  // table.buttons().container()
-  // .appendTo( '#dataTable_wrapper .col-md-6:eq(0)' );
-// Call the dataTables jQuery plugin
-  $('#dataTableUsers').DataTable();
+ 
+ // Call the dataTables jQuery plugin
+  // $('#dataTableUsers').DataTable();
 
   // Add event listener for opening and closing details
   $('#dataTable tbody').on('click', 'td.details-control', function () {
@@ -84,6 +87,7 @@ $(document).ready(function(){
 // formats the UI for the client list table that displays additional information
 function format(d){
  
+  console.log (d);
   // `d` is the original data object for the row
   return '<table class="table table-responsive" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
            ' <thead class="thead-dark"> '+
@@ -91,7 +95,7 @@ function format(d){
                 '<th scope="col">Program</th>'+
                 '<th scope="col">Status</th>'+
                 '<th scope="col">Comments</th>'+
-                '<th scope="col">Enrolled in</th>'+
+                '<th scope="col">Enrolled In</th>'+
             '</tr>'+
             '</thead>'+
             '<tbody>'+ 
@@ -109,7 +113,7 @@ function format(d){
       '<tr>' +
         ((d.bartending === null)? '' 
             :  
-            '<td>'+ d.barbering +'</td>' +
+            '<td>'+ d.bartending +'</td>' +
             '<td>' + ((d.bar_status === null)? 'none' : d.bar_status) + '</td>'+
             '<td>' + ((d.bar_comment === null)? 'none' : d.bar_comment) + '</td>'+
             '<td>' + ((d.bar_enrolled === null)? 'none' : d.bar_enrolled) + '</td>'
@@ -236,10 +240,10 @@ function format(d){
           '<td class="font-weight-bold">Emergency Contact Relation:</td>' +
           '<td>' +  ((d.ec_relation === null)? 'NONE' : d.ec_relation) + '</td>' +
       '</tr>' +
-      '<tr>' +
-          '<td class="font-weight-bold">Specialized Training:</td>' +
-          '<td>' + ((d.specialized_trainings === null )? 'NONE': d.specialized_trainings )+ '</td>' +
-      '</tr>' +
+      // '<tr>' +
+      //     '<td class="font-weight-bold">Specialized Training:</td>' +
+      //     '<td>' + ((d.specialized_trainings === null )? 'NONE': d.specialized_trainings )+ '</td>' +
+      // '</tr>' +
       '<tr>' +
       '</tr>' +
       

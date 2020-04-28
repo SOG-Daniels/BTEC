@@ -31,12 +31,12 @@
         </div>
     </div>
 -->
-<div class="row col-12 justify-content-center" >
+<div class="row col-12 justify-content-center " >
     
     
     <div class="card shadow">
         <div class="card-body p-4">
-            <div id="g-calendar" style="width: 100%;">
+            <div id="g-calendar" style="width: 100%;" class="table-responsive">
             </div>
 
         </div>

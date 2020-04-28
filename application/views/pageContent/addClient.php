@@ -1,5 +1,13 @@
-<?php echo validation_errors(); ?>
-<?php echo (isset($addClientMessage))? $addClientMessage : ' ';?>
+<?php 
+ //echo validation_errors(); 
+ //  echo (isset($addClientMessage))? $addClientMessage : ' ';
+//  echo '<pre>';
+//  !empty($result)? print_r($result) : '';
+//  echo '</pre>';
+ 
+ echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : '');
+
+ ?>
 <div class="card shadow-lg mb-3">
     <div class="card-header py-3">
     <?php
@@ -115,7 +123,7 @@
                         </div>
                         <div class="col-12 col-md-6">
                                 <label for="first_name" class="font-weight-bold">SSN:</label>
-                                <input type="text" class="form-control" name="ssn" id="ssn" placeholder="000123456..."  required>
+                                <input type="number" class="form-control" name="ssn" id="ssn" placeholder="000123456..." min="0" max="000999999" required>
                         </div> 
                     </div>
                     <div class="row form-group">
@@ -300,52 +308,9 @@
                             <label for="PreTest" class="font-weight-bold">Year Enrolled:</label>
                             <input type="number" class="form-control" name="enrolled_in" id="enrolledIn" value="<?php echo date('Y'); ?>" required>
                         </div>
-                        <!-- <div class="col col-md-12">
-                            <label for="comment">Comment:</label>
-                            <textarea class="form-control" name="comment" placeholder="You can type something about the individual" rows="3"></textarea>
-                        </div>
-                         -->
+            
                     </div>
-                    <!-- <hr>
-                    <h6>
-                        <small>
-                        TRAINING LIST
-                        </small>        
-                     </h6> -->
-                    <!-- Table below will display the current trainings -->
-                    <!-- <div class="row">
-                        <div class="col">
-                        
-                            <table class="table shadow table-light borderless rounded">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>Training</th>
-                                        <th>Enrolled</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Time Management</td>
-                                        <td>2019</td>
-                                        <td><a href="#">add/remove</a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        
-                        </div>
-                    </div> -->
-                      
-                    <!-- <ul class="list-group">
-                    
-                        <li class="list-group-item font-weight-bold bg-dark text-light text-right"> <span class="pull-left">Training</span>Enrolled
-                        </li>
-                        <li class="list-group-item text-right"><span class="pull-left"><strong>Anger Management</strong></span> June 4, 2009</li>
-                        <li class="list-group-item text-right"><span class="pull-left"><strong>Time Management</strong></span> March 1, 2007</li>
-                        <!- <li class="list-group-item text-right"> <span class="pull-left">Add Another Training</span>
-                        <a class="btn btn-sm btn-primary rounded-circle" href="<?php //echo site_url()?>add-training"><i class="fa fa-plus"></i></a>
-                        </li> ->
-                    </ul>   -->
+                
                 </form>
             </div><!--/col-8-->
         </div><!--/row-->

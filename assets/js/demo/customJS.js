@@ -60,8 +60,9 @@ function checkPasswordMatch() {
 }
 // function creates the enrolled structuring it into an object and so that it can be used by the datatable
 function createList (jsonData, base_url, hasGradeEdit, hasEdit, hasView){
-  eList = [];
-//   console.log(jsonData);
+
+    //clearing old eList
+    eList = [];
 
     if (jsonData[0].length > 0){
 
@@ -177,6 +178,21 @@ $(document).ready(function() {
     }
     /**************End of function declaration************/
 
+    // triggered in the edit grade page - unenrolling a user
+    $('#removeClientFromProgram').click(function (e){
+        e.preventDefault();
+        //loading modal
+
+        $('#unenrollClientModal').modal('show');
+
+    });
+    $('#confirmClientUnenroll').click(function (e){
+        e.preventDefault();
+
+        // console.log('confirm unenroll');
+        $('#removeEnrolledClientForm').submit();
+
+    });
     // triggered upon clicking the remove imag link in edit-client-info page
     $('#remove-img ').on('click', '#remove-client-img', function (e){
         e.preventDefault();
@@ -227,31 +243,31 @@ $(document).ready(function() {
 
     });
 
-    // on submitting the program assesmetn form
-    $('#assesNames').on('submit', function (e){
+    // // on submitting the program assesmetn form
+    // $('#assesNames').on('submit', function (e){
 
 
-        let modifiedFormData = $('#assesNames').serialize();
+    //     let modifiedFormData = $('#assesNames').serialize();
        
-        // console.log(assesNameForm);
-        // console.log('break');
-        // console.log(modifiedFormData);
+    //     // console.log(assesNameForm);
+    //     // console.log('break');
+    //     // console.log(modifiedFormData);
 
-        // checking to see if the form has changed
-        //assesNameForm is defined in programSetup
-        if(modifiedFormData !== assesNameForm){
+    //     // checking to see if the form has changed
+    //     //assesNameForm is defined in programSetup
+    //     if(modifiedFormData !== assesNameForm){
             
-            //submitting the form
-            // $('#assesNames').submit();
-            console.log('form not the same');
+    //         //submitting the form
+    //         // $('#assesNames').submit();
+    //         console.log('form not the same');
 
-        }else{
+    //     }else{
             
-            e.preventDefault();
-            alert('No changes were made!');
-        }
+    //         e.preventDefault();
+    //         alert('No changes were made!');
+    //     }
 
-    });
+    // });
 
     //setting up the summernote plugin by specifying the components it should have
     $('#programComment').summernote({
@@ -475,8 +491,10 @@ $(document).ready(function() {
     $(".file-upload-2").on('change', function(){
         readURL(this);
         var data = new FormData(document.getElementById("upload-img-form-2"));
+        
         console.log('form-2');
         console.log(data);
+
         //sends a request to the change_profile_pic() function in the user controller
         // to change the users profile pic
         $.ajax({
@@ -654,57 +672,61 @@ $(document).ready(function() {
 
     });
 
-// The functionality is triggered when the select option is changed in the program setup UI   
+    // The functionality is triggered when the select option is changed in the program setting page   
     $('#programs').change(function(e){
 
         e.preventDefault();//if the button is to submit it will not do it //
 
-        let url = 'http://localhost/CI_miniproject/program-setup';//we will use the form URL
+        // let url = 'http://localhost/CI_miniproject/program-setup';//we will use the form URL
         // let tableSelected = $('#assesNames').val();//the selected option from the select input
         let formData = $('#assesNames').serialize();
 
         // sending a jquery ajax post to the url declared
-        $.post(url, formData, function(data){
+        $.post(base_url+'program-setup', formData, function(data){
         
-            //console.log(JSON.parse(data));
-            // let i = '1';
             let inputs = '';
             inputCount = 1;
-
-            $('#assesments').empty();//We are clearing all the child elements of the parent element, i.e. the div that holds all the input fields
             
-            //Lopping through the jason object we have recieved 
-            //NOTE: using JSON.parse() on returned data to prevent a error trigger
-            //JSON.parse convers the data recieved into jason format
-            console.log(JSON.parse(data));
-            $.each(JSON.parse(data), function(key, value) {
+            //We are clearing all the child elements of the parent element, i.e. the div that holds all the input fields
+            $('#assesments').empty();
+            
+                console.log(data);
+            if (data != 0){
                 
-                // console.log(value);
+                // console.log(JSON.parse(data));
                 
-                //Spliting the value to separate the assesment name and grade
-                if ( value !== null && value !== ""){
+                //Lopping through the jason object we have recieved 
+                //NOTE: using JSON.parse() on returned data to prevent a error trigger
+                //JSON.parse convers the data recieved into jason object format so we can then use the $.each()
+                $.each(JSON.parse(data), function(key, value) {
+                    
+                    //Spliting the value to separate the assesment name and grade
+                    if ( value !== null && value !== ""){
 
-                    //splitting the value since we have it set in database as assesmentName-gradeValue
-                    let asses = value.split(',');
+                        //splitting the value since we have it set in database as assesmentName-gradeValue
+                        let asses = value.split(',');
 
-                    // creating an input element
-                    let html = '<div id="asses-input'+inputCount+'" class="row">';
-                    html += '<div class="col-12 col-md-12">';
-                    html += '<label >Assesment Grade:</label>';
-                    html += '<div class="input-group">';
-                    html += '<input type="text" class="form-control" name="assesmentName[]" id="assesment'+inputCount+'" value="'+asses[0]+'" required>';
-                    html += '<span class="input-group-append ">';
-                    html += '<span class="input-group-text bg-danger remove-grade"><i class="fa fa-minus text-white"></i></span>';
-                    html += '</span>';
-                    html += '</div>';
-                    html += '</div>';
-                    html += '</div>';
+                        // creating an input element
+                        let html = '<div id="asses-input'+inputCount+'" class="row">';
+                        html += '<div class="col-12 col-md-12">';
+                        html += '<label >Assesment Grade:</label>';
+                        html += '<div class="input-group">';
+                        html += '<input type="text" class="form-control" name="assesmentName[]" id="assesment'+inputCount+'" value="'+asses[0]+'" required>';
+                        html += '<span class="input-group-append ">';
+                        html += '<span class="input-group-text bg-danger remove-grade"><i class="fa fa-minus text-white"></i></span>';
+                        html += '</span>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
 
-                    inputs += html;
-                    inputCount++;
+                        inputs += html;
+                        inputCount++;
 
-                }
-              });
+                    }
+                });
+            }else{
+                console.log('no grade names availabe');
+            }
               // If there were no grade assesments names then we will print out an empty input field
               if( inputCount == 1){
                 let html = '<div id="asses-input'+inputCount+'" class="row">';

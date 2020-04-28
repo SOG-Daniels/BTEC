@@ -35,7 +35,8 @@ class Client_model extends CI_Model{
                     FROM profile_img p
                     where p.id = '.$result[0]['profile_img_id'].' and p.status = 1
                     ');
-                $result[0]['imgPath'] = $sql2->row()->path;
+                $result2 = $sql2->row_array();
+                $result[0]['imgPath'] = $result2['path'];//$sql2->row()->path;
 
             }
             $this->db->trans_complete();
@@ -66,8 +67,9 @@ class Client_model extends CI_Model{
 
             //getting clients personal info 
             $data = $this->get_personal_info($clientId);
-            if ($data === FALSE){
-                return 'Unable to get client personal info';
+            if ($data === FALSE || empty($data[0])){
+                // return 'Unable to get client personal info';
+                return 0;
             }
             $this->db->trans_start();
 
@@ -130,7 +132,7 @@ class Client_model extends CI_Model{
             $sql12 = $this->db->query("
             SELECT * FROM nail_tech WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
             ");
-            $data['programs']['nail_tech'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
+            $data['programs']['nail_tech'] = (($sql12->num_rows() > 0 )? $sql2->result_array() : '' );
 
             $sql13 = $this->db->query("
             SELECT * FROM wait_staff WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
@@ -140,11 +142,9 @@ class Client_model extends CI_Model{
             $this->db->trans_complete();
 
             if ($this->db->trans_status() === FALSE){
-                return 'error: Could not get client programs';
-                
+               log_messsage('debug', 'A query failed in get_client_profile function inside client_model');
+               return FALSE; 
             }
-
-            //print_r($data);
             return $data;
             //combining data together
 
@@ -170,10 +170,10 @@ class Client_model extends CI_Model{
         $query = $this->db->query("
        
         select a.id, a.first_name, a.last_name, a.email, a.mobile_phone,
-		a.ec_name, a.ec_number, a.ec_relation, a.ssn, a.dob, 
+		a.ec_name, a.ec_number, a.ec_relation, a.ssn, a.dob, a.is_client,
         bpo.programme as bpo, bpo.status as bpo_status, bpo.enrolled_in as bpo_enrolled, bpo.comments as bpo_comment,
         bar.programme as bartending, bar.status as bar_status, bar.enrolled_in as bar_enrolled, bar.comments as bar_comment,
-        ba.programme as barbering, ba.status as ba_status, ba.enrolled_in as ba_enrolled, ba.comments as bar_comment ,
+        ba.programme as barbering, ba.status as ba_status, ba.enrolled_in as ba_enrolled, ba.comments as ba_comment ,
         cc.programme as child_care, cc.status as cc_status, cc.enrolled_in as cc_enrolled, cc.comments as cc_comment,
         cb.programme as computer_basics, cb.status as cb_status, cb.enrolled_in as cb_enrolled, cb.comments as cb_comment,
         ep.programme as event_planning, ep.status as ep_status, ep.enrolled_in as ep_enrolled, ep.comments as ep_comment,
@@ -183,8 +183,7 @@ class Client_model extends CI_Model{
         l.programme as landscaping,  l.status as l_status, l.enrolled_in as l_enrolled, l.comments as l_comment,
         lg.programme as life_guard, lg.status as lg_status, lg.enrolled_in as lg_enrolled, lg.comments as lg_comment,
         nt.programme as nail_tech, nt.status as nt_status, nt.enrolled_in as nt_enrolled, nt.comments as nt_comment ,
-        ws.programme as wait_staff, ws.status as ws_status, ws.enrolled_in as ws_enrolled, ws.comments as ws_comment,
-        st.organization as specialized_trainings, st.date_offered as st_date_offered
+        ws.programme as wait_staff, ws.status as ws_status, ws.enrolled_in as ws_enrolled, ws.comments as ws_comment, st.date_offered as st_date_offered
         from applicants a 
         left join bpo on bpo.client_id = a.id 
         left join bartending bar on bar.client_id = a.id 
@@ -214,6 +213,7 @@ class Client_model extends CI_Model{
         or lg.status ='completed' or lg.status = 'participated'
         or nt.status='completed' or nt.status = 'participated'
         or ws.status='completed' or ws.status = 'participated'
+        and a.is_client = 1
 
         ");
         $this->db->trans_complete();
@@ -224,69 +224,19 @@ class Client_model extends CI_Model{
         
         return $query->result_array();
     }
+   
     /**
      * 
      * Function will query all the clients in the database that have completed atleast one program
      *
      * @access    public
      * @param     clientId the id of the client we are updating
-     * @param     post containes all values passed by the post
+     * @param     data containes all values passed by the post
+     * @param     defaultImg keeps track if the image was removed
      *
      * @return    Bool if the query fails then it returns false else it will return true
      */   
-    public function update_client_program_list($clientId = NULL, $programs = NULL){
-        
-        if (!empty($clientId) && !empty($programs)){
-
-            // echo "<pre>";
-            // print_r($programs);
-            // echo "</pre>";
-            $this->db->trans_start();
-
-            foreach ($programs as $program => $data){
-                
-                $status = (isset($data['pre_test_avg']) && ($data['pre_test_avg'] >= 70)? 'Enrolled' : 'Rejected');
-                
-                // if ($program === 'newProgram' && $data['programme'] !== 'none'){
-                //     $query = $this->db->query("
-                //         INSERT INTO ".$data['programme']." (client_id, pre_test_avg, enrolled_in, comments, status) VALUES('".$clientId."', '".$data['pre_test_avg']."', '".$data['enrolled']."', '".$data['comment']."', '".$status."')
-                //     ");
-                    
-                // }else{
-                //     if ($data['programme'] !== 'none')
-                //     $query = $this->db->query("
-                //     UPDATE ".$data['programme']." SET pre_test_avg = '".$data['pre_test_avg']."', enrolled_in = '".$data['enrolled']."', comments = '".$data['comment']."' WHERE client_id = ".$clientId." 
-                            
-                //     ");
-
-                // }
-                
-              
-                
-            }
-            $this->db->trans_complete();
-
-            if ($this->db->trans_status() === FALSE){
-                return FALSE;
-            }else{
-                return TRUE;
-            }
-        }
-        
-        
-        
-    }
-    /**
-     * 
-     * Function will query all the clients in the database that have completed atleast one program
-     *
-     * @access    public
-     * @param     clientId the id of the client we are updating
-     * @param     post containes all values passed by the post
-     *
-     * @return    Bool if the query fails then it returns false else it will return true
-     */   
-    public function update_client_info($clientId = NULL, $data = NULL, $hasImgFile = NULL){
+    public function update_client_info($clientId = NULL, $data = NULL, $defaultImg = NULL){
 
         if (isset($data) && isset($clientId)){
 
@@ -335,10 +285,10 @@ class Client_model extends CI_Model{
             
             $this->db->trans_start();//starting transaction
             
-            if($hasImgFile != 0){
+            if($defaultImg == 1){
                 
-                //setting existing image file
-                $input['profile_img_id'] = $hasImgFile;
+                //setting profile pic to default
+                $input['profile_img_id'] = $defaultImg;
                 
                 //selecting current profile_img_id
                 $sql = $this->db->query('SELECT profile_img_id as imgID FROM applicants WHERE id = '.$clientId.'');
@@ -385,12 +335,13 @@ class Client_model extends CI_Model{
         
         if (isset($data)){
                
-                // Performing a Validation check if strings are empty
+                // checking if the client attained the 70 passing mark
                 $isClient = ($data['preTestAvg'] >= 70 )? 1 : 0;
-                $status = ($data['preTestAvg'] >= 70 )? 'Enrolled' : 'Rejected';
-                $profileImgId = ($hasImgFile === 1)? NULL : 1;// One means that we will load the default profile pic that is in the database.
-
                 
+                // 1 means that we will load the default profile pic that is in the database.
+                $profileImgId = ($hasImgFile === 1)? NULL : 1;
+                
+                // homephone not required so passing null if empty string was passed
                 $homePhone = ($data['homePhone'] !== '')? $data['homePhone'] : NULL;
 
                 // loading array with all the data from post
@@ -435,26 +386,28 @@ class Client_model extends CI_Model{
                                     
                 );
 
-                $this->db->trans_start();//starting transaction
+                //starting transaction
+                $this->db->trans_start();
+               
                 // checking if client is already in through email and SSN (social security number)
-                $result = $this->db->query(
-                'SELECT id FROM applicants WHERE ssn = "'.$input['ssn'].'" 
-                ');
+                $result = $this->db->query('SELECT id FROM applicants WHERE ssn = "'.$input['ssn'].'"');
+
                 if ($result->num_rows() > 0){
-                    return -1;//returning -1 so we can identify that the client is already in the system.
+                    //returning -1 so we can identify that the client is already in the system.
+                    return -1;
                 }
+
                 $this->db->insert('applicants', $input);
                 $clientId = $this->db->insert_id();
-
-                $input2 = array(
-
-                    'client_id' => $clientId,
-                    'pre_test_avg' => $data['preTestAvg'],
-                    'enrolled_in' => $data['enrolled_in'],
-                    'status' => $status
-
-                );
-                $this->db->insert($data['program'], $input2);
+                
+                // inserting client in a program
+                if(!$this->set_client_in_program($clientId, $data)){
+                    
+                    log_message('debug', 'Failed to set_client_in_program in client_model');
+                    return FALSE;
+                    
+                }
+               
                 $this->db->trans_complete();//ending transaction
 
                 if($this->db->trans_status() === FALSE){//checking to see if an error occured during transaction
@@ -475,6 +428,54 @@ class Client_model extends CI_Model{
 
 
     }
+    /**
+     * sets the client in a program selected 
+     *
+     * @access    public
+     * @param     clientid the id of the client 
+     * @param     data array containing the data need to insert client into program
+     * 
+     * @return    Boolean true/false if the query was successful
+     */    
+    public function set_client_in_program($clientId, $data){
+        
+        //checking if user meets the passing mark
+        $status = ($data['preTestAvg'] >= 70 )? 'Enrolled' : 'Rejected';
+
+        $this->db->trans_start();
+
+            // input data
+            $input2 = array(
+
+                'client_id' => $clientId,
+                'pre_test_avg' => $data['preTestAvg'],
+                'enrolled_in' => $data['enrolled_in'],
+                'created_on' =>  date("Y-m-d H:i:s"),
+                'created_by' => $this->session->userdata('userIdentity'),
+                'status' => $status
+
+            );
+
+            $this->db->insert($data['program'], $input2);
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }else{
+            return TRUE;
+        }
+        
+    }
+    /**
+     * updated the client's profile pic
+     *
+     * @access    public
+     * @param     clientid the id of the client in which the profile image belongs to
+     * @param     filename the name of the image file
+     * 
+     * @return    Boolean true/false if the query was successful
+     */    
     public function update_client_profile_pic($clientid = NULL, $filename = NULL){
 
         
@@ -493,11 +494,14 @@ class Client_model extends CI_Model{
             $pId = $this->db->insert_id();//getting last inserted ID i.e. id of profile_image 
             
             //print_r($row);
-           
+            
+            // the old image is not the default profile pic
             if ($row[0]['imgId'] != 1){
 
+                //delete old image
                 $this->db->update('profile_img',array('status' => 0), 'id= '.$row[0]['imgId'].'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
             }
+            // set new profile image to client
                 $this->db->update('applicants',array('profile_img_id'=>$pId), 'id= '.$clientid.'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
 
             $this->db->trans_complete();
@@ -744,23 +748,25 @@ class Client_model extends CI_Model{
             
             $this->db->trans_start();
 
+                // querying all the program tables to get client program data 
                 $sql1 = $this->db->query("
-                SELECT * FROM barbering WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+                SELECT * FROM barbering WHERE client_id = ".$clientId." 
                 ");
+                // Data was found so we load the program data in the data array
                 $data['barbering'] = (($sql1->num_rows() > 0 )? $sql1->result_array() : '' );
             
                 $sql2 = $this->db->query("
-                SELECT * FROM bartending WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+                SELECT * FROM bartending WHERE client_id = ".$clientId."
                 ");
                 $data['bartending'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
                 
                 $sql3 = $this->db->query("
-                SELECT * FROM bpo  WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+                SELECT * FROM bpo  WHERE client_id = ".$clientId." 
                 ");
                 $data['bpo'] = (($sql3->num_rows() > 0 )? $sql3->result_array() : '' );
                 
                 $sql4 = $this->db->query("
-                SELECT * FROM child_care WHERE client_id = ".$clientId."
+                SELECT * FROM child_care WHERE client_id = ".$clientId." 
                 ");
                 $data['child_care'] = (($sql4->num_rows() > 0 )? $sql4->result_array() : '' );
                 
@@ -770,12 +776,12 @@ class Client_model extends CI_Model{
                 $data['computer_basics'] = (($sql5->num_rows() > 0 )? $sql5->result_array() : '' );
                 
                 $sql6 = $this->db->query("
-                SELECT * FROM event_planning WHERE client_id = ".$clientId."
+                SELECT * FROM event_planning WHERE client_id = ".$clientId." 
                 ");
                 $data['event_planning'] = (($sql6->num_rows() > 0 )? $sql6->result_array() : '' );
                 
                 $sql7 = $this->db->query("
-                SELECT * FROM front_desk WHERE client_id = ".$clientId." 
+                SELECT * FROM front_desk WHERE client_id = ".$clientId."  
                 ");
                 $data['font_desk'] = (($sql7->num_rows() > 0 )? $sql7->result_array() : '' );
             
@@ -802,7 +808,7 @@ class Client_model extends CI_Model{
                 $sql12 = $this->db->query("
                 SELECT * FROM nail_tech WHERE client_id = ".$clientId." 
                 ");
-                $data['nail_tech'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
+                $data['nail_tech'] = (($sql12->num_rows() > 0 )? $sql12->result_array() : '' );
 
                 $sql13 = $this->db->query("
                 SELECT * FROM wait_staff WHERE client_id = ".$clientId." 
@@ -819,6 +825,7 @@ class Client_model extends CI_Model{
 
             return $data;
         }
+        // and status = 'Completed' or status = 'participated' or status = 'Enrolled' or status = 'Rejected'
 
 
     }
@@ -844,8 +851,16 @@ class Client_model extends CI_Model{
             where 
             a.id = '.$clientId.' and pro.status = "Enrolled" and pro.enrolled_in = '.date('Y').'
                 ');
+
+            if ($sql->num_rows() < 1){
+                // error no such user found
+                return -1;
+
+            }
             $result = $sql->result_array();
-            
+
+           
+            // getting user profile pic
             $sql2 = $this->db->query('
                 SELECT p.path as imgPath
                 FROM profile_img p
@@ -880,15 +895,22 @@ class Client_model extends CI_Model{
 
         if (!empty($data)){
 
+            //varaibles used for setting grades
             $average = 0;
             $assSum = 0;
             $assCount = 0;
 
             $set = array();
             $set['status'] = ($data['status'] == "1" )? 'Enrolled' : $data['status'];
+
+            // set graduated on since status is no longer enrolled
+            if($data['status'] != "1"){
+                $set['graduated_on'] = $data['graduated_on'];
+            }
+
             $set['comments'] = isset($comment)? $comment : NULL;
-            // $set['updated_on'] = date("Y-m-d H:i:sa");
-            // $set['updated_by'] = $this->session->userdata('userIdentity');
+            $set['updated_on'] = date("Y-m-d H:i:sa");
+            $set['updated_by'] = $this->session->userdata('userIdentity');
             
            
             // in the query for assesmets 1-5 we are checking to see if the input exist by means of checking array keys
@@ -958,21 +980,77 @@ class Client_model extends CI_Model{
         return TRUE;
     
     }
-    /**
-     * function set updated_by and update_on in the choosen table
+   /**
+     * function set the grade name pertaining to the program the client is enrolled in
      *
      * @access    public
-     * @param     table the table we are to query from, by default it is barbering
-     * @param     userIdentity the signiture stamp of the user that made the update  
+     * @param     clientId the clients ID number
+     * @param     tableName the names of the program enrolled in
+     * @param     gradeName an array containing the list of names
      * 
      * @return    Boolean true if successful, false if transaction faild
      */    
-    public function get_program_grades_names($table = 'barbering') {
+    public function set_program_grades_names($clientId, $tableName, $gradeNames) {
+       
+        $set = array(
+            'Assesment1' => NULL,
+            'Assesment2' => NULL,
+            'Assesment3' => NULL,
+            'Assesment4' => NULL,
+            'Assesment5' => NULL
+        );
+
+        $i = 1;
+        // getting all the names assigned
+        foreach( $gradeNames as $key => $val){
+            
+            //grade name is stored in database as gradeName,gradeNumber e.g. (practical,70)
+            $grade = explode(',', $val);
+
+            if (isset($grade[0]) && $grade[0] != ''){
+                //setting grade name and comma separator
+                $set['Assesment'.$i] = $grade[0].",";
+                $i++;
+            }
+        }
+
         $this->db->trans_start();
         
-        $this->db->select('Assesment1, Assesment2, Assesment3, Assesment4, Assesment5');
-        $this->db->where('status', 'Enrolled' );
-        $query = $this->db->get($table);
+        $this->db->update($tableName, $set, array('client_id' => $clientId));
+
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+        
+        return TRUE;
+
+    } 
+    /**
+     * function gets the grade name of an enrolled client in a program/training
+     *
+     * @access    public
+     * @param     table the table we are to query from, by default it is barbering
+     * @param     status the status of a client in a program
+     * 
+     * 
+     * @return    Boolean true if successful, false if transaction faild
+     */    
+    public function get_program_grades_names($table = 'barbering', $status = 'Enrolled') {
+
+        
+
+        $this->db->trans_start();
+        
+            if ($status !== 'Enrolled'){
+                $this->db->order_by('enrolled_in');
+            }
+            $this->db->select('Assesment1, Assesment2, Assesment3, Assesment4, Assesment5');
+            $this->db->where(array('status' => $status));
+            $query = $this->db->get($table);
+            // $query = $this->db->query('');
 
         $this->db->trans_complete();
 
@@ -985,7 +1063,7 @@ class Client_model extends CI_Model{
     }
 
     /**
-     * updates the assesment names of the program/ training
+     * updates the assesment names of all enrolled clients in that program/ training
      *
      * @access    public
      * @param     data the post data  
@@ -1040,6 +1118,29 @@ class Client_model extends CI_Model{
         }
         
         return TRUE;
+    }
+
+    /**
+     * Deletes the record from the program table
+     *
+     * @access    public
+     * @param     tableName name of the program table
+     * @param     programId the program ID containing the enrolled client info
+     * 
+     * @return    boolean true or false based on query execution
+     */    
+    public function remove_enrolled_client($tableName = NULL, $programId = NULL) {
+   
+        $this->db->trans_start();
+            $this->db->delete($tableName, array('id' => $programId));
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+        
+        return TRUE;
+    
     }
     /**
      * get_client() gets all the clients info tha have the first and last name equal to name

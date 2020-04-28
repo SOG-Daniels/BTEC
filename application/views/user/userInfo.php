@@ -45,115 +45,119 @@
                         <input type="hidden" id="base" value="<?php echo base_url(); ?>">
                        <input type="hidden" name="action" value="saveUserInfo"> 
                        <input type="hidden" name="userId" value="<?php echo (isset($userData['id'])? $userData['id'] : ' ');  ?>"> 
-                        <div class="row mb-3">
+                        <div class="row">
                             <div class="col-12 col-md-6">
-                                <label for="first_name">First name:</label>
-                                <input type="text" class="form-control" name="fname" id="fname"  value = "<?php echo (isset($userData['fname']))? $userData['fname'] : ' ';?>" required>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label for="last_name">Last name:</label>
-                                <input type="text" class="form-control" name="lname" id="lname" value = "<?php echo (isset($userData['lname']))? $userData['lname'] : ' ';?>" required>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-12 col-md-6">
-                                <label for="first_name">Username:</label>
-                                <input type="text" class="form-control" name="username" id="username" value = "<?php echo (isset($userData['username']))? $userData['username'] : ' ';?>" required>
-                            </div>
-                            <div class="col-12 col-md-6">
-                                <label for="last_name">Email:</label>
-                                <!-- <p>SOmeEmail@somemail.com</p> -->
-                                <input type="text" class="form-control" name="email"  value = "<?php echo (isset($userData['email']))? $userData['email']: ' ';?>" required>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-12 col-md-6">
-                                <label for="first_name">Phone #:</label>
-                                <input type="number" class="form-control" name="phone" id="phone" value = "<?php echo (isset($userData['phone']))? $userData['phone'] : ' ';?>" required>
-                            </div>
-                            <?php 
-                                $action = array();
-                                foreach ($userData['action'] as $key => $val){
-                                    foreach ($val as $key => $data){
-                                        array_push($action, $data);
-                                    }
-                                }
-                            ?>
-                            
-                            <div class="col-12 col-md-6" >
-                                <label class="" for="last_name">Priviledge:</label>
-                                <div class="row offset-1">
-                                    <div class="col-12 col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" name="privilege[]" value="2" id="privil2" <?php echo ( isset($action) && in_array(2, $action) )? 'checked' : ' ';?> disabled>
-                                        <label class="form-check-label" for="viewClients">
-                                            View Clients
-                                        </label>
-                                    </div>
-                                    <div class="col-12 col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" name="privilege[]" value="4" id="privil4" <?php echo (isset($action) && in_array(4, $action))? 'checked' : ' '; ?> disabled>
-                                        <label class="form-check-label" for="viewUsers">
-                                            View Users
-                                        </label>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="first_name">First name:</label>
+                                    <input type="text" class="form-control" name="fname" id="fname"  value = "<?php echo (isset($userData['fname']))? $userData['fname'] : ' ';?>" required>
                                 </div>
                                 
-                                <div class="row offset-1">
-                                    <div class="col-12 col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="1" name="privilege[]" id="privil1"  <?php echo (isset($action) && in_array(1, $action))? 'checked' : ' '; ?> disabled>
-                                        <label class="form-check-label" for="addClient">
-                                            Add Client
-                                        </label>
-                                    </div>
-                                    <div class="col-12 col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="3" name="privilege[]" id="privil3"  <?php echo (isset($action) && in_array(3, $action))? 'checked' : ' '; ?> disabled>
-                                        <label class="form-check-label" for="addClient">
-                                            Add User
-                                        </label>
-                                    </div>
+                                    <!-- <div class="col-12 col-md-6">
+                                        <label for="first_name">Username:</label>
+                                        <input type="text" class="form-control" name="username" id="username" value = "<?php //echo (isset($userData['username']))? $userData['username'] : ' ';?>" required>
+                                    </div> -->
+                                <div class="form-group">
+                                    <label for="last_name">Email:</label>
+                                    <!-- <p>SOmeEmail@somemail.com</p> -->
+                                    <input type="text" class="form-control" name="email"  value = "<?php echo (isset($userData['email']))? $userData['email']: ' ';?>" required>
                                 </div>
-                                 
-                                <div class="row offset-1">
-                                    <div class="col-12 col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="7" name="privilege[]" id="privil7"  <?php echo (isset($action) && in_array(7, $action))? 'checked' : ' '; ?> disabled>
-                                        <label class="form-check-label" for="enrolledList">
-                                            Edit Client
-                                        </label>
-                                    </div>
-                                    <div class="col-12 col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="8" name="privilege[]" id="privil8"  <?php echo (isset($action) && in_array(8, $action))? 'checked' : ' '; ?> disabled>
-                                        <label class="form-check-label" for="editGrade">
-                                            Edit User
-                                        </label>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="first_name">Phone #:</label>
+                                    <input type="number" class="form-control" name="phone" id="phone" value = "<?php echo (isset($userData['phone']))? $userData['phone'] : ' ';?>" required>
                                 </div>
-                                <div class="row offset-1">
-                                    <div class="col-12 col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="5" name="privilege[]" id="privil5"  <?php echo (isset($action) && in_array(5, $action))? 'checked' : ' '; ?> disabled>
-                                        <label class="form-check-label" for="enrolledList">
-                                            View Enrolled List
-                                        </label>
-                                    </div>
-                                    <div class="col-12 col-md-5 form-check">
-                                        <input class="form-check-input action" type="checkbox" value="6" name="privilege[]" id="privil6"  <?php echo (isset($action) && in_array(6, $action))? 'checked' : ' '; ?> disabled>
-                                        <label class="form-check-label" for="editGrade">
-                                            Edit Grade
-                                        </label>
-                                    </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                
+                                <div class="form-group">
+                                    <label for="last_name">Last name:</label>
+                                    <input type="text" class="form-control" name="lname" id="lname" value = "<?php echo (isset($userData['lname']))? $userData['lname'] : ' ';?>" required>
                                 </div>
-                                <div class="row offset-1">
-                                    <div class="col-12 col-md-5 form-check">
-                                        <input class="form-check-input action" id="privil9" type="checkbox" value="9" name="privilege[]" <?php echo (isset($action) && in_array(9, $action))? 'checked' : ' '; ?> disabled>
-                                        <label class="form-check-label" for="enrolledList">
-                                            Program Setup
-                                        </label>
+                                    <?php 
+                                        $action = array();
+                                        // extracting the privileges from the userdata associative array 
+                                        foreach ($userData['action'] as $key => $val){
+                                            foreach ($val as $key => $data){
+                                                array_push($action, $data);
+                                            }
+                                        }
+                                    ?>
+                                    
+                                    <div class="form-group" >
+                                        <label class="" for="last_name">Priviledge:</label>
+                                        <div class="row offset-1">
+                                            <div class="col-12 col-md-5 form-check">
+                                                <input class="form-check-input action" type="checkbox" name="privilege[]" value="2" id="privil2" <?php echo ( isset($action) && in_array(2, $action) )? 'checked' : ' ';?> disabled>
+                                                <label class="form-check-label" for="viewClients">
+                                                    View Clients
+                                                </label>
+                                            </div>
+                                            <div class="col-12 col-md-5 form-check">
+                                                <input class="form-check-input action" type="checkbox" name="privilege[]" value="4" id="privil4" <?php echo (isset($action) && in_array(4, $action))? 'checked' : ' '; ?> disabled>
+                                                <label class="form-check-label" for="viewUsers">
+                                                    View Users
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row offset-1">
+                                            <div class="col-12 col-md-5 form-check">
+                                                <input class="form-check-input action" type="checkbox" value="1" name="privilege[]" id="privil1"  <?php echo (isset($action) && in_array(1, $action))? 'checked' : ' '; ?> disabled>
+                                                <label class="form-check-label" for="addClient">
+                                                    Add Client
+                                                </label>
+                                            </div>
+                                            <div class="col-12 col-md-5 form-check">
+                                                <input class="form-check-input action" type="checkbox" value="3" name="privilege[]" id="privil3"  <?php echo (isset($action) && in_array(3, $action))? 'checked' : ' '; ?> disabled>
+                                                <label class="form-check-label" for="addClient">
+                                                    Add User
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row offset-1">
+                                            <div class="col-12 col-md-5 form-check">
+                                                <input class="form-check-input action" type="checkbox" value="7" name="privilege[]" id="privil7"  <?php echo (isset($action) && in_array(7, $action))? 'checked' : ' '; ?> disabled>
+                                                <label class="form-check-label" for="enrolledList">
+                                                    Edit Client
+                                                </label>
+                                            </div>
+                                            <div class="col-12 col-md-5 form-check">
+                                                <input class="form-check-input action" type="checkbox" value="8" name="privilege[]" id="privil8"  <?php echo (isset($action) && in_array(8, $action))? 'checked' : ' '; ?> disabled>
+                                                <label class="form-check-label" for="editGrade">
+                                                    Edit User
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row offset-1">
+                                            <div class="col-12 col-md-5 form-check">
+                                                <input class="form-check-input action" type="checkbox" value="5" name="privilege[]" id="privil5"  <?php echo (isset($action) && in_array(5, $action))? 'checked' : ' '; ?> disabled>
+                                                <label class="form-check-label" for="enrolledList">
+                                                    View Enrolled List
+                                                </label>
+                                            </div>
+                                            <div class="col-12 col-md-5 form-check">
+                                                <input class="form-check-input action" type="checkbox" value="6" name="privilege[]" id="privil6"  <?php echo (isset($action) && in_array(6, $action))? 'checked' : ' '; ?> disabled>
+                                                <label class="form-check-label" for="editGrade">
+                                                    Edit Grade
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row offset-1">
+                                            <div class="col-12 col-md-5 form-check">
+                                                <input class="form-check-input action" id="privil9" type="checkbox" value="9" name="privilege[]" <?php echo (isset($action) && in_array(9, $action))? 'checked' : ' '; ?> disabled>
+                                                <label class="form-check-label" for="enrolledList">
+                                                    Program Setup
+                                                </label>
+                                            </div>
+                                            <div class="col-12 col-md-5 form-check">
+                                                <input class="form-check-input action" id="privil10" type="checkbox" value="10" name="privilege[]" <?php echo (isset($action) && in_array(10, $action))? 'checked' : ' '; ?> disabled>
+                                                <label class="form-check-label" for="enrolledList">
+                                                    Create Report
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-12 col-md-5 form-check">
-                                        <input class="form-check-input action" id="privil10" type="checkbox" value="10" name="privilege[]" <?php echo (isset($action) && in_array(10, $action))? 'checked' : ' '; ?> disabled>
-                                        <label class="form-check-label" for="enrolledList">
-                                            Create Report
-                                        </label>
-                                    </div>
-                                </div>
+                                
                             </div>
                         </div>
                     <!-- </form> -->

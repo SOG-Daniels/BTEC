@@ -2,6 +2,8 @@
 // echo "<pre>";
 //     print_r($programInfo); 
 // echo "</pre>";
+
+//  displaying any message 
  echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : '');
 ?>
 <h1 class="h3 mb-2 text-gray-800">Program Setup</h1>
@@ -66,12 +68,17 @@
                     <br>
                     <div id="assesments">
                     <?php 
+                      
+
                       $count = 1;
                       for ($i = 1;$i <= 5; $i++){
 
                         if (!empty($programInfo['Assesment'.$i])){
+
+                          //splitting the grade data 
                           $assesName = explode(',', $programInfo['Assesment'.$i]);
-                          // print_r($assesName);
+                          
+                          // loading the grade names for the default program selected i.e. introduction to bartending
                           echo '
                             
                             <div id="asses-input'.$i.'" class="row"> 
@@ -79,7 +86,7 @@
                               <div class="col-12 col-md-12">
                                 <label>Assesment Name:</label>
                                 <div class="input-group">
-                                  <input type="text" class="form-control" name="assesmentName[]" id="assesment1" placeholder="Enter a Grade...." value="'.$assesName[0].'" required>
+                                  <input type="text" class="form-control" name="assesmentName[]" id="assesment1" placeholder="Enter a name...." value="'.$assesName[0].'" required>
                                   <span class="input-group-append ">
                                     <span class="input-group-text bg-danger remove-grade"><i class="fa fa-minus text-white"></i></span>
                                   </span>
@@ -92,6 +99,8 @@
                           
 
                         }
+                        // introduction to bartending doesnt have any grade names set yet
+                        // so we display a input field requesting to add a grade
                         if ($count === 1){
                           echo '
                             

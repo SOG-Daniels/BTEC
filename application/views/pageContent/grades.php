@@ -6,15 +6,26 @@
  echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : '');
 ?>
 <h1 class="h3 mb-2 text-gray-800">Grades</h1>
-
+        <form id="removeEnrolledClientForm" method="POST" action="<?php echo base_url()?>unenroll-client">
+          <input type="hidden" name="action" value="unEnrollClient">
+          <input type="hidden" name="userId" value="<?php echo $programInfo[0]['client_id'];?>">
+          <input type="hidden" name="program" value="<?php echo $programInfo[0]['programme'];?>">
+          <input type="hidden" name="programId" value="<?php echo $programInfo[0]['id'];?>">
+        </form>
           <!-- DataTales Example -->
           <div class="card shadow-lg mb-4">
             <div class="card-header py-3">
               <div class="row">
-                <div class=" col-12 col-md-10">
+                <div class=" col-12 col-md-9">
                   <h5 class="m-0 font-weight-bold text-primary"><?php echo $programInfo[0]['programme'] ?></h5>
                 </div>
-                <div class="col-12 col-md-2 d-flex justify-content-end">
+                <div class="col-12 col-md-3 d-flex justify-content-end">
+                <a href="#" id="removeClientFromProgram" class="btn btn-danger btn-sm " data-toggle="modal" data-target="#unenrollClientModal">
+                  <i class="fas fa-fw fa-trash"></i>
+                  <span>Unenroll Client</span>
+                </a>
+                &nbsp;
+                &nbsp;
                 <button id="saveGradeChanges" class="btn btn-success btn-sm ">
                   <i class="fas fa-fw fa-save"></i>
                   <span>Save</span>
@@ -173,7 +184,7 @@
                     </div>
                     <div class="form-group col-12 col-md-6">
                       <label class="font-weight-bold">Graduated On:</label>
-                     <input id="graduatedOn" class="form-control" type="date" name="graduated_on"> 
+                     <input id="graduatedOn" class="form-control" type="date" name="graduated_on" value="<?php echo date('Y-m-d');?>" > 
                     </div>
 
                     </div>

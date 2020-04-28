@@ -231,7 +231,55 @@ class User extends CI_Controller{
         }
 
     }
-     /**
+    /* sets the grade names to the specified client
+     *
+     * @access    public
+     * @param     clientId 
+     * @param     program  the name of the table we will get the name for  
+     *
+     * @return    NONE
+     */    
+    public function set_grade_name($clientId = NULL, $program = NULL){
+    
+        //checking if session is set
+        if ($this->is_session_set()){
+
+            if ($clientId != NULL){
+                                        
+                //get grade name for enrolled clients 
+                $result = $this->client_model->get_program_grades_names($program);
+
+                if ($result === FALSE){
+                    log_message('debug', 'get_program_grades_names inside client_model returned false');
+                }
+                // grade names are already set
+                if (!isset($result['Assesment1'])){
+                    
+                    $result = array();
+                    //get grade name from completed clients
+                    $result = $this->client_model->get_program_grades_names($program, 'Completed');
+                
+                
+                }
+                if (isset($result['Assesment1']) && trim($result['Assesment1']) != ''){
+                    
+                    $result3 = $this->client_model->set_program_grades_names($clientId, $program, $result);
+                    if( $result3 === FALSE ){
+                        log_message('debug', 'set_program_grades_names inside client_model returned false');
+                    }
+
+                    log_message('debug', 'Success');
+                }
+
+
+            }
+
+        }else{
+            redirect('login');
+        }
+    }
+
+    /**
      * Adds a client to the system 
      * 
      * get_random_password() will add client to the system
@@ -292,55 +340,62 @@ class User extends CI_Controller{
             $this->data['title'] = 'Add Client';
             $this->data['active'] = 'addClient';
 
+            // user submitted the form with data 
             if($this->input->post('action') === 'addClient' && $this->form_validation->run() === TRUE){
-                // process the data given in the form
-                // print_r($this->input->post());
 
+                // checking if a profile pic was set
                 $hasImgFile = (!empty($_FILES['clientImg']['name']))? 1 : 0;
                 
+                // filtering post input 
                 $post = $this->input->post(NULL, TRUE);
-                $clientId = $this->client_model->enter_client($post, $hasImgFile);//Calling the user's modal method enter_client to add client to the system
+                
+                //Calling the user's modal method enter_client to add client to the system
+                $clientId = $this->client_model->enter_client($post, $hasImgFile);
 
                 if ( $clientId === -1){
                     
+                    // client in the system already sending a message
                     $this->data['addClientMessage'] = '
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h5><strong><i class="fa fa-2x fa-frown"></i>Notice:</strong>
-                    Client has already been entered into the system, refer to the clients table please.<h5>
-                    </div>
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5><strong><i class="fa fa-2x fa-frown"></i> Notice:</strong>
+                        Client has already been entered into the system, refer to the clients table please.<h5>
+                        </div>
                     ';
 
 
                 }else if ( $clientId ){
-                //checking if a valid id was returned (positive value)
-
-                $this->data['addClientMessage'] = '
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h5><strong><i class="fa fa-2x fa-smile"></i> Success</strong>, Client has be registers!<h5>
-                </div>
-                ';
+                    //checking if a valid id was returned (positive value)
+                    
+                    //setting a success message
+                    $this->data['addClientMessage'] = '
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5><strong><i class="fa fa-2x fa-smile"></i> Success</strong>, Client has be registers!<h5>
+                        </div>
+                    ';
                 
-                //Checking if an image was uploaded to insert it to the database. 
+                    //Checking if an image was uploaded to insert it to the database. 
                     if ($hasImgFile){
-
 
                         $newFileName = $post['fname'].'_'.$post['lname'].'_'.time();
                         
                         $config['upload_path'] = './upload/';
                         $config['allowed_types'] = 'jpg|png';
                         $config['file_name'] = $newFileName;
+
+                        // you can set image size restriction
                         // $config['max_size'] = 2000;
                         // $config['max_width'] = 1500;
                         // $config['max_height'] = 1500;
                 
                         $this->load->library('upload', $config);
 
+                        // uploading the image to the uploads folder
                         if($this->upload->do_upload('clientImg')){
                             
                             $uploadInfo = $this->upload->data();
@@ -377,6 +432,15 @@ class User extends CI_Controller{
 
                     }
                     
+                    // client is enrolled so we will assign grade names to the program enrolled
+                    if ( $this->input->post('preTestAvg') >= 70){
+
+                        $program = $this->input->post('program');
+
+                        $this->set_grade_name($clientId, $program);
+                      
+                    }
+                    
 
 
                 }else{
@@ -393,22 +457,19 @@ class User extends CI_Controller{
                     
 
                 }
-                
-                // calling views to structure the addClient form  
-                $this->load->view('templates/header', $this->data);
-                $this->load->view('templates/sidebar', $this->data);
-                $this->load->view('templates/topbar', $this->data);
-                $this->load->view('pageContent/addClient', $this->data);
-                $this->load->view('templates/footer', $this->data);
+                // setting one-time message
+                $this->session->set_flashdata('message',$this->data['addClientMessage']);
+                redirect('register-applicant');
+               
 
             }else{
-
+                // no submitions have been made yet 
 
                 // Display the form 
                 $this->load->view('templates/header', $this->data);
                 $this->load->view('templates/sidebar', $this->data);
                 $this->load->view('templates/topbar', $this->data);
-                $this->load->view('pageContent/addClient', $this->data);
+                $this->load->view('pageContent/addClient');
                 $this->load->view('templates/footer', $this->data);
             }
            
@@ -443,6 +504,7 @@ class User extends CI_Controller{
         
                 $this->load->library('upload', $config);
 
+                //uploading file to the upload folder
                 if($this->upload->do_upload('clientImg')){
                     
                     $uploadInfo = $this->upload->data();
@@ -483,43 +545,68 @@ class User extends CI_Controller{
             $this->data['title'] = 'Update Client';
             
             if ($this->input->post('action') === 'updateClient'){
-                
-                
+                                
                 $post = $this->input->post(NULL, TRUE);//filtering the post, enabling XSS filtering 
 
-                // $hasImgFile = (!empty($_FILES['clientImg']['name']))? 1 : 0;//checking if image was uploaded
-                // echo "<pre>";
-                // print_r($this->input->post());
-                // print_r($_FILES);//checking if image was uploaded
-                // echo "</pre>";
-                
-                $hasImgFile = 0;
-                //image was uploaded
+                $imgRemoved = 0;
+
+                //An image was uploaded
                 if (!empty($_FILES['clientImg']['name']) ){
                     
+                    //set new profile pic
                     $result3 = $this->set_client_pic($post, $clientId);
 
                 }else{
-                
-                    $hasImgFile = $this->input->post('imageId');
+                    
+                    $imgRemoved = $this->input->post('imageId');
                 }
                 
                 //calling models to update applicant information 
-                $result = $this->client_model->update_client_info($clientId, $post, $hasImgFile);
-                $result2 = $this->client_model->update_client_program_list($clientId, $this->input->post('programList', TRUE)); 
+                $result = $this->client_model->update_client_info($clientId, $post, $imgRemoved);
+
+                // users added client to a program
+                if ($this->input->post('programList')['newProgram']['program'] != 'none'){
+                    
+                    //setting client in program
+                    $result2 = $this->client_model->set_client_in_program($clientId, $this->input->post('programList')['newProgram']);//passing inner array
+                    
+                    //setting client grade names 
+                    if ($this->input->post('programList')['newProgram']['preTestAvg'] >= 70){
+                        //passing clientId and program name
+                        $this->set_grade_name($clientId, $this->input->post('programList')['newProgram']['program']);
+                    }
+                }
                 
                 if ($result){
+                    // setting success message 
                     $message = '
                     
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h5><strong><i class="fa fa-2x fa-smile"></i> Success!</strong> User was updated.<h5>
+                    <h5><strong><i class="fa fa-2x fa-smile"></i> Success!</strong> Client was updated.<h5>
                     </div>
                     
                     
                     ';
+
+                    if ($result2 === FALSE){
+                        // setting error message
+                        $message = '
+                    
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5><strong><i class="fa fa-2x fa-frown"></i> We\'re Sorry!</strong> Could not enroll client into the program.<h5>
+                        </div> 
+                        
+                        
+                        ';
+                        log_message('debug', 'set_client_in_program failed when called inside update_client in the user controller');
+                    }
+                    
                 }else{
 
                     $message = '
@@ -534,11 +621,13 @@ class User extends CI_Controller{
                     
                     ';
                 }
-                   $this->session->set_flashdata('message',$message);
-                   redirect('edit-client-info/'.$clientId) ;
+                //setting message to page
+                $this->session->set_flashdata('message',$message);
+                redirect('edit-client-info/'.$clientId) ;
 
             }else{
 
+                //getting display data
                 $clientData = $this->client_model->get_personal_info($clientId);
                 $programList = $this->client_model->get_program_list($clientId);
             
@@ -577,7 +666,7 @@ class User extends CI_Controller{
                 $this->form_validation->set_rules('preTestAvg', 'Address Ref#3:', 'trim');
                 $this->form_validation->set_rules('enrolled_on', 'Year Enrolled:', 'trim');
 
-                // Result was return lets go in the if 
+                // Result was returned 
                 if ($clientData !== FALSE && $programList !== FALSE){
 
                     $this->data['clientData'] = $clientData;
@@ -875,12 +964,29 @@ class User extends CI_Controller{
             $this->data['name'] = $this->session->userdata('name');
             $this->data['clientData'] = $this->client_model->get_client_profile($clientId);
 
-            // display the data on the view     
-            $this->load->view('templates/header', $this->data);
-            $this->load->view('templates/sidebar', $this->data);
-            $this->load->view('templates/topbar', $this->data);
-            $this->load->view('user/clientInfo', $this->data);
-            $this->load->view('templates/footer', $this->data);
+            if ($this->data['clientData'] === 0){
+                $this->data['message'] = '
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5>
+                    <strong><i class="fa fa-2x fa-frown"></i> Notice:</strong> Unable to find client. 
+                    <h5>
+                    </div>
+                    ';
+                $this->session->set_flashdata('message', $this->data['message']);
+                redirect('dashboard'); 
+            
+            }else{
+
+                // display the data on the view     
+                $this->load->view('templates/header', $this->data);
+                $this->load->view('templates/sidebar', $this->data);
+                $this->load->view('templates/topbar', $this->data);
+                $this->load->view('user/clientInfo', $this->data);
+                $this->load->view('templates/footer', $this->data);
+            }
 
         }else{
 
@@ -1069,7 +1175,8 @@ class User extends CI_Controller{
      * Will allow user to view clients grade and modify them
      *
      * @access    public
-     * @param     NONE
+     * @param     program the name of the program table
+     * @param     clientId the id of the client
      *
      * @return    String An alpha numeric string 
      */    
@@ -1077,25 +1184,58 @@ class User extends CI_Controller{
 
         if ($this->is_session_set() && in_array(2, $this->user_actions)){
 
-            $this->data['title'] = "Grades";
+            if (isset($program) && isset($clientId)){
+                $this->data['title'] = "Grades";
 
-            $result = $this->client_model->get_client_program_info($clientId, $this->programTables[$program]);
+                $result = $this->client_model->get_client_program_info($clientId, $this->programTables[$program]);
+                
+                if ($result == -1){
+                    // no such user was found
+                    $this->message = '
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5><strong><i class="fa fa-2x fa-exclamation-triangle"></i> Notice!</strong> There was no user found with that ID<h5>
+                    </div>
+                    ';
+                    
 
-            // appending the parameters to the result array as we will need it to update client grade
-            $result[0]['program'] = $this->programTables[$program];
-            $result[0]['clientId'] = $clientId;
-            $result[0]['slug'] = $program.'/'.$clientId;
+                    $this->session->set_flashdata('message', $this->message);
+                    redirect('enrolled-list'); 
+                
+                }else if( $result == FALSE){
+                    // sql error
+                    log_message('debug', 'get_client_program_info returned false, called from view_client_grade in user controller');
+                    redirect('enrolled-list'); 
+                
+                }else{
+                    //user exist
 
-            if ($result === FALSE){
-                $result = 0;
+                    // appending the parameters to the result array as we will need it to update client grade
+                    $result[0]['program'] = $this->programTables[$program];
+                    $result[0]['clientId'] = $clientId;
+                    $result[0]['slug'] = $program.'/'.$clientId;
+
+                    if ($result === FALSE){
+                        $result = 0;
+                    }
+                    $this->data['programInfo'] = $result;
+
+                    $this->load->view('templates/header', $this->data);
+                    $this->load->view('templates/sidebar', $this->data);
+                    $this->load->view('templates/topbar', $this->data);
+                    $this->load->view('pageContent/grades', $this->data);
+                    $this->load->view('templates/footer', $this->data);
+
+                }
+               
+                
+
+            }else{
+                redirect('enrolled-list');
             }
-            $this->data['programInfo'] = $result;
 
-            $this->load->view('templates/header', $this->data);
-            $this->load->view('templates/sidebar', $this->data);
-            $this->load->view('templates/topbar', $this->data);
-            $this->load->view('pageContent/grades', $this->data);
-            $this->load->view('templates/footer', $this->data);
 
 
         }else{
@@ -1254,13 +1394,10 @@ class User extends CI_Controller{
 
             if (!empty($this->input->post())){
                 //passing post data to client model to update info
-                // echo "<pre>";
-                // print_r($this->input->post());
-                // echo "</pre>";
                 $comment = $this->input->post('comment');
-                echo "<pre>";
-                echo $comment;
-                echo "</pre>";
+                // echo "<pre>";
+                // echo $comment;
+                // echo "</pre>";
 
                 
                 $result = $this->client_model->update_client_grade($this->input->post(NULL, TRUE), $comment);
@@ -1438,8 +1575,16 @@ class User extends CI_Controller{
             // checking to see if ajax has sent a post request
             if (!empty($this->input->post()) && !empty($this->input->post('program'))){
 
-                $result = $this->client_model->get_program_grades_names($this->input->post('program'), TRUE);
-                echo json_encode($result);
+                $result = $this->client_model->get_program_grades_names($this->input->post('program'));
+
+                if (isset($result['Assesment1'])){
+                    // grades have already been name for enrolled students
+                    echo json_encode($result);
+
+                }else{
+                    // get the most recent grade name entered 
+                    echo 0;
+                }
                 
             }else{// No ajax post sent, then we will just load the default 
 
@@ -1460,7 +1605,9 @@ class User extends CI_Controller{
             }
            
         }else{
+            
             redirect('login');
+
         }
     }
     /* save_assesments_name() will save the names of the assesments listed
@@ -1476,11 +1623,10 @@ class User extends CI_Controller{
 
             if(!empty($this->input->post()) && !empty($this->input->post('program'))){
 
+                // setting program names to enrolled clients of a selected program
                 $result = $this->client_model->set_program_asses_name($this->input->post(NULL, TRUE));
-    
-                // echo "<pre>";
-                // print_r($this->input->post());
-                // echo "</pre>";
+   
+                //something went wrong witthe the query
                 if ($result === FALSE){
 
                     $this->data['message'] = '
@@ -1494,6 +1640,7 @@ class User extends CI_Controller{
                         </div>
                     ';
 
+                // no enrolled user in the program/training
                 }else if ($result === 0){
                     
                     $this->data['message'] = '
@@ -1508,6 +1655,7 @@ class User extends CI_Controller{
                     </div>
                 ';
 
+                // success, grades were added to enrolled clients in the proram
                 }else{
 
                     $this->data['message'] = '
@@ -1523,9 +1671,10 @@ class User extends CI_Controller{
 
                 }
 
+                // setting message viewable only once, disapears upon page reload
                 $this->session->set_flashdata('message', $this->data['message']);
-                redirect('program-setup');
 
+                redirect('program-setup');
 
             }else{
                 redirect('program-setup');
@@ -1645,6 +1794,62 @@ class User extends CI_Controller{
             redirect('login');
         }
     }
+  
+    /* Function will uneroll a client based on the post data recieved
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE
+     */    
+    public function unenroll_client(){
+    
+        if ($this->is_session_set()){
+            
+            //checking if post data is set and user had the privilege to editGrade meaning they can unenroll client
+            if ($this->input->post('action') === 'unEnrollClient' && in_array(6, $this->user_actions)){
+
+                // getting table name
+                $tableName = $this->programTables[$this->input->post('program')];
+                
+                // unenrolling client from programs
+                $result = $this->client_model->remove_enrolled_client($tableName, $this->input->post('programId'));
+
+                $this->message = '
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5><strong><i class="fa fa-2x fa-Smile"></i> Success!</strong> Client was removed from the Program.<h5>
+                    </div>
+                ';
+                    
+
+                
+                if ($result === FALSE){
+                    $this->message = '
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5><strong><i class="fa fa-2x fa-exclamation-triangle"></i> Sorry!</strong> Something went wrong trying to unenroll client<h5>
+                        </div>
+                    ';
+
+                }
+                
+                $this->session->set_flashdata('message', $this->message);
+                redirect('enrolled-list');
+                
+
+            }else{
+                redirect('dashboard');
+            }
+
+        }else{
+            redirect('login');
+        }
+    }
     /* get_cal_events() call the get_cal_events model and returns a json encode response
      *
      * @access    public
@@ -1676,8 +1881,8 @@ class User extends CI_Controller{
                         
                         
                     }
-                    // $arr['extendedProps'] = array('Submitted By: '=> $arr['fname'].' '.$arr['lname']);
-                    $arr['color'] = '#ff8000';//setting event color
+                    //setting the color of the event (orange);
+                    $arr['color'] = '#ff8000';
                     $eventList[$key] = $arr;
                 }
 

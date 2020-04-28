@@ -324,8 +324,15 @@ class User_model extends CI_Model{
 
             //setting old img status to 0 - no longer in use
             $this->db->update('profile_img',array('status' => 0), array('id' => $oldImgId));
+
             //setting user profile pic to default 
-            $this->db->update('users',array('profile_img_id' => 1), array('id' => $userId));
+            $this->db->update('users',array(
+                // columns to be updated
+                'profile_img_id' => 1, 
+                'updated_by' => $this->session->userdata('userIdentity'),
+                'updated_on' => date("Y-m-d H:i:s"),
+            ),
+            array('id' => $userId));
 
 
         $this->db->trans_complete();
@@ -366,7 +373,12 @@ class User_model extends CI_Model{
             $pId = $this->db->insert_id();//getting last inserted ID i.e. id of profile_image 
             
             //assigning new image to user
-            $this->db->update('users',array('profile_img_id'=>$pId), 'id= '.$userid.'');//first arg1 = table, arg2 = SET values, arg3 = WHERE conditions 
+            $this->db->update('users',array(
+                //columns to be updated in the user table
+                'profile_img_id'=>$pId,
+                'updated_by' => $this->session->userdata('userIdentity'),
+                'updated_on' => date("Y-m-d H:i:s"),
+            ), 'id= '.$userid.''); 
             
             if ($result['p_id'] != 1){
                 

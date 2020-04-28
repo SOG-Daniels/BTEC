@@ -2,8 +2,13 @@
   echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : '');
   $actions = $this->session->userdata('action');
   // echo json_encode($cList);
+  // echo '<pre>';
+  // print_r($cList);
+  // echo '</pre>';
 ?>
 <h1 class="h3 mb-2 text-gray-800">Client List</h1>
+
+<!-- styling for the more icon on clients list -->
 <style>
   td.details-control {
     text-align:center;
@@ -75,6 +80,7 @@
 
 var clist = { "data" : <?php echo json_encode($cList, JSON_HEX_TAG); ?> };
 // console.log(clist.data);
+// creating view and edit links
 var hasView = <?php echo (in_array(2,$this->session->userdata('action')))? 1 : 0;?>;
 var hasEdit = <?php echo (in_array(7,$this->session->userdata('action')))? 1 : 0; ?>;
 var i;
@@ -94,6 +100,7 @@ for (i = 0; i < clist.data.length; i++) {
     proList += (clist.data[i].nail_tech === null)? '': ', '+clist.data[i].nail_tech;
     proList += (clist.data[i].wait_staff === null)? '': ', '+clist.data[i].wait_staff;
 
+    //adding view and edit links 
     var merge = {
     profile : ((hasView == 1)? '<a href ="<?php echo base_url()?>'+'client-info/'+clist.data[i].id+'">View</a>' : "")+
      ((hasEdit == 1)?'&nbsp&nbsp'+'<a href ="<?php echo base_url()?>'+'edit-client-info/'+clist.data[i].id+'">Edit</a>': "")
@@ -105,6 +112,7 @@ for (i = 0; i < clist.data.length; i++) {
 
   
 }
+//code continues in the datatable-demo.js
 //  console.log(clist.data);
 </script>
           

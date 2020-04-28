@@ -36,7 +36,7 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
         <div class="row">
             <div class="col-12 col-md-6"><!--left col-->
                 <div class="text-center">
-                <img src="<?php echo isset($personalInfo['imgPath'])? base_url().$personalInfo['imgPath'] : base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="40%" height="40%">
+                <img src="<?php echo isset($personalInfo['imgPath'])? base_url().$personalInfo['imgPath'] : base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="350" height="400">
                 <br>
                 </div>
                 <?php echo '<h4 class="text-center pt-2">'.$name.'</h4>';?>
@@ -326,15 +326,6 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
         <br>
         <div class="row">
             <div class="col col-md ml-2">
-                <!-- <ul class="list-group">
-                    <li class="list-group-item font-weight-bold bg-dark text-light text-right"> <span class="pull-left">Training</span>Enrolled
-                    </li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Anger Management</strong></span> June 4, 2009</li>
-                    <li class="list-group-item text-right"><span class="pull-left"><strong>Time Management</strong></span> March 1, 2007</li>
-                    <!- <li class="list-group-item text-right"> <span class="pull-left">Add Another Training</span>
-                    <a class="btn btn-sm btn-primary rounded-circle" href="<?php echo site_url()?>add-training"><i class="fa fa-plus"></i></a>
-                    </li> ->
-                </ul>   -->
                 <div id="programs">
                 <?php
                 

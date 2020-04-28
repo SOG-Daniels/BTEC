@@ -6,13 +6,16 @@
     // echo "<pre>";
     // print_r($clientData);
     // echo "</pre>";
+    // echo "<pre>";
+    // print_r($programList);
+    // echo "</pre>";
     // echo validation_errors();// echo's validation errors made that were stated in the controller for the form
     // echo (isset($addClientMessage))? $addClientMessage : ' ';
  ?>
 <div class="card shadow-lg mb-3">
     <div class="card-header py-3">
     <?php
-        //@param 1 action location one form is submitted
+        //@param 1 action location when form is submitted
         //@param 2 attributes for the form tag
         echo form_open_multipart('update-client-info/'.$clientData[0]['id'].'');//so the validations stated in the controller take effect
     ?>    
@@ -29,7 +32,7 @@
         <div class="row">
             <div class="col col-md-6"><!--left col-->
                 <div class="text-center">
-                    <img id="profilePic" src="<?php echo base_url().((isset($clientData[0]['imgPath']))? $clientData[0]['imgPath'] : 'upload/default_profile_img.png'); ?>" class="avatar rounded img-thumbnail" alt="avatar">
+                    <img id="profilePic" src="<?php echo base_url().((isset($clientData[0]['imgPath']))? $clientData[0]['imgPath'] : 'upload/default_profile_img.png'); ?>" class="avatar rounded img-thumbnail" alt="avatar" width="350" hight="400">
                     <br>
                     
                     <div class="p-image pt-2">
@@ -116,7 +119,7 @@
                         </div>
                         <div class="col-12 col-md-6 form-group">
                             <label for="exampleFormControlSelect1" class="font-weight-bold">District</label>
-                            <select class="form-control" name="district" id="">
+                            <select class="form-control" name="district" id=""  onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                                 <option <?php echo ((isset($clientData[0]['district']) && $clientData[0]['district'] === 'Corozal')? 'selected': '')?> >Corozal</option>
                                 <option <?php echo ((isset($clientData[0]['district']) && $clientData[0]['district'] === 'Orange Walk')? 'selected': '')?>>Orange Walk</option>
                                 <option <?php echo ((isset($clientData[0]['district']) && $clientData[0]['district'] === 'Cayo')? 'selected': '')?>>Cayo</option>
@@ -288,9 +291,12 @@
                         </small>        
                     </h6>
                         <?php 
+                            $count = 0;
 
                             foreach ($programList as $program => $data ){
                                 if(isset($data[0]['programme'])){
+   
+   
                                     
                                     echo '
                                     
@@ -298,19 +304,19 @@
                                             <div class="col-12 col-md-6">
                                                 <div class="form-group">
                                                     <label for="trainings" class="font-weight-bold">Training:</label>
-                                                    <select class="form-control" name="programList['.$program.'][programme]" id="trainings" disabled>
+                                                    <select class="form-control"  id="trainings" disabled>
                                                     <option  value="'.$program.'">'.$data[0]['programme'].'</option>
                                                     
                                                     </select>
                                                 </div>
                                             </div>
                                                 <div class="col-12 col-md-3">
-                                                <label for="PreTest" class="font-weight-bold">Pre-Test Avg:</label>
-                                                <input type="number" class="form-control" name="programList['.$program.'][pre_test_avg]" id="preTestAvg" value="'.(isset($data[0]['pre_test_avg'])? $data[0]['pre_test_avg']: '').'" disabled>
+                                                <label for="PreTest" class="font-weight-bold">Status:</label>
+                                                <input type="text" class="form-control"  id="preTestAvg" value="'.(isset($data[0]['status'])? $data[0]['status']: '').'" disabled>
                                             </div>
                                             <div class="col-12 col-md-3">
                                                 <label for="PreTest" class="font-weight-bold">Year Enrolled:</label>
-                                                <input type="number" class="form-control" name="programList['.$program.'][enrolled]" id="enrolledIn" value="'.(isset($data[0]['enrolled_in'])? $data[0]['enrolled_in']:'').'" disabled>
+                                                <input type="number" class="form-control"  id="enrolledIn" value="'.(isset($data[0]['enrolled_in'])? $data[0]['enrolled_in']:'').'" disabled>
                                             </div>
                                             
                     
@@ -321,18 +327,21 @@
                                     
                                     
                                     ';
-
+                                    $count++;
                                 }
+                            }
+                            if ($count == 0){
+                                echo '
+                                <label for="none" class="font-weight-bold pl-2">NONE</label>
+
+                                ';
                             }
 
 
 
 
                         ?>
-                                            <!-- <div class="col col-md-12">
-                                                <label for="comment">Comment:</label>
-                                                <textarea class="form-control" name="programList['.$program.'][comment]"  rows="3">'.(isset($data[0]['comments'])? $data[0]['comments']: '').'</textarea>
-                                            </div> -->
+
                     <br>
                     <h6>
                         <small class="font-weight-bold text-primary">
@@ -344,7 +353,7 @@
                         <div class="col-12 col-md-6">
                             <div class="form-group">
                                 <label for="trainings" class="font-weight-bold">Trainings:</label>
-                                <select class="form-control" name="<?php echo 'programList[newProgram][programme]';?>" id="trainings">
+                                <select class="form-control" name="<?php echo 'programList[newProgram][program]';?>" id="trainings"  onfocus='this.size=7;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                                 <?php
                                 //listing out all the options (programs) that the user has not taken. 
                                 echo '<option value="none" selected>none</option>';
@@ -368,17 +377,13 @@
                         </div>
                         <div class="col-12 col-md-3">
                             <label for="PreTest" class="font-weight-bold">Pre-Test Avg:</label>
-                            <input type="number" class="form-control" name="<?php echo 'programList[newProgram][pre_test_avg]';?>" id="preTestAvg" placeholder="">
+                            <input type="number" class="form-control" name="<?php echo 'programList[newProgram][preTestAvg]';?>" id="preTestAvg" placeholder="">
                         </div>
                         <div class="col-12 col-md-3">
                             <label for="PreTest" class="font-weight-bold">Year Enrolled:</label>
-                            <input type="number" class="form-control" name="<?php echo 'programList[newProgram][enrolled]';?>" id="enrolledIn" value="<?php echo date('Y'); ?>" >
+                            <input type="number" class="form-control" name="<?php echo 'programList[newProgram][enrolled_in]';?>" id="enrolledIn" value="<?php echo date('Y'); ?>" >
                         </div>
-                        <!-- <div class="col col-md-12">
-                            <label for="comment">Comment:</label>
-                            <textarea class="form-control" name="<?php echo 'programList[newProgram][comment]';?>" placeholder="You can type something about the individual" rows="3"></textarea>
-                        </div> -->
-                        
+                      
 
                     </div>
                     
