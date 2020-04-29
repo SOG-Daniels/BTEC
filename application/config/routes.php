@@ -53,67 +53,70 @@ $route['default_controller'] = 'verification/login';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-//////////////////////User controller routes start/////////////////////
+//////////////////////Main controller routes start/////////////////////
 
 //view my profile routes
-$route['profile'] = 'user/profile';
-$route['remove-profile-picture'] = 'user/remove_profile_pic';
+$route['profile'] = 'main/profile';
+$route['remove-profile-picture'] = 'main/remove_profile_pic';
 
 // Home/Dashboard page routes
-$route['dashboard'] = 'user/get_dashboard';
-$route['get-events'] = 'user/get_cal_events';
-$route['add-event'] = 'user/add_cal_event';
-$route['remove-event'] = 'user/delete_cal_event';
-$route['update-event'] = 'user/update_cal_event';
+$route['dashboard'] = 'main/get_dashboard';
+$route['get-events'] = 'main/get_cal_events';
+$route['add-event'] = 'main/add_cal_event';
+$route['remove-event'] = 'main/delete_cal_event';
+$route['update-event'] = 'main/update_cal_event';
 
 
 // Routes used for the Enrolled list 
-$route['enrolled-list'] = 'user/view_enrolled_list';
-$route['register-applicant'] = 'user/add_client';
-$route['view-client-grade/(:any)/(:num)'] = 'user/view_client_grade/$1/$2';
-$route['unenroll-client'] = 'user/unenroll_client';
+$route['enrolled-list'] = 'main/view_enrolled_list';
+$route['register-applicant'] = 'main/add_client';
+$route['view-client-grade/(:any)/(:num)'] = 'main/view_client_grade/$1/$2';
+$route['unenroll-client'] = 'main/unenroll_client';
 
 // Route used to update grades
-$route['update-grades'] = 'user/update_client_grade';
+$route['update-grades'] = 'main/update_client_grade';
 
 // Routes used for the Client List
-$route['client-list'] = 'user/view_clients';
+$route['client-list'] = 'main/view_clients';
 
 //routes are used in both Client list and Enrolled list
-$route['client-info/(:num)'] = 'user/view_client_profile/$1';
-$route['edit-client-info/(:num)'] = 'user/update_client/$1';
-$route['update-client-info/(:num)'] = 'user/update_client/$1';
-// $route['update-client-info/'] = 'user/update_client/$1';
+$route['client-info/(:num)'] = 'main/view_client_profile/$1';
+$route['edit-client-info/(:num)'] = 'main/update_client/$1';
+$route['update-client-info/(:num)'] = 'main/update_client/$1';
 
 // Adding a user route
-$route['add-user'] = 'user/add_user';
+$route['add-user'] = 'main/add_user';
 
 // Routes used for User List
-$route['user-list'] = 'user/view_users';
-$route['user-info/(:num)'] = 'user/view_user_profile/$1';
-$route['remove-user/(:num)'] = 'user/remove_user/$1';
-$route['update-user-profile'] = 'user/update_user_profile';
+$route['user-list'] = 'main/view_users';
+$route['user-info/(:num)'] = 'main/view_user_profile/$1';
+$route['remove-user/(:num)'] = 'main/remove_user/$1';
+$route['update-user-profile'] = 'main/update_user_profile';
 
 // routes used for viewing my profile
-$route['update-profile'] = 'user/update_my_profile';
-$route['change-my-password'] = 'user/change_pass';
-$route['update-profile-picture'] = 'user/change_profile_pic';
+$route['update-profile'] = 'main/update_my_profile';
+$route['change-my-password'] = 'main/change_pass';
+$route['update-profile-picture'] = 'main/change_profile_pic';
 
 // routes for creating report
-$route['report'] = 'user/report_settings';
-$route['program-summary-report'] = 'user/generate_program_summary';
+$route['report'] = 'main/report_settings';
+$route['program-summary-report'] = 'main/generate_program_report';
+$route['delete-existing-report'] = 'main/remove_existing_report';
+$route['save-report'] = 'main/save_report';
 
 //Additional routes
-$route['activate-user'] = 'user/activate_user';
-$route['autocomplete'] = 'user/auto_complete';
+$route['activate-user'] = 'main/activate_user';
+$route['autocomplete'] = 'main/auto_complete';
+
+//autocomplete route
+$route['search'] = 'main/autocomplete_search';
 
 
-
-//////////////////////User controller routes end///////////////////////
+////////////////////// Main controller routes end///////////////////////
 
 //program setup page routes
-$route['program-setup'] = 'user/program_setup';
-$route['save-program-setup'] = 'user/save_assesment_name';
+$route['program-setup'] = 'main/program_setup';
+$route['save-program-setup'] = 'main/save_assesment_name';
 
 //verification routes start//
 
@@ -128,6 +131,4 @@ $route['change-password/(:any)'] = 'verification/change_password/$1';
 $route['forgot-password'] = 'email/request_email';
 $route['reset-request'] = 'email/send_reset_request';
 
-//autocomplete route
-$route['search'] = 'user/autocomplete_search';
 

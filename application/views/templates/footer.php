@@ -15,7 +15,7 @@
       <footer class="bg-white">
               <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                  <span>Copyright &copy; ci_miniproject '.date('Y').'</span>
+                  <span>Copyright &copy; BELTRAIDE '.date('Y').'</span>
                 </div>
               </div>
       </footer>
@@ -165,6 +165,31 @@
       </div>
     </div>
   </div>
+<!-- confirmation modal for saving a report -->
+<div class="modal fade" id="saveReportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-dark" id="exampleModalLabel">Create a Report Name.</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <form id="saveReportForm" action="<?php echo base_url()?>save-report" method="post">
+        <div class="modal-body">
+          <!-- <input id="query" type="hidden" name="query" value=""> -->
+          <textarea id="query" name="query" style="display:none;"><?php echo (isset($query)? $query : '');?></textarea>
+          <label class="font-weight-bold">Name the Report:</label>
+          <input class="form-control" type="text" name="reportName" required>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn btn-secondary" data-dismiss="modal">Cancel</a>
+          <button class="btn btn-success" id="confirmSaveReport">Save Report</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
 <!-- confirmation modal for removing enrolled client -->
  <div class="modal fade" id="unenrollClientModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -198,6 +223,27 @@
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
           <a class="btn btn-danger" href="<?php echo site_url('logout'); ?>">Logout</a>
         </div>
+      </div>
+    </div>
+  </div>
+<!-- Removing Existin Report confirmation Modal-->
+ <div class="modal fade" id="removeReportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+        
+          <h5 class="modal-title text-dark" id="exampleModalLabel">Are you sure you want to remove the Existing Report?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "DELETE" if you want to remove the Existing Report.</div>
+        
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a id="confirmReportDelete" href="#" class="btn btn-link btn-danger text-white" >DELETE</a>
+        </div>
+       
       </div>
     </div>
   </div>
@@ -384,7 +430,7 @@
   <!-- Google API js file -->
   <!-- <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script> -->
  <!-- <script src="https://apis.google.com/js/client.js" type="text/javascript"></script> -->
-  <!-- <script src="<?php echo base_url()?>assets/vendor/googleAPI/client.js?onload=handleClientLoad" type="text/javascript"></script> -->
+  <!-- <script src="<?php //echo base_url()?>assets/vendor/googleAPI/client.js?onload=handleClientLoad" type="text/javascript"></script> -->
   <!-- <script async defer src="https://apis.google.com/js/api.js"
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange ="if (this.readyState === 'complete') this.onload()">
@@ -399,6 +445,7 @@
   <script type="text/javascript">
       //declaring global variable
       var base_url = "<?php echo base_url(); ?>";
+      
 
       //setting up autocomplete by stating the controller that will perform the search
       //the autocomplete plugin will always submit it as a GET method reason being for having the '?' after the 'search'

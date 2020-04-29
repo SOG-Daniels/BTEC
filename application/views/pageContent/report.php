@@ -1,17 +1,27 @@
+<?php
+    // echo "<pre>";
+    // print_r($existingReports);
+    // echo "</pre>";
+ 
+    // showing message if there is any
+    echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : '');
+
+?>
 <h1 class="h3 mb-2 text-gray-800">Generate a Report</h1>
 <div class="card">
     <div class="card-header">
         <h6 class=" font-weight-bold text-primary">Report Options</h6>
+       
     </div>
     <div class="card-body">
 
 
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="client-tab" data-toggle="tab" href="#client" role="tab" aria-controls="client" aria-selected="true">Client Report</a>
+            <a class="nav-link active" id="client-tab" data-toggle="tab" href="#client" role="tab" aria-controls="client" aria-selected="true">Custom Report</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Program Summary Report</a>
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Created Reports</a>
         </li>
         <!-- <li class="nav-item">
             <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
@@ -22,13 +32,29 @@
     <!-- Content for client report in a particular program -->
     <div class="tab-pane fade show active" id="client" role="tabpanel" aria-labelledby="client-tab">
 
-        <form action="" method="POST">
+        <form action="<?php echo base_url()?>program-summary-report/" method="POST">
+            <input type="hidden" name="action" value="createReport">
             <br>
                        <div class="alert alert-secondary" role="alert">
-                           <i class="fa fa-info-circle"></i>
-                           Provides a report of each indivdual client based on the selected displays and filter options.
+                           <span><i class="fa fa-info-circle"></i><span>
+                           Provides a report of each client based on the selected displays and filter options.
+                           Setting a name will save the created report in the system.
+                           <span class="text-primary">Note:</span> Selected CheckBoxes cannot be unchecked
                            
                        </div>
+                <!-- <h6>
+                    <small class="font-weight-bold text-primary">
+                    Save report (optional)
+                    <hr>    
+                    </small>        
+                </h6>
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                    <label class="font-weight-bold">Report Name (optional):</label>
+                    <input class="form-control" type="text" name="reportName" value="">
+                    </div>
+                </div> -->
+                <br>
                 <h6>
                     <small class="font-weight-bold text-primary">
                     Choose a program display 
@@ -57,7 +83,7 @@
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="font-weight-bold">Program Compeltion Status:</label>
-                        <select class="custom-select" name="programStatus" id="courseStatus" onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                        <select class="custom-select" name="programStatus" id="programStatus" onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                         <option value="Completed">Completed</option>
                         <option value="Dropped">Dropped</option>
                         <option value="Participated">Participated</option>
@@ -76,26 +102,26 @@
                 <div class="row" id="grade-options">
                     <div class="col-12 col-md-4">
                         <div class="checkbox">
-                            <label><input type="checkbox" name="gradeOption[][enrolledOn]" value="1" checked> Year Enrolled</label>
+                            <label><input type="checkbox" name="gradeOption[enrolledOn]" value="1" > Year Enrolled</label>
                         </div>
                         <div class="checkbox">
-                            <label><input type="checkbox" name="gradeOption[][graduatedOn]" value="1" checked> Year of Completion</label>
+                            <label><input type="checkbox" name="gradeOption[graduatedOn]" value="1" > Year of Completion</label>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
                         <div class="checkbox">
-                            <label><input type="checkbox" name="gradeOption[][listAssesments]" value="1"> Assesments with Grade</label>
+                            <label><input type="checkbox" name="gradeOption[listAssesments]" value="1"> Assesments with Grade</label>
                         </div>
                         <div class="checkbox">
-                            <label><input type="checkbox" name="gradeOption[][finalAvg]" value="1" checked> Final Average</label>
+                            <label><input type="checkbox" name="gradeOption[finalAvg]" value="1" checked onclick="return false"> Final Average</label>
                         </div>   
                     </div>
                     <div class="col-12 col-md-4">
                         <!-- <div class="checkbox">
-                            <label><input type="checkbox" name="gradeOption[][topTen]" value="1"> Top 10 Final Avg.</label>
+                            <label><input type="checkbox" name="gradeOption[topTen]" value="1"> Top 10 Final Avg.</label>
                         </div> -->
                         <div class="checkbox">
-                            <label><input type="checkbox" name="gradeOption[][comments]" value="1"> Comments</label>
+                            <label><input type="checkbox" name="gradeOption[comments]" value="1"> Comments</label>
                         </div>   
                     </div>
                 </div>
@@ -110,26 +136,26 @@
                 <div class="row">
                     <div class="col-12 col-md-4">
                         <div class="checkbox">
-                                <label><input type="checkbox" name="" value="" checked> Personal Info</label>
+                                <label><input type="checkbox" name="clientInfo[personalInfo]" value="1" checked onclick="return false"> Personal Info</label>
                         </div>
                         <div class="checkbox">
-                            <label><input type="checkbox" name="" value="" checked> Address </label>
+                            <label><input type="checkbox" name="clientInfo[address]" value="1" > Address </label>
                         </div>   
                     </div>
                     <div class="col-12 col-md-4">
                         <div class="checkbox">
-                            <label><input type="checkbox" name="" value=""> Emergency Contact Info</label>
+                            <label><input type="checkbox" name="clientInfo[emergContactInfo]" value="1"> Emergency Contact Info</label>
                         </div>   
                         <div class="checkbox">
-                                <label><input type="checkbox" name="" value=""> References</label>
+                                <label><input type="checkbox" name="clientInfo[references]" value="1"> References</label>
                         </div>
                     </div>
                     <div class="col-12 col-md-4">
                         <div class="checkbox">
-                                <label><input type="checkbox" name="" value="" checked> Education Info</label>
+                                <label><input type="checkbox" name="clientInfo[eduInfo]" value="1" > Education Info</label>
                         </div>
                         <div class="checkbox">
-                            <label><input type="checkbox" name="" value="" checked> Employment Info</label>
+                            <label><input type="checkbox" name="clientInfo[empInfo]" value="1" > Employment Info</label>
                         </div>   
                     </div>
 
@@ -137,24 +163,25 @@
                 <br>
                 <h6>
                     <small class="font-weight-bold text-primary">
-                    Additonal filter (optional)
+                    Filters (optional)
                     <hr>    
                     </small>        
                 </h6>
 
                 <div class="row">
                     <div class="col-12 col-md-4">
-                        <label class="font-weight-bold">Choose Filter by Year:</label>
-                        <select class="custom-select" name="programStatus" id="courseStatus" onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
-                        <option selected value="1">All Years</option>
-                        <option value="enrolledOn">Enrolled</option>
-                        <option value="graduatedOn">Graduated</option>
+                        <label class="font-weight-bold">Choose Top Grades</label>
+                        <select class="custom-select" name="limit" id="" onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                        <option selected value="1">All Grades</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
                         </select>
                     
                     </div>
                     <div class="col-12 col-md-4">
-                        <label class="font-weight-bold">Choose a Year:</label>
-                        <input type="number" name="completedOn" placeholder="2010..." class="form-control " required>
+                        <label class="font-weight-bold">Choose a Year Enrolled (optional):</label>
+                        <input type="number" name="yearFilter" placeholder="2010..." class="form-control " >
                     </div>
                     <div class="col-12 col-md-4">
                         <label class="font-weight-bold">Final Average:</label>
@@ -164,6 +191,7 @@
                         <option value="90">90 - 99</option>
                         <option value="80">80 - 89</option>
                         <option value="70">70 -79</option>
+                        <option value="0"> < 70 </option>
                         </select>
                     
                     </div>
@@ -174,66 +202,54 @@
     </div>
 
     <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-        <form action="<?php echo base_url();?>program-summary-report/" method="POST">
+        <form id="removeReportForm" action="<?php echo base_url()?>delete-existing-report" method="POST">
+            <input type="hidden" id="deleteAction" name="action" value="deleteReport">
+            <input type="hidden" id="reportViewName" name="viewName" value="">
+        </form>
+        <form action="<?php echo base_url()?>program-summary-report/" method="POST">
+        <input type="hidden" name="action" value="generateReport">
         <br>
-                       <div class="alert alert-secondary" role="alert">
-                           <i class="fa fa-info-circle"></i>
-                           Provides a summary of the total amount of clients in a program that meet the selected filters below.
-                           
-                       </div>
+                      
                 <h6>
                     <small class="font-weight-bold text-primary">
-                    Choose a the filters 
+                    Generate a Report
                     <hr>    
                     </small>        
                 </h6>
                 <div class="row">
                     <div class="col-12 col-md-4">
-                        <label class="font-weight-bold">Choose a program:</label>
-                        <select class="form-control" name="program"  onfocus='this.size=7;' onblur='this.size=1;' onchange='this.size=1; this.blur();' >
-                        <option  value="1">All Programs</option>
-                        <option  value="barbering">Introduction to Barbering</option>
-                        <option  value="bartending">Bartending</option>
-                        <option  value="bpo">Business Process Outsourcing</option>
-                        <option  value="child_care">Child Care Training</option>
-                        <option  value="computer_basics">Computer's For Everyday Use</option>
-                        <option  value="event_planning">Event Planning</option>
-                        <option  value="front_desk">Front Desk Training</option>
-                        <option  value="home_health">Home Health Training</option>
-                        <option  value="house_keeping">House Keeping</option>
-                        <option  value="landscaping">Landscaping</option>
-                        <option  value="life_guard">Life Guard Training</option>
-                        <option  value="nail_tech">Nail Tech</option>
-                        <option  value="wait_staff">Wait Staff Training</option>
+                        <label class="font-weight-bold">Choose a Report:</label>
+                        <select class="form-control" id="reportDisplayName" name="reportName"  >
+                        <!-- onfocus='this.size=7;' onblur='this.size=1;' onchange='this.size=1; this.blur();' > -->
+                        <?php 
+
+                            // looping and displaying records 
+                            foreach ($existingReports as $report){
+                            
+                                echo '
+                                    <option value="'.$report['view_name'].'">'.$report['display_name'].'</option>
+                                ';
+                            }
+
+
+
+                        ?>
+                    
                         </select>
                     </div>
-                    <div class="col-12 col-md-3">
-                        <label class="font-weight-bold">Program Status:</label>
-                        <select class="custom-select" name="programStatus" onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
-                        <option value="Completed">Completed</option>
-                        <option value="Dropped">Dropped</option>
-                        <option value="Participated">Participated</option>
-                        </select>
+                    <div class="col-12 col-md-8 ">
+                        <br>
+                        <span class="float-right pt-2">
+                        <a id="deleteReport" href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#removeReportModal"><i class="fa fa-trash"></i> Delete Report</a>
+                        &nbsp;
+                        <button class="btn btn-sm btn-primary "><i class="fa fa-print"></i> Generate Report</button>
+                        <span>
+                    
                     
                     </div>
-                    <div class="col-12 col-md-2">
-                        <label class="font-weight-bold">Final Average:</label>
-                        <select class="custom-select" name="gradeFilter" id="courseStatus" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
-                        <option value="1">All Grades</option>
-                        <option value="100">100</option>
-                        <option value="90">90 - 99</option>
-                        <option value="80">80 - 89</option>
-                        <option value="70">70 -79</option>
-                        <option value="0">< 70</option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-md-3">
-                        <label class="font-weight-bold">Choose a Year (optional):</label>
-                        <input type="number" name="year" placeholder="2010..." class="form-control " >
-                    </div>
+                 
                 </div>
                 <br>
-                <button class="btn btn-sm btn-primary float-right"><i class="fa fa-print"></i> Create Report</button>
         </form>
     </div>
     <!-- <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div> -->

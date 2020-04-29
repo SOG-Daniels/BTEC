@@ -182,14 +182,14 @@ $(document).ready(function() {
     $('#removeClientFromProgram').click(function (e){
         e.preventDefault();
         //loading modal
-
+        console.log('modal');
         $('#unenrollClientModal').modal('show');
 
     });
     $('#confirmClientUnenroll').click(function (e){
         e.preventDefault();
 
-        // console.log('confirm unenroll');
+        console.log('confirm unenroll');
         $('#removeEnrolledClientForm').submit();
 
     });
@@ -309,6 +309,15 @@ $(document).ready(function() {
         
 
     });
+    // submitting saveReportForm
+    $('#confirmSaveReport').click(function(e){
+        
+        // console.log(base_url);
+        console.log($('#query').text());
+        // $('#saveReportForm').submit();
+        
+
+    });
     // submitting form upon confirmation of modal
     $('#confirmProgComp').click(function(e){
         
@@ -317,6 +326,16 @@ $(document).ready(function() {
 
     });
 
+    // confirming removal of a report
+    $('#confirmReportDelete').click(function(e){
+        
+       //setting selected report in the delete report form  
+        $('#reportViewName').val($('#reportDisplayName').val());
+        
+        $('#removeReportForm').submit();
+        
+
+    });
     //submitting grade changes that were made
     $('#saveGradeChanges').click(function(e){
        

@@ -75,67 +75,67 @@ class Client_model extends CI_Model{
 
             //Query get are getting all the programs client has taken
             $sql1 = $this->db->query("
-            SELECT * FROM barbering WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM barbering WHERE client_id = ".$clientId." and status = 'Completed' 
             ");
             $data['programs']['barbering'] = (($sql1->num_rows() > 0 )? $sql1->result_array() : '' );
            
             $sql2 = $this->db->query("
-            SELECT * FROM bartending WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM bartending WHERE status = 'Completed' and client_id = ".$clientId."  
             ");
             $data['programs']['bartending'] = (($sql2->num_rows() > 0 )? $sql2->result_array() : '' );
             
             $sql3 = $this->db->query("
-            SELECT * FROM bpo  WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM bpo  WHERE client_id = ".$clientId." and status = 'Completed' 
             ");
             $data['programs']['bpo'] = (($sql3->num_rows() > 0 )? $sql3->result_array() : '' );
             
             $sql4 = $this->db->query("
-            SELECT * FROM child_care WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM child_care WHERE client_id = ".$clientId." and status = 'Completed' 
             ");
             $data['programs']['child_care'] = (($sql4->num_rows() > 0 )? $sql4->result_array() : '' );
             
             $sql5 = $this->db->query("
-            SELECT * FROM computer_basics WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM computer_basics WHERE client_id = ".$clientId." and status = 'Completed' 
             ");
             $data['programs']['computer_basics'] = (($sql5->num_rows() > 0 )? $sql5->result_array() : '' );
             
             $sql6 = $this->db->query("
-            SELECT * FROM event_planning WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM event_planning WHERE client_id = ".$clientId." and status = 'Completed'
             ");
             $data['programs']['event_planning'] = (($sql6->num_rows() > 0 )? $sql6->result_array() : '' );
             
             $sql7 = $this->db->query("
-            SELECT * FROM front_desk WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM front_desk WHERE client_id = ".$clientId." and status = 'Completed' 
             ");
             $data['programs']['font_desk'] = (($sql7->num_rows() > 0 )? $sql7->result_array() : '' );
            
             $sql8 = $this->db->query("
-            SELECT * FROM home_health WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM home_health WHERE client_id = ".$clientId." and status = 'Completed'
             ");
             $data['programs']['home_health'] = (($sql8->num_rows() > 0 )? $sql8->result_array() : '' );
 
             $sql9 = $this->db->query("
-            SELECT * FROM house_keeping WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM house_keeping WHERE client_id = ".$clientId." and status = 'Completed' 
             ");
             $data['programs']['house_keeping'] = (($sql9->num_rows() > 0 )? $sql9->result_array() : '' );
 
             $sql10 = $this->db->query("
-            SELECT * FROM landscaping WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM landscaping WHERE client_id = ".$clientId." and status = 'Completed' 
             ");
             $data['programs']['landscaping'] = (($sql10->num_rows() > 0 )? $sql10->result_array() : '' );
 
             $sql11 = $this->db->query("
-            SELECT * FROM life_guard WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM life_guard WHERE client_id = ".$clientId." and status = 'Completed' 
             ");
             $data['programs']['life_guard'] = (($sql11->num_rows() > 0 )? $sql11->result_array() : '' );
 
             $sql12 = $this->db->query("
-            SELECT * FROM nail_tech WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM nail_tech WHERE client_id = ".$clientId." and status = 'Completed' 
             ");
             $data['programs']['nail_tech'] = (($sql12->num_rows() > 0 )? $sql2->result_array() : '' );
 
             $sql13 = $this->db->query("
-            SELECT * FROM wait_staff WHERE client_id = ".$clientId." and status = 'Completed' or status = 'participated'
+            SELECT * FROM wait_staff WHERE client_id = ".$clientId." and status = 'Completed' 
             ");
             $data['programs']['wait_staff'] = (($sql13->num_rows() > 0 )? $sql13->result_array() : '' );
 
@@ -1040,8 +1040,6 @@ class Client_model extends CI_Model{
      */    
     public function get_program_grades_names($table = 'barbering', $status = 'Enrolled') {
 
-        
-
         $this->db->trans_start();
         
             if ($status !== 'Enrolled'){
@@ -1170,43 +1168,7 @@ class Client_model extends CI_Model{
         return $sql->result_array();
     
     }
-    /**
-     * get_client() gets all the clients info tha have the first and last name equal to name
-     *
-     * @access    public
-     * @param     name of the clients entered in the search  
-     * 
-     * @return    Boolean/Array array of records if successful, false if transaction failed
-     */    
-    public function get_program_summary($table = NULL, $grade = NULL, $status = NULL, $year = NULL) {
-   
-        $year = ($year == NULL)? '' : 'AND p.enrolled_in = '.$year;
-        $sql = '';
-        $this->db->trans_start();
-        
 
-            if ($table === 1){
-                //query all tables
-
-
-            }else{
-           
-                $sql = $this->db->query('
-                    SELECT p.programme, COUNT(p.id) as amount
-                    From '.$table.' p
-                    WHERE p.status = "'.$status.'" '.$grade.' '.$year.'');
-            
-            }
-        
-        $this->db->trans_complete();
-
-        if ($this->db->trans_status() === FALSE){
-            return FALSE;
-        }
-        
-        return $sql->result_array();
-    
-    }
 }
 
 ?>

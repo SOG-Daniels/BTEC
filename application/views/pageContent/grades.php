@@ -9,7 +9,7 @@
         <form id="removeEnrolledClientForm" method="POST" action="<?php echo base_url()?>unenroll-client">
           <input type="hidden" name="action" value="unEnrollClient">
           <input type="hidden" name="userId" value="<?php echo $programInfo[0]['client_id'];?>">
-          <input type="hidden" name="program" value="<?php echo $programInfo[0]['programme'];?>">
+          <input type="hidden" name="program" value="<?php echo trim($programInfo[0]['programme']);?>">
           <input type="hidden" name="programId" value="<?php echo $programInfo[0]['id'];?>">
         </form>
           <!-- DataTales Example -->

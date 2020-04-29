@@ -1,8 +1,8 @@
 <?php
 // defined('BASEPATH') OR exit('No direct script access allowed');
-// This class will manage the users which are the admin and the general users 
-// that do not have administrative priviledge
-class User extends CI_Controller{
+// Main Controller manages all the users functionality 
+// meaning, all the users are able to do in the system
+class Main extends CI_Controller{
 
     //start of data Members//
 
@@ -13,6 +13,7 @@ class User extends CI_Controller{
         protected $message;
         protected $programTables;
         protected $userIdent;
+        protected $viewQuery;
 
     //end of data members//
 
@@ -26,6 +27,7 @@ class User extends CI_Controller{
         $this->load->library('session');
         $this->load->model('user_model'); 
         $this->load->model('client_model'); 
+        $this->load->model('report_model'); 
 
         // initializing datamembers with session data 
         $this->userId = $this->session->userdata('userid');
@@ -1697,16 +1699,215 @@ class User extends CI_Controller{
                 
             $this->data['title'] = "Report settings";
             $this->data['active'] = "report";
-            
+            $result = $this->data['existingReports'] = $this->report_model->get_existing_reports();
+
+            if($result === FALSE){
+                    //query failed
+                    log_message('debug', 'Could not query the records from the reports table, when called from generate_program_summary()');
+            } 
+
             $this->load->view('templates/header', $this->data);
             $this->load->view('templates/sidebar', $this->data);
             $this->load->view('templates/topbar', $this->data);
             $this->load->view('pageContent/report', $this->data);
             $this->load->view('templates/footer', $this->data);
+
         }else{
             redirect('login');
         }
     }
+    /* saves the created report data as a view 
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE 
+     */    
+    public function save_report(){
+    
+        if ($this->is_session_set()){
+                
+            if (!empty($this->input->post()) && in_array(10, $this->user_actions)){
+
+                // print_r($this->input->post());
+                $viewName = strtolower(preg_replace("/\s+/", "", $this->input->post('reportName', TRUE)));
+
+                //checking if report name exist
+                $reportExist = $this->report_model->get_report_info($viewName);
+
+                $this->message = '
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5><strong><i class="fa fa-2x fa-exclamation-triangle"></i> Sorry!</strong> Report name already exist.<h5>
+                    </div>
+                ';
+                if (empty($reportExist)){
+
+
+                    //creating view
+                    $viewResult = $this->report_model->create_report_view($viewName, $this->input->post('query'));
+
+                    //success message
+                    $this->message = '
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h5><strong><i class="fa fa-2x fa-smile"></i> Success!</strong> Report was saved!<h5>
+                        </div>
+                     ';
+                    if ($viewResult === FALSE){
+                    //failed to create view
+                        $this->message = '
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h5><strong><i class="fa fa-2x fa-exclamation-triangle"></i> Sorry!</strong> Something went wrong trying to save the report<h5>
+                            </div>
+                        ';
+                        
+
+                    }else{
+
+                        $reportResult = $this->report_model->create_new_report($viewName, $this->input->post('reportName'));
+                        
+                        if ($reportResult === FALSE ){
+                            //failed to create report record
+                        
+                            $this->message = '
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h5><strong><i class="fa fa-2x fa-exclamation-triangle"></i> Sorry!</strong> Something went wrong trying to save the report<h5>
+                                </div>
+                            ';
+                            
+                        }
+
+                    }
+
+
+                }
+                
+                $this->session->set_flashdata('message', $this->message);
+                redirect('report');
+
+              
+
+            }else{
+                // does not have privilege
+                redirect('dashboard');
+            }
+           
+
+            // $this->load->view('templates/header', $this->data);
+            // $this->load->view('templates/sidebar', $this->data);
+            // $this->load->view('templates/topbar', $this->data);
+            // $this->load->view('pageContent/report', $this->data);
+            // $this->load->view('templates/footer', $this->data);
+
+        }else{
+            redirect('login');
+        }
+    }
+    /* Builds a query based on the post report data provided
+     *
+     * @access    public
+     * @param     reportData the data to build the report  
+     *
+     * @return    NONE 
+     */    
+    public function build_report_query($reportData = NULL, $gradeFilter = NULL){
+    
+        if ($this->is_session_set()){
+                
+            if (in_array(10, $this->user_actions) && !empty($reportData)){
+                
+                $gradeSelect = '';
+                // part of query for grades
+                $enrolled_in = (isset($reportData['gradeOption']['enrolledOn']))? 'p.enrolled_in as `Enrolled In`' : '';
+                $graduated_on = (isset($reportData['gradeOption']['graduatedOn']))? 'p.graduated_on as `Graduated On`' : '';
+                $assesments= (isset($reportData['gradeOption']['listAssesments']))? 
+                'p.Assesment1,p.Assesment2,p.Assesment3,p.Assesment4,p.Assesment5' : 
+                '';
+                $finalAvg  = (isset($reportData['gradeOption']['finalAvg']))? 'p.final_grade as `Final Average`' : '';
+                $comment  = (isset($reportData['gradeOption']['comments']))? 'p.comments as `Comments`' : '';
+
+                //contructing grade query
+                $gradeSelect .= 
+                (!empty($enrolled_in)? $enrolled_in.',' : '').
+                (!empty($graduated_on)? $graduated_on.',' :'').
+                (!empty($assesments)? $assesments.',' : '').
+                (!empty($finalAvg)? $finalAvg.',' : '').
+                (!empty($comment)? $comment.',' : '');
+                
+                $clientSelect = '';
+
+                //part of query for client Info
+                $personalInfo = (isset($reportData['clientInfo']['personalInfo']))? 
+                'CONCAT(a.first_name," ",a.last_name ) as `Name`, a.gender as `Gender`, a.ssn as `SSN`, a.email as `Email`, a.mobile_phone as `Phone Number`' : '';
+
+                $addressInfo = (isset($reportData['clientInfo']['address']))? 
+                'a.street as `Street`, a.ctv AS `City/Town/Village`' : '';
+                
+                $emergInfo = (isset($reportData['clientInfo']['emergContactInfo']))? 
+                'a.ec_name as `Emerg. Contact Name`, a.ec_number as `Emerg. Contact Number`, a.ec_relation as `Emerg. Contact Relation`' : '';
+
+                $referenceInfo = (isset($reportData['clientInfo']['references']))? 
+                'a.ref_name1 as `Ref. Name #1`, a.ref_address1 as`Ref. Address #1`, a.ref_city1 as `Ref. City #1`, a.ref_phone1 as `Ref. Phone #1`,
+                 a.ref_name2 as `Ref. Name #2`, a.ref_address2 as`Ref. Address #2`, a.ref_city2 as `Ref. City #2`, a.ref_phone2 as `Ref. Phone #2`,
+                 a.ref_name3 as `Ref. Name #3`, a.ref_address3 as`Ref. Address #3`, a.ref_city3 as `Ref. City #3`, a.ref_phone3 as `Ref. Phone #3`' : '';
+                
+                $eduInfo = (isset($reportData['clientInfo']['eduInfo']))? 
+                'a.ed_name as `Educational Institution`, a.ed_degree as `Education Level`':'';
+                
+                $empInfo = (isset($reportData['clientInfo']['empInfo']))? 
+                'a.employed_at as `Employer` , a.em_position as `Job Title`' :'';
+
+                //contructing client query
+                $clientSelect .= 
+                (!empty($personalInfo)? $personalInfo.',' : '').
+                (!empty($addressInfo)? $addressInfo.',' : '').
+                (!empty($emergInfo)? $emergInfo.',' : '').
+                (!empty($referenceInfo)? $referenceInfo.',' : '').
+                (!empty($eduInfo)? $eduInfo.',' : '').
+                (!empty($empInfo)? $empInfo.',' : '');
+
+                $enrolled_on = (!empty($reportData['yearFilter']))? 'AND p.enrolled_in = '.$reportData['yearFilter'] : ''; 
+                
+                $limit = ($reportData['limit'] != 1)? 'ORDER BY `Final Average` DESC LIMIT '.$reportData['limit'] : '';
+
+                $where = 'p.status = "'.$reportData['programStatus'].'" '.$enrolled_on.' '.$gradeFilter.' '.$limit;
+
+                $query = 'SELECT '.$clientSelect.$gradeSelect.' FROM applicants a, '.$reportData['program'].' p WHERE a.id = p.client_id AND '.$where.''; 
+
+                // //checking if ,, still remain in query
+                // $query = str_replace(',,', ',', $query);
+
+                //final filtering of query
+                return str_replace(', FROM', ' FROM', $query);
+
+            }else{
+                // does not have privilege
+                redirect('dashboard');
+            }
+           
+
+            // $this->load->view('templates/header', $this->data);
+            // $this->load->view('templates/sidebar', $this->data);
+            // $this->load->view('templates/topbar', $this->data);
+            // $this->load->view('pageContent/report', $this->data);
+            // $this->load->view('templates/footer', $this->data);
+
+        }else{
+            redirect('login');
+        }
+    }
+
     /* report_settings() displays the view for report setting (report.php in view)
      *
      * @access    public
@@ -1714,80 +1915,112 @@ class User extends CI_Controller{
      *
      * @return    NONE 
      */    
-    public function generate_program_summary(){
+    public function generate_program_report(){
     
         if ($this->is_session_set()){
                 
-            if (!empty($this->input->post())){
-                //generate report   
-
-                print_r($this->input->post());
-
-                $grade = 'AND ';//will be appended to query for filtering grades
-
-                switch ($this->input->post('gradeFilter')) {
-                    case '100':
-                        $grade .= 'p.final_grade >= 100';
-                        break;
-                    case '90':
-                        $grade .= 'p.final_grade BETWEEN  90 AND 99.9';
-                        break;
-                    case '80':
-                        $grade .= 'p.final_grade BETWEEN  80 AND 89.9';
-                        break;
-                    case '70':
-                        $grade .= 'p.final_grade BETWEEN  70 AND 79.9';
-                        break;
-                    case '0':
-                        $grade .= 'p.final_grade BETWEEN  0 AND 69.9';
-                        break;
-                        
-                    default:
-                        $grade = '';
-                        break;
-                }
-
-                $year = (trim($this->input->post('year')) != '')? trim($this->input->post('year', TRUE)) : NULL;
-
+            if (in_array(10, $this->user_actions)){
                 
-                $result = $this->client_model->get_program_summary(
-                    $this->input->post('program', TRUE),
-                    $grade,
-                    $this->input->post('programStatus', TRUE),  
-                    $year
-                );
 
-                if ($result == FALSE){
-                    log_message('debug', 'get_program_summary() in client model returned false');
-                    $this->session->set_flashdata('message',
-                    '
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h5>
-                        <strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong> An error occured while trying to create the report. 
-                        <h5>
-                        </div>
-                    ');
-                    redirect('dashboard');
+                //setting page title
+                $this->data['title'] = "Report Summary Report";
+                
+                //generate a report   
+                if ($this->input->post('action') ===  'generateReport'){
+                    // Existing report
+
+                    // echo "<pre>";
+                    // print_r($this->input->post());
+                    // echo "</pre>";
+
+                    $reportInfo = $this->report_model->get_report_info($this->input->post('reportName'));
+                    $result = $this->report_model->get_report_view($this->input->post('reportName'));
+
+                    if ($result === FALSE){
+                        log_message('debug', 'get_report_view returned FALSE from generate_program_summary() in user controller');
+                    }
+
+                    $this->data['reportData'] = $result;
+                    $this->data['reportInfo'] = $reportInfo[0];
+
                 }else{
-                    //loading page with data recieved from model
-                    $this->data['reportData'] = $result[0]; 
-                    
-                    $this->data['title'] = "Report Summary Report";
-                    // $this->data['active'] = "report";
-                    
-                    $this->load->view('templates/header', $this->data);
-                    $this->load->view('templates/sidebar', $this->data);
-                    $this->load->view('templates/topbar', $this->data);
-                    $this->load->view('pageContent/programSumReport', $this->data);
-                    $this->load->view('templates/footer', $this->data);
+                    // creating a new report
+                    if ($this->input->post('action') === 'createReport'){
+                        
+                        //creating a save button
+                        
+                        $this->data['saveBtn'] = '
+                            <a href="#" id="saveReport" class="btn btn-success btn-sm " data-toggle="modal" data-target="#saveReportModal"><i class="fa fa-save"></i> Save Report</a>
+                        ';
+                        
 
-                }
+                    // echo "<pre>";
+                    // print_r($this->input->post());
+                    // echo "</pre>";
+                        // part of query for grade filtering
+                        $grade = 'AND ';
+
+                        switch ($this->input->post('gradeFilter')) {
+                            case '100':
+                                $grade .= 'p.final_grade >= 100';
+                                break;
+                            case '90':
+                                $grade .= 'p.final_grade BETWEEN  90 AND 99.9';
+                                break;
+                            case '80':
+                                $grade .= 'p.final_grade BETWEEN  80 AND 89.9';
+                                break;
+                            case '70':
+                                $grade .= 'p.final_grade BETWEEN  70 AND 79.9';
+                                break;
+                            case '0':
+                                $grade .= 'p.final_grade BETWEEN  0 AND 69.9';
+                                break;
+                                
+                            default:
+                                $grade = '';
+                                break;
+                        }
+                        
+
+                       //building a query from our post data
+                        $query = $this->build_report_query($this->input->post(), $grade);
+
+                        
+                        //executing query
+                        $result = $this->report_model->run_report_query($query);
+                        
+
+                        if ($result == FALSE){
+                            log_message('debug', 'run_report_query() in client model returned false');
+                            $this->session->set_flashdata('message',
+                            '
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h5>
+                                <strong><i class="fa fa-2x fa-frown"></i> Oh Snap!</strong> An error occured while trying to create the report. 
+                                <h5>
+                                </div>
+                            ');
+
+                        }
+                        $this->data['query'] = $query;
+                        $this->data['reportData'] = $result;
+                    }  
+                }  
+                
+                
+                $this->load->view('templates/header', $this->data);
+                $this->load->view('templates/sidebar', $this->data);
+                $this->load->view('templates/topbar', $this->data);
+                $this->load->view('pageContent/programSumReport', $this->data);
+                $this->load->view('templates/footer', $this->data);
+
 
             }else{
-                //try to access page without data provided
+                //try to access page without data or privilege set
                 redirect('dashboard');
             }
         }else{
@@ -1809,8 +2042,9 @@ class User extends CI_Controller{
             //checking if post data is set and user had the privilege to editGrade meaning they can unenroll client
             if ($this->input->post('action') === 'unEnrollClient' && in_array(6, $this->user_actions)){
 
+                $table = str_replace(' ', '-',$this->input->post('program'));
                 // getting table name
-                $tableName = $this->programTables[$this->input->post('program')];
+                $tableName = $this->programTables[$table];
                 
                 // unenrolling client from programs
                 $result = $this->client_model->remove_enrolled_client($tableName, $this->input->post('programId'));
@@ -1898,6 +2132,74 @@ class User extends CI_Controller{
         }
     }
     /* get_cal_events() will add an event 
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE
+     */    
+    public function remove_existing_report(){
+    
+        if ($this->is_session_set() && in_array(10, $this->user_actions)){
+            
+
+            if (!empty($this->input->post()) && $this->input->post('action') == 'deleteReport'){
+
+                // setting success message
+                $this->message = '
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5><strong><i class="fa fa-2x fa-smile"></i> Success!</strong> The existing report was removed.<h5>
+                    </div>
+                ';
+
+                // removing the existing report
+               $result = $this->report_model->remove_existing_report($this->input->post('viewName'));
+              
+               if ($result === -1){
+                   // Report cannot be deleted
+                   $this->message = '
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5><strong><i class="fa fa-2x fa-exclamation-triangle"></i> Notice!</strong> The Selected Report cannot be removed. Only created reports by system users can be removed<h5>
+                    </div>
+                   ';
+                   
+
+               }else{
+
+                   if($result === FALSE){
+                       //query failed
+                        $this->message = '
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h5><strong><i class="fa fa-2x fa-frown"></i> Sorry!</strong> We cannot remove the report at this time.<h5>
+                            </div>
+                        ';
+
+                   }
+
+               }
+
+                
+               $this->session->set_flashdata('message', $this->message);
+               redirect('report');
+
+            }else{
+                redirect('dashboard');
+            }
+
+        }else{
+            redirect('login');
+        }
+    }
+    /* Calls the respective model to insert calendar events 
      *
      * @access    public
      * @param     NONE 

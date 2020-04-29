@@ -55,6 +55,9 @@ $(document).ready(function(){
  
  // Call the dataTables jQuery plugin
   // $('#dataTableUsers').DataTable();
+  
+  //initializing report table with the datatable plugin
+  $('#reportDataTable').DataTable();
 
   // Add event listener for opening and closing details
   $('#dataTable tbody').on('click', 'td.details-control', function () {
