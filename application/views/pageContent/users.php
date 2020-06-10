@@ -51,7 +51,7 @@
                       
                       foreach($userList as $key => $array){
 
-                        echo '
+                        $html = '
                         
                           <tr>
                           <td>'.$array->id.'</td>
@@ -62,12 +62,29 @@
                           <td>'.(($array->updated_by == NULL)? 'N/A': $array->updated_by).'</td>
                           <td>'.(($array->updated_on == NULL)? 'N/A' : $array->updated_on).'</td>
                           <td><a class="btn btn-link viewUser" href="'.site_url().'user-info/'.$array->id.'">View </a></td>
-                          <td>'.((in_array(3, $this->session->userdata('action')) && in_array(8, $this->session->userdata('action')))? 
-                          '<a id="removeUser" class="btn btn-link text-danger" href="'.site_url().'remove-user/'.$array->id.'" data-toggle="modal" data-target="#modalUserDelete" >Delete </a></td>' 
-                          : '').'</tr>
                         
                         ';
+                        
+                        if (in_array(3, $this->session->userdata('action')) && in_array(8, $this->session->userdata('action'))){
 
+                          if ($array->status == 1){
+                            $html .='
+                                  <td><a id="removeUser" class="btn btn-link text-danger" href="'.site_url().'remove-user/'.$array->id.'" data-toggle="modal" data-target="#modalUserDelete" >Delete </a></td>
+                            ';
+                          }else{
+                            $html .='
+                          <form id="activationForm" action="'.base_url().'activate-user" style="display: none;"> 
+                          <input type="hidden" name="userId" value="'.$array->id.'" />
+
+
+                          </form>
+
+                            <td><button id="activateUser" class="btn btn-link text-success"> Activate</button></td>
+                            ';
+
+                          }
+                        }
+                        echo $html.'</tr>';
                       }
                       
 

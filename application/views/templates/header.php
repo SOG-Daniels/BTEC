@@ -17,7 +17,8 @@
  
     <!-- Custom styles for data tables -->
     <link href="<?php echo base_url()?>assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
+    <link href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.bootstrap4.min.css" rel="stylesheet">
+    
     <!-- JQuery plugins CSS file for autocomplete feature -->
     <link href="<?php echo base_url()?>assets/css/jquery-ui.css" rel="stylesheet">
   

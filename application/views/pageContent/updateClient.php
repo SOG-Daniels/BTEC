@@ -12,6 +12,7 @@
     // echo validation_errors();// echo's validation errors made that were stated in the controller for the form
     // echo (isset($addClientMessage))? $addClientMessage : ' ';
  ?>
+<a href="<?php echo base_url().'client-info/'.$clientData[0]['id']; ?>" class="btn btn-link "><i class="fa fa-arrow-left"></i> Go back to View Client Profile</a>
 <div class="card shadow-lg mb-3">
     <div class="card-header py-3">
     <?php
@@ -40,7 +41,7 @@
                         <i class="fa fa-camera "></i> Upload Image
                         </a>&nbsp;
                         <span id="remove-img">
-                            <a  href="#" id="remove-client-img" class="btn btn-link text-danger" style="<?php echo (($clientData[0]['profile_img_id'] == 1)? 'display: none': '' ); ?>" >
+                            <a  href="#" id="remove-client-img" class="btn btn-link text-danger" style="<?php echo (($clientData[0]['profile_img_id'] == 1 || empty($clientData[0]['profile_img_id']))? 'display: none': '' ); ?>" >
                             <i class="fa fa-trash"></i> Remove Image
                             </a>
                         </span>

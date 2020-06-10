@@ -12,7 +12,8 @@ class Verification extends CI_Controller{
         // These only work when loaded in the autoload.php file
         // $this->load->library('session');        //starting the session 
         // $this->load->helper('url');
-        //$this->load->model('validation_model'); 
+        // $this->load->model('user_model'); 
+        $this->load->model('user_model'); 
         
         
     }
@@ -69,9 +70,18 @@ class Verification extends CI_Controller{
                            array_push($actions, $val);
                         }
                     }
+                    $allPrivi = $this->user_model->get_all_privileges();
+                    // $eventLabels = $this->user_model->get_event_labels();
 
-                    $this->session->set_userdata('action', $actions);//setting user actions/privileges as a session
+                    //setting user actions/privileges as a session
+                    $this->session->set_userdata('action', $actions);
                     
+                    // setting all privileges in the session array
+                    $this->session->set_userdata('allPrivi', $allPrivi);
+                    
+                    // setting all event label for calendar
+                    // $this->session->set_userdata('eventLabels', $eventLabels);
+
                     redirect('dashboard');
                 }
             }

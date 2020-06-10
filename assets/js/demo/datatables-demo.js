@@ -5,10 +5,13 @@ $(document).ready(function(){
 
   // data table for the user list 
   $('#userDataTable').DataTable({
-    
     columnDefs: [ 
-      { "orderable" : false, targets: [3,4,5,6,7,8] } 
-    ]
+      { 
+        "orderable" : false, targets: [3,4,5,6,7,8]
+    } 
+    ],
+    "order": [[ 8, "desc" ]]
+
   });
 
   //defining the column definition for datatable for client list
@@ -57,7 +60,17 @@ $(document).ready(function(){
   // $('#dataTableUsers').DataTable();
   
   //initializing report table with the datatable plugin
-  $('#reportDataTable').DataTable();
+  var reportTable = $('#reportDataTable').DataTable({
+    lengthChange: false,
+    buttons: [{
+      extend: 'excel',
+      title: 'Report Sumary'
+    }, 'colvis' ],
+    bPaginate: false
+ 
+  });
+  // displaying buttons to datatable
+  reportTable.buttons().container().appendTo( '#reportDataTable_wrapper .col-md-6:eq(0)' );
 
   // Add event listener for opening and closing details
   $('#dataTable tbody').on('click', 'td.details-control', function () {

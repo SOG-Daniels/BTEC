@@ -1,6 +1,6 @@
 <?php 
 // echo "<pre>";
-//     print_r($programInfo); 
+//     print_r($eventLabels); 
 // echo "</pre>";
 
 //  displaying any message 
@@ -13,7 +13,7 @@
             <div class="card-header py-3">
               <div class="row">
                 <div class=" col-6 col-md-9">
-                  <h5 class="m-0 font-weight-bold text-primary">Grade Settings</h5>
+                  <h5 class="m-0 font-weight-bold text-primary">Settings</h5>
                 </div>
                 <div class="col-6 col-md-3 d-flex justify-content-end">
                 <button id="saveProSettings" class="btn btn-success btn-sm " type="submit" form="assesNames">
@@ -25,29 +25,19 @@
               </div>
             </div>
             <div class="card-body">
+                <form id="assesNames" action="<?php echo base_url() ;?>save-program-setup/" method="POST">
               <div class="row">
                   <!-- <div class="col-12 col-md-8">
-                    <h6>
-                        <small class="font-weight-bold text-dark">
-                        PROGRAM AVAILABLE 
-                        <hr>    
-                        </small>        
-                    </h6>
                     
                   </div> -->
                   <div class="col-12 col-md-4">
                     <h6>
                         <small class="font-weight-bold text-dark">
-                        PROGRAM ASSESMENTS 
+                        PROGRAM/TRAINING ASSESMENTS 
                         <hr>    
                         </small>        
                     </h6>
 
-                <form id="assesNames" action="<?php echo base_url() ;?>save-program-setup/" method="POST">
-                  <!-- <input type="hidden" name="action" value="updateGrades"> -->
-                  <!-- <input type="hidden" name="program" value="<?php// echo (isset($programInfo[0]['program'])? $programInfo[0]['program'] : '');?>">
-                  <input type="hidden" name="clientId" value="<?php //echo (isset($programInfo[0]['clientId'])? $programInfo[0]['clientId'] : '');?>">
-                  <input type="hidden" name="slug" value="<?php //echo (isset($programInfo[0]['slug'])? $programInfo[0]['slug'] : '');?>"> -->
                   <span class="form-group">
                       <select class="form-control" name="program" id="programs" style="width: 100%;" >
                       <option  data-content="Introduction to Barbering" value="barbering" >Introduction to Barbering</option>
@@ -84,7 +74,7 @@
                             <div id="asses-input'.$i.'" class="row"> 
                               
                               <div class="col-12 col-md-12">
-                                <label>Assesment Name:</label>
+                                <label class="font-weight-bold">Assesment Name:</label>
                                 <div class="input-group">
                                   <input type="text" class="form-control" name="assesmentName[]" id="assesment1" placeholder="Enter a name...." value="'.$assesName[0].'" required>
                                   <span class="input-group-append ">
@@ -107,7 +97,7 @@
                             <div id="asses-input'.$count.'" class="row"> 
                               
                               <div class="col-12 col-md-12">
-                                <label >Assesment Name:</label>
+                                <label class="font-weight-bold">Assesment Name:</label>
                                 <div class="input-group">
                                   <input type="text" class="form-control" name="assesmentName[]" id="assesment1" placeholder="Enter a name..." required>
                                   <span class="input-group-append ">
@@ -130,14 +120,74 @@
                             
                     </div>
                     <div class="pt-2 d-flex justify-content-end">
-                      <button class="btn btn-link add-more-asses"><i class="fa fa-plus"></i>Add Assesment</button>
+                      <button class="btn btn-link add-more-asses"><i class="fa fa-plus"></i> Add Assesment</button>
                     </div>
                     <br>
-                   
-                  </form>
+                  </div>
+                  <div class="col-12 col-md-5">
+                      <h6>
+                          <small class="font-weight-bold text-dark">
+                          CALENDAR EVENT LABELS 
+                          <hr>    
+                          </small>        
+                      </h6>
+                      <span id="eventLabels">
+                      <?php 
+                          if (!empty($eventLabels)){
+
+                            foreach ($eventLabels as $val){
+                              
+                                echo '
+                                <div class="row">
+                                  <div class="col-12 col-md-12">
+                                    <div class="input-group mb-3">
+                                      <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                        <input class="from-control" type="color" id="favcolor" name="color[]" value="'.$val['color'].'">
+                                        </span>
+                                      </div>
+                                      <input type="text" class="form-control" aria-label="Event Label" name="eventLabel[]" value="'.$val['label'].'" required>
+                                      <div class="input-group-append">
+                                            <span class="input-group-text bg-danger remove-event-label"><i class="fa fa-minus text-white"></i></span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                ';
+                            }
+
+                          }else{
+
+                              echo '
+                              <div class="row">
+                                <div class="col-12 col-md-12">
+                                  <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">
+                                      <input class="from-control" type="color" id="favcolor" name="color[]" value="">
+                                      </span>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Event Label" name="eventLabel[]" value="" required>
+                                    <div class="input-group-append">
+                                          <span class="input-group-text bg-danger remove-event-label"><i class="fa fa-minus text-white"></i></span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              ';
+
+                          }
+                          
+                      ?>
+                      </span>
+                    <div class="pt-2 d-flex justify-content-end">
+                      <button class="btn btn-link add-new-label"><i class="fa fa-plus"></i> Add New Label</button>
+                    </div>
                   </div>
                 </div>
+                  </form>
             </div>
+          
           </div>
           <script type="text/javascript">
 

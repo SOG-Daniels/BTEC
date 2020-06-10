@@ -2,19 +2,28 @@
 // if ($clientData === FALSE){
 // }
 // // getting data from array 
+
+//user privileges
+$actions = $this->session->userdata('action');
+
 $personalInfo = ((isset($clientData[0]))? $clientData[0] : array());
 $programs = ((isset($clientData['programs']))? $clientData['programs'] : array());
 $mname = (isset($personalInfo['middle_name']))? $personalInfo['middle_name'].' ': '';
 $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name']))? ucfirst($personalInfo['first_name']).' '.ucfirst($mname).ucfirst($personalInfo['last_name']) : '' ;
 // echo "<pre>";
+//  print_r($personalInfo);
+// echo"</pre>";
+// echo "<pre>";
 //  print_r($programs);
 // echo"</pre>";
 ?>
+<h1 class="h3 mb-2 text-gray-800">Client Information</h1>
+
 <div class="card shadow-lg mb-3">
     <div class="card-header py-3">
         <div class="row">
         <div class="col-12 col-md-8">
-            <h4 class="m-0 ">Client Information</h4>
+                <?php echo '<h4 class="m-0 text-primary">'.$name.'</h4>';?>
         </div>
         <div  class="col-12 col-md-4 d-flex justify-content-end">
             <?php 
@@ -39,8 +48,7 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
                 <img src="<?php echo isset($personalInfo['imgPath'])? base_url().$personalInfo['imgPath'] : base_url()."upload/default_profile_img.png";?>" class="avatar rounded img-thumbnail" width="350" height="400">
                 <br>
                 </div>
-                <?php echo '<h4 class="text-center pt-2">'.$name.'</h4>';?>
-
+                <br>
             <h6>
                 <small class="font-weight-bold text-primary">
                 PERSONAL INFORMATION
@@ -342,7 +350,9 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
                             <th>Enrolled On</th>
                             <th>Program Status</th>
                             <th>Graduated On</th>
-                            <th>Comments</th>
+                            <th>Notes</th>
+                            <th># of Comments</th>
+                            <th>Certificate</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -351,14 +361,45 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
                     $html = '';
 
                     foreach ($programs as $program => $data){
+                        
+                        // print_r($data);
                         $tableContent = '';
 
                         if (!empty($data)){
                             foreach($data as $val){
+                                // setting grade view link that will submit the form 
+                                $grade = (in_array(6, $actions)? '
+                                <form id="viewGradeForm" action="'.base_url().'view-client-grade/'.str_replace(' ', '-',trim($val['programme'])).'/'.$val['client_id'].'" method="POST" class="d-inline">
+                                    <input type="hidden" name="year" value="'.$val['enrolled_in'].'">
+                                    <input type="hidden" name="status" value="'.$val['status'].'">
+                                    <input type="submit"  class="btn btn-link pt-1" value="View Grades">
+                                </form>
+                                     
+                                ' : '');
+
+                                // setting mangae client link
+                                $manageClient = (in_array(6, $actions)? '
+                                <a href="'.base_url().'manage-client/'.str_replace(' ', '-',trim($val['programme'])).'/'.$val['id'].'">Manage Client</a>
+                                     
+                                ' : '');
+
+                                if($val['status'] == 'Enrolled'){
+                                
+                                    //setting manage client grade link
+                                    $grade = (in_array(6, $actions)? '
+                                    <a href="'.base_url().'manage-client-grade/'.str_replace(' ', '-',trim($val['programme'])).'/'.$val['client_id'].'">Mange Grades</a>
+                                        
+                                    ' : '');
+                                }
                                 $tableName = '
-                                    <h4 class="font-wieght-bold">
+                                    <h4 class="font-wieght-bold d-inline">
+                                    '.(($val['status'] == 'Enrolled')?'Currently Enrolled in ' : '').'
                                     '.$val['programme'].'
                                     </h4>
+                                    &nbsp;
+                                    '.$grade.'
+                                    &nbsp;
+                                    '.$manageClient.'
                                     <hr>
                                 ';
                                 $tableContent.=' 
@@ -370,7 +411,12 @@ $name = (isset($personalInfo['first_name']) && isset($personalInfo['last_name'])
                                 <td>'.$val['enrolled_in'].'</td>
                                 <td>'.$val['status'].'</td>
                                 <td>'.$val['graduated_on'].'</td>
-                                <td>'.$val['comments'].'</td>
+                                <td>'.$val['notes'].'</td>
+                                <td>'.$val['commentCount'].'</td>
+                                <td>'.((!empty($val['certificate']))? 
+                                    '<a href="'.base_url().'upload/certificates/'.$val['certificate'].'" download="'.$clientData[0]['first_name'].'_'.''.$clientData[0]['last_name'].'_Certificate">Download</a>' :
+                                    'N/A').'
+                                </td>
                                 </tr>
                                 
                                 ';

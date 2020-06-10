@@ -177,8 +177,8 @@ function createFullCalendar(){
         }],
         select: function(info) {
             
-            console.log(info);
-            console.log(info.startStr);
+            // console.log(info);
+            // console.log(info.startStr);
                 
             $('#info-startDate').text(calendar.formatDate(info.startStr, {
                 month : 'short',
@@ -202,18 +202,17 @@ function createFullCalendar(){
             //assigning endDate and startDate to eventForm in modal 
             $('#startDate').val(info.startStr);
             $('#endDate').val(info.endStr);
-            console.log(info.start);
-            console.log(info.end);
+            // console.log(info.start);
+            // console.log(info.end);
 
             //showing the add modal
             $('#calendarModal').modal('show');
-
   
             calendar.unselect();
         },
         //when an event on the calendar is clicked
         eventClick: function (info){
-            console.log(info);
+            // console.log(info);
 
             info.jsEvent.preventDefault();
 

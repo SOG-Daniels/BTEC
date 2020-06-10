@@ -34,6 +34,29 @@ class User_model extends CI_Model{
     }
     /**
      * 
+     * Function will return all privileges if status is 1
+     *
+     * @access    public
+     *
+     * @return    Array that contains a list of all the privileges by id
+     */    
+    public function get_all_privileges(){
+        
+        $this->db->trans_start();
+        $sql = $this->db->query('SELECT a.id, a.name FROM privileges a WHERE status = 1');
+        $this->db->trans_complete();
+
+        if($this->db->trans_status() === FALSE){
+            return FALSE;
+        }else{
+            return $sql->result_array();
+        }
+        
+        
+        return FALSE;
+
+    }
+    /**
      * get_user_info() will return all users data that the system has excluding password
      *
      * @access    public
@@ -173,11 +196,12 @@ class User_model extends CI_Model{
 
             $this->db->trans_start();
 
+         
+            // username = "'.$data['username'].'", 
             $query = $this->db->query('
             UPDATE users 
             SET fname = "'.$data['fname'].'", 
             lname = "'.$data['lname'].'", 
-            username = "'.$data['username'].'", 
             phone = "'.$data['phone'].'" 
             WHERE id = '.$userid.'');
            
@@ -207,7 +231,7 @@ class User_model extends CI_Model{
 
         $this->db->trans_start();
         $this->db->select('*');
-        $this->db->where('status', '1' );
+
         $query = $this->db->get('users');
 
         $this->db->trans_complete();
@@ -474,15 +498,20 @@ class User_model extends CI_Model{
      * Will query the applicants table to get alist of all the clients based on the search value
      *
      * @access    public
-     * @param     word the keyword that is to be queried
+     * @param     search the keyword that is to be queried
+     * @param     searchBy determines the column data the search should match
      * 
      * @return    Array containing all the data that matched the word
      */    
-    public function get_autocomplete($search = NULL) {
+    public function get_autocomplete($search = NULL, $searchBy = NULL) {
       
         $this->db->trans_start();
         
+
+
+
            $sql = $this->db->query('
+        
            SELECT 
                CONCAT(first_name," ",last_name) as full_name 
            FROM applicants a
@@ -491,6 +520,7 @@ class User_model extends CI_Model{
            ORDER BY full_name ASC 
            LIMIT 
                10 
+               
            ');
 
         $this->db->trans_complete();
@@ -518,7 +548,7 @@ class User_model extends CI_Model{
         $this->db->trans_start();
         
         $sql = $this->db->query('
-        SELECT e.id as id, concat(u.fname," ", u.lname) as created_by, (SELECT CONCAT(us.fname, " ", us.lname) FROM users us WHERE us.id = e.updated_by) as updated_by, e.title, e.description, e.startDate as start, e.endDate as end 
+        SELECT e.id as id, concat(u.fname," ", u.lname) as created_by, e.color, (SELECT CONCAT(us.fname, " ", us.lname) FROM users us WHERE us.id = e.updated_by) as updated_by, e.title, e.description, e.startDate as start, e.endDate as end 
         FROM events e, users u
         WHERE e.created_by = u.id and e.status = 1
         ');
@@ -550,6 +580,7 @@ class User_model extends CI_Model{
             'description' => $eventData['description'],
             'startDate' => $eventData['startDate'],
             'endDate' => $eventData['endDate'],
+            'color' => $eventData['color'],
             'status' => 1
 
         );
@@ -633,13 +664,64 @@ class User_model extends CI_Model{
 
         if ($this->db->trans_status() === FALSE){
            
-            log_message('debug', 'add_cal_event user_model function returned false');
+            log_message('debug', 'update_cal_event user_model function returned false');
             return FALSE;
         }
         
         return TRUE;
         
     }
+    /**
+     * Gets all event_labels create, i.e. the label's name and color code 
+     *
+     * @access    public
+     * @param     NONE
+     *
+     * @return    Array that contains a list of all the data the user has in the system 
+     */    
+    public function get_event_labels(){
+
+        $this->db->trans_start();
+
+        $this->db->select('label, color');
+        $this->db->where(array('status' => 1));
+        $query = $this->db->get('event_labels');
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+
+        return $query->result_array();
+    }
+    /**
+     * sets all labels with the respective color provied  
+     *
+     * @access    public
+     * @param     input array containg all records to be inserted  
+     *
+     * @return    Array that contains a list of all the data the user has in the system 
+     */    
+    public function set_event_labels($input = NULL){
+
+        $this->db->trans_start();
+        
+        $this->db->update('event_labels', array('status' => 0), array('status' => 1));
+
+        if ($input != NULL){
+            $this->db->insert_batch('event_labels', $input);
+        }
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            return FALSE;
+        }
+
+        return TRUE;
+    }
+
 }
 
 ?>

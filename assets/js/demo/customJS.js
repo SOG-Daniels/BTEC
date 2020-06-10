@@ -7,7 +7,9 @@ var hasView;
 var hasEdit;
 var inputCount = 2;
 var userInfoFormData;
-var PRIVI_SIZE = 10;
+var isSessionSet;
+
+var personalRefCount = 2;
 
 // var cList = [];
 
@@ -58,10 +60,10 @@ function checkPasswordMatch() {
         }
     }
 }
-// function creates the enrolled structuring it into an object and so that it can be used by the datatable
+// function creates the enrolled structuring it into an object so that it can be used by the datatable
 function createList (jsonData, base_url, hasGradeEdit, hasEdit, hasView){
 
-    //clearing old eList
+    //clearing old erolledList
     eList = [];
 
     if (jsonData[0].length > 0){
@@ -76,7 +78,7 @@ function createList (jsonData, base_url, hasGradeEdit, hasEdit, hasView){
                 eTempList.data[i][sub].pActions = ((hasView == 1)? '<a href ="'+base_url+'client-info/'+eTempList.data[i][sub].id+'">View</a>':"")+
                 ((hasEdit == 1)? '&nbsp'+'<a href ="'+base_url+'edit-client-info/'+eTempList.data[i][sub].id+'"> Edit</a>' : ""); 
                 
-                eTempList.data[i][sub].gView =((hasGradeEdit == 1)? '<a href ="'+base_url+'view-client-grade/'+(eTempList.data[i][sub].programme.replace(/\s/g , "-")).replace(/'/g,"")+'/'+eTempList.data[i][sub].id+'">Edit</a>' : "");
+                eTempList.data[i][sub].gView =((hasGradeEdit == 1)? '<a href ="'+base_url+'manage-client-grade/'+(eTempList.data[i][sub].programme.replace(/\s/g , "-")).replace(/'/g,"")+'/'+eTempList.data[i][sub].id+'">Edit</a>' : "");
 
                 //enrolled list object
                 eList.push(eTempList.data[i][sub]);//we take the arrays that are embeded and list them out into one array 
@@ -137,6 +139,7 @@ function initializeDatatable(data){
 }
 
 $(document).ready(function() {
+ 
 
   /***********start of custom function declaration **************/
 
@@ -177,7 +180,190 @@ $(document).ready(function() {
         }
     }
     /**************End of function declaration************/
+   
+    
+    $(".certificate-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+    
+    $('#postComment').click(function (e){
 
+        // prevent button from submitting form
+        e.preventDefault();
+
+        var comment = document.getElementById('comment').value;
+        $.post(base_url+'session-check',function(data){
+
+            if (data == 1){
+                //Cecking if the comment is not empty
+                if (comment.trim() !== ""){
+                
+                    var data = $('#commentForm').serialize();
+                    var action = document.getElementById('commentForm').action
+
+                    //sending an ajax request as post to remove profile pic
+                    $.post(action, data, function(data){
+                        
+                        console.log('data is:');
+                        console.log(data);
+
+                        //reloading current page from server and not from cache
+                        location.reload(true);
+                        
+
+                    });
+                    
+                }
+
+            }else{
+                //session not set
+                location.reload(true);
+            }
+        });
+
+
+    });
+    // handle the UI display for editing a comment
+    $('.editComment').click(function (e){
+
+        e.preventDefault();
+
+        var commentInput = document.getElementById('comment');
+        var spanEdit = document.getElementById('commentEdit');
+        var oldComment = document.getElementById(this.value).innerText;
+        var rowContent = this.closest(".row");
+
+        //hidden input 
+        var commentId = document.getElementById('commentId');
+
+        //buttons 
+        var postBtn = document.getElementById('postComment');
+        var spanBtns = document.getElementById('editBtn')
+
+        //hiding old comment 
+        rowContent.style.display = "none";
+
+        //clearing comment post
+        commentInput.value = "";
+
+        //setting comment post value with old post value for edit
+        commentInput.value = oldComment;
+        spanEdit.style.display = "block";
+
+        //hiding and displaying buttons
+        postBtn.style.display = "none";
+        spanBtns.style.display = "block";
+
+        //setting comment id to hidden input 
+        commentId.value = this.value;
+
+    });
+    // triggered when update button is clicked when making an edit to a comment
+    $('#updateComment').click(function (e){
+
+        e.preventDefault();
+        var commentId = document.getElementById('commentId').value;
+        var comVal = document.getElementById('comment').value;
+
+        $.post(base_url+'session-check',function(data){
+            
+            if (data == 1){
+                //session is set so we update 
+                $.post(base_url+'update-comment', {id : commentId, comment: comVal.trim()}, function(data){
+                    
+                    console.log(data);
+                    location.reload(true);//reloading current page from server and not from cache
+                    
+
+                });
+
+
+            }else{
+
+                location.reload(true);
+            }
+           
+        });
+  
+
+        //console.log(sessionCheck());
+
+    });
+    //canecels the update 
+    $('#cancelEdit').click(function (e){
+
+        e.preventDefault();
+        
+        var commentInput = document.getElementById('comment');
+        var spanEdit = document.getElementById('commentEdit');
+
+        //hidden input 
+        var commentId = document.getElementById('commentId').value;
+        
+        //oldComment element
+        var oldComment = document.getElementById(commentId).closest('.row');
+
+        //buttons 
+        var postBtn = document.getElementById('postComment');
+        var spanBtns = document.getElementById('editBtn')
+
+        console.log(oldComment);
+        //hiding old comment 
+        oldComment.style.display = "flex";
+    
+        //clearing comment post
+        commentInput.value = "";
+
+        // removing span from display
+        spanEdit.style.display = "none";
+
+        //hiding and displaying buttons
+        spanBtns.style.display = "none";
+        postBtn.style.display = "block";
+
+        //setting comment id to empty string
+        commentId.value = "";
+        
+
+    });
+
+    // triggered upon clicking the delete icon on a comment
+    $('.deleteComment').click(function (e){
+
+        e.preventDefault();
+
+        var commentId = $('.deleteComment').val();
+        
+        $.post(base_url+'session-check',function(result){
+
+            if(result == 1){
+                //session is set
+                $.post(base_url+'remove-comment', {id : commentId}, function(data){
+                    
+                    console.log(data);
+                    //reloading current page from server and not from cache
+                    location.reload(true);
+                    
+
+                });
+
+            }else{
+                //session not set 
+                location.reload(true);
+            }
+        });
+
+    });
+  
+    //clicking view grade link, submits the form
+    $('#viewGrades').click(function (e){
+        e.preventDefault();
+
+        //submitting form
+        $('#viewGradeForm').submit();
+
+    });
     // triggered in the edit grade page - unenrolling a user
     $('#removeClientFromProgram').click(function (e){
         e.preventDefault();
@@ -270,9 +456,9 @@ $(document).ready(function() {
     // });
 
     //setting up the summernote plugin by specifying the components it should have
-    $('#programComment').summernote({
+    $('#programNotes').summernote({
 
-        placeholder: 'Enter a comment...',
+        placeholder: 'Enter some notes ...',
         tabsize: 2,
         height: 250,
         toolbar: [
@@ -284,7 +470,13 @@ $(document).ready(function() {
             ['height', ['height']]
           ]
     });
-
+    //summernote for notes when viewing grades
+    $('#viewNotes').summernote({
+        toolbar: []
+    });
+    //making summernote readonly
+    $('#viewNotes').next().find(".note-editable").attr("contenteditable",false)
+    
     //when the activation button is click it will send the activation form to the user.php controller
     //check form action to identify controller method
     $('#activateUser').click(function(e){
@@ -297,8 +489,9 @@ $(document).ready(function() {
         $.post(url, formData, function(data){
            
             // console.log(data);
-            location.reload(false);
             alert(data);
+            
+            location.reload(false);
 
 
         }).fail(function(){
@@ -363,7 +556,7 @@ $(document).ready(function() {
             
             html = '<div id="asses-input'+inputCount+'" class="row">';
             html += '<div class="col-12 col-md-12">';
-            html += '<label >Assesment Name:</label>';
+            html += '<label class="font-weight-bold">Assesment Name:</label>';
             html += '<div class="input-group">';
             html += '<input type="text" class="form-control" name="assesmentName[]" id="assesment'+inputCount+'" placeholder="Enter a name...." required    >';
             html += '<span class="input-group-append ">';
@@ -789,5 +982,73 @@ $(document).ready(function() {
 
     });
     
+    //removing added personal references
+    $('#remove-ref').click(function (e){
+
+        e.preventDefault();
+        
+        // console.log(personalRefCount);
+        if (personalRefCount >= 3){
+            //removing last element
+            personalRefCount--;
+
+            var refDisplay = document.getElementById('ref'+personalRefCount);
+            refDisplay.style.display = 'none';
+
+        }
+
+    });
+
+    //dynmic adding of personal reference
+    $('#add-more-ref').click(function (e){
+
+        e.preventDefault();
+
+        if (personalRefCount >= 2 && personalRefCount < 4){
+            
+            //we display input of reference
+
+            var refDisplay = document.getElementById('ref'+personalRefCount);
+            refDisplay.style.display = 'block';
+            personalRefCount++;
+            
+        }
+
+    });
+
+    // Adding more event label fields dynamically
+    $('.add-new-label').click(function (e){
+
+        e.preventDefault();
+
+        $html = '<div class="row">';
+        $html += '<div class="col-12 col-md-12">';
+        $html +='<div class="input-group mb-3">';
+        $html +='<div class="input-group-prepend">';
+        $html +='<span class="input-group-text">';
+        $html +='<input class="from-control" type="color" id="favcolor" name="color[]" value="">';
+        $html += '</span>';
+        $html += '</div>';
+        $html +='<input type="text" class="form-control" aria-label="Event Label" name="eventLabel[]" value="" required>';
+        $html +='<div class="input-group-append">';
+        $html +='<span class="input-group-text bg-danger remove-event-label"><i class="fa fa-minus text-white"></i></span>';
+        $html += '</div>';
+        $html += '</div>';
+        $html += '</div>';
+        $html += '</div>';
+
+        $('#eventLabels').append($html);
+
+        
+
+    });
+    // Removes an event label made
+    $('#eventLabels').on('click','.remove-event-label', function(e){
+        e.preventDefault();
+
+        $(this).parent().parent().parent().parent().remove();
+        // inputCount--;
+
+    });
 
 });

@@ -70,14 +70,29 @@ $route['update-event'] = 'main/update_cal_event';
 // Routes used for the Enrolled list 
 $route['enrolled-list'] = 'main/view_enrolled_list';
 $route['register-applicant'] = 'main/add_client';
-$route['view-client-grade/(:any)/(:num)'] = 'main/view_client_grade/$1/$2';
 $route['unenroll-client'] = 'main/unenroll_client';
 
-// Route used to update grades
+// Route used for grades
+$route['view-client-grade/(:any)/(:num)'] = 'main/view_client_grade/$1/$2';
+$route['manage-client-grade/(:any)/(:num)'] = 'main/manage_client_grade/$1/$2';
 $route['update-grades'] = 'main/update_client_grade';
+
 
 // Routes used for the Client List
 $route['client-list'] = 'main/view_clients';
+
+//Routes for client management
+$route['manage-client/(:any)/(:num)'] = 'main/manage_client/$1/$2';
+$route['client-program-update'] = 'main/update_client_program_data';
+
+//Route for comments
+$route['enter-comment'] = 'main/create_comment';
+$route['remove-comment'] = 'main/delete_comment';
+$route['update-comment'] = 'main/update_comment';
+
+//route for js session check
+$route['session-check'] = 'main/js_session_check';
+
 
 //routes are used in both Client list and Enrolled list
 $route['client-info/(:num)'] = 'main/view_client_profile/$1';
@@ -116,7 +131,7 @@ $route['search'] = 'main/autocomplete_search';
 
 //program setup page routes
 $route['program-setup'] = 'main/program_setup';
-$route['save-program-setup'] = 'main/save_assesment_name';
+$route['save-program-setup'] = 'main/save_program_settings';
 
 //verification routes start//
 

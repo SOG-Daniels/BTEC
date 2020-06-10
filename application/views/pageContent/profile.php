@@ -33,22 +33,10 @@
                         
                     </div>
                 </form>
-                <!-- <form id="remove-my-profile-pic">
-                    <input type="hidden" name="imgId" value="<?php //echo $profileData['profile_img_id']; ?>">
-                </form> -->
+              
                 </div>
                 <br>
 
-            
-            
-            
-            <!-- <ul class="list-group">
-                <li class="list-group-item text-muted">Trainings <i class=""></i></li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Shares</strong></span> 125</li>
-                <li class="list-group-item text-right"><span class="pull-left"><strong>Likes</strong></span> 13</li>
-            </ul>  -->
-            
-            
             </div><!--/col-3-->
             <div class="col-12 col-md-8">
                 <ul class="nav nav-tabs">

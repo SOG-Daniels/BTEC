@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2020 at 08:05 AM
+-- Generation Time: Apr 30, 2020 at 11:02 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.3.1
 
@@ -53,7 +53,7 @@ INSERT INTO `action` (`id`, `user_id`, `privilege_id`, `status`) VALUES
 (14, 18, 4, 1),
 (15, 18, 3, 1),
 (37, 4, 5, 1),
-(38, 4, 6, 1),
+(38, 4, 6, 0),
 (39, 4, 7, 1),
 (40, 4, 8, 1),
 (63, 31, 2, 1),
@@ -70,7 +70,21 @@ INSERT INTO `action` (`id`, `user_id`, `privilege_id`, `status`) VALUES
 (74, 3, 5, 1),
 (75, 3, 6, 1),
 (76, 4, 9, 1),
-(77, 4, 10, 1);
+(77, 4, 10, 1),
+(78, 32, 2, 1),
+(79, 32, 4, 1),
+(80, 32, 1, 1),
+(81, 32, 3, 1),
+(82, 32, 7, 1),
+(83, 32, 8, 1),
+(84, 32, 5, 1),
+(85, 32, 6, 1),
+(86, 32, 9, 1),
+(87, 32, 10, 1),
+(88, 3, 4, 1),
+(89, 3, 3, 1),
+(90, 3, 8, 1),
+(91, 3, 10, 1);
 
 -- --------------------------------------------------------
 
@@ -1030,10 +1044,10 @@ INSERT INTO `applicants` (`id`, `last_name`, `first_name`, `middle_name`, `ssn`,
 (0000894, 'Petillo', 'Camisha', NULL, 000000000, NULL, NULL, NULL, NULL, NULL, NULL, 6300369, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'Childcare', NULL, 2018, '2016-01-01 00:00:00', NULL, 0, '', '', NULL, NULL, NULL, NULL),
 (0000895, 'testaaaa', 'test', 'Lino', 002001001, '56 Quilter Avenue', 'Ladyville', 'Belize', 'Belize', 'danielsoncorrea@gmail.com', 1231234, 6687434, 'Abelino Correa', NULL, 'Father', 'F', '1999-12-16', 'Married', 'linito', '56 quilter avenue', 'Belize', 678, '', '', '', 0, '', '', '', 0, NULL, NULL, NULL, '2016-01-01 00:00:00', 11, 1, '', '', NULL, NULL, NULL, NULL),
 (0000896, 'testing', 'test', 'linito', 002001002, '56 Quilter Avenue', 'Ladyville', 'Orange Walk', 'Belize', 'wow@gmail.com', 1231234, 6687434, 'Abelino Correa', 6238201, '           Father', 'M', '1999-12-16', 'Single', 'linito', '56 quilter avenue', 'Belize', 678, '', '', '', 0, '', '', '', 0, NULL, NULL, NULL, '2020-02-19 13:24:34', 30, 1, '', '', NULL, NULL, NULL, NULL),
-(0000903, 'correa', 'Danielson', 'Linito', 002000777, '56 Quilter Avenue', 'Ladyville', 'Belize', 'Belize', 'danielsoncorrea@gmail.com', 1231234, 6687434, 'Adelita Correa', 6238201, 'Mother', 'M', '1999-12-16', 'Common-Law', 'lyno', '56 quilter avenue', 'Belize', 6784343, '', '', '', 0, '', '', '', 0, NULL, NULL, NULL, '2020-02-26 14:21:41', 1, 1, '', '', NULL, NULL, NULL, NULL),
+(0000903, 'correa', 'Danielson', 'Linito', 002000777, '56 Quilter Avenue', 'Ladyville', 'Belize', 'Belize', 'danielsoncorrea@gmail.com', 1231234, 6687434, 'Adelita Correa', 6238201, 'Mother', 'M', '1999-12-16', 'Common-Law', 'lyno', '56 quilter avenue', 'Belize', 6784343, '', '', '', 0, '', '', '', 0, NULL, NULL, NULL, '2020-02-26 14:21:41', 1, 1, 'Associates Degree', 'University of Belize', 'Beltraide', 'Programmer', 'DCORREA', '2020-04-29 11:31:42'),
 (0000904, 'correa', 'Danillie', 'linita', 002000776, '56 Quilter Avenue', 'Ladyville', 'Cayo', 'Belize', 'danielsoncorrea@gmail.com', 1231235, 6687435, 'Abelino Correa', 6238201, 'Brother', 'F', '1999-12-16', 'Married', 'linito', '56 quilter avenue', 'Belize', 6784356, '', '', '', 0, '', '', '', 0, NULL, NULL, NULL, '2020-02-26 14:26:49', 13, 1, '', '', NULL, NULL, NULL, NULL),
 (0000905, 'woggy', 'pudge', 'dutch', 002001111, '56 Quilter Avenue', 'Ladyville', 'Cayo', 'Belize', 'testing@gmail.com', 1231234, 6687434, 'Abelino Correa', 6238201, 'Father', 'M', '1999-12-16', 'Married', 'lyno', '56 quilter avenue', 'Belize', 6784343, '', '', '', 0, '', '', '', 0, NULL, NULL, NULL, '2020-02-28 05:37:03', 1, 1, '', '', NULL, NULL, NULL, NULL),
-(0000906, 'testaaaa', 'Danielson', 'Linito', 002001452, '56 Quilter Avenue', 'Ladyville', 'Belize', 'Belize', '7son7of7god@gmail.cm', 1231234, 6687434, 'Abelino Correa', 6238201, 'Father', 'M', '1999-12-16', 'Single', 'linito', '56 quilter avenue', 'Belize', 6784343, 'lino', 'some st', 'some city', 6684545, '', '', '', 0, NULL, NULL, NULL, '2020-02-28 05:57:28', 84, 1, 'Associates Degree', 'University of Belize', 'Beltraide', 'Programmer', 'DCORREA', '2020-04-28 06:37:42'),
+(0000906, 'testaaaa', 'Danielson', 'Linito', 002001452, '56 Quilter Avenue', 'Ladyville', 'Belize', 'Belize', '7son7of7god@gmail.cm', 1231234, 6687434, 'Abelino Correa', 6238201, 'Father', 'M', '1999-12-16', 'Single', 'linito', '56 quilter avenue', 'Belize', 6784343, 'lino', 'some st', 'some city', 6684545, '', '', '', 0, NULL, NULL, NULL, '2020-02-28 05:57:28', 84, 1, 'Associates Degree', 'University of Belize', 'Beltraide', 'Programmer', 'DCORREA', '2020-04-29 15:42:27'),
 (0000907, 'Chi', 'Eliezer', 'Linito', 123456781, '44 Quilter Avenue', 'Santa Elena', 'Cayo', 'Belize', 'Eliezer@gmail.com', NULL, 6661234, 'Linito', 6687434, 'Cousin', 'M', '1999-12-16', 'Married', 'daniels', '56 quilter avenue', 'Belize', 1234567, '', '', '', 0, '', '', '', 0, NULL, NULL, NULL, '2020-03-13 12:25:40', 1, 1, 'Bachelors in Education', 'University of Belize', 'Baptist High School', NULL, NULL, NULL),
 (0000920, 'correa', 'Danielson', 'Linito', 000777777, '56 Quilter Avenue', 'Ladyville', 'Corozal', 'Belize', '7son7of7god@gmail.com', 1231234, 6687434, 'Adelita Correa', 6238201, 'Mother', 'M', '1999-12-12', 'Single', 'linito', '56 quilter avenue', 'Belize', 6784343, '', '', '', 0, '', '', '', 0, NULL, NULL, NULL, '2020-04-27 04:39:44', 85, 1, 'Bachelors in Education', 'University of Belize', 'Baptist High School', 'Teacher', 'DCORREA', '2020-04-27 11:02:11'),
 (0000922, 'correa', 'Danielson', 'Linito', 000343443, '56 Quilter Avenue', 'Santa Elena', 'Corozal', 'Belize', '7son7of7god@gmail.com', 1231234, 6687434, 'Adelita Correa', 6238201, 'Father', 'M', '1999-12-12', 'Single', 'linito', '56 quilter avenue', 'Belize', 6784343, '', '', '', 0, '', '', '', 0, NULL, NULL, NULL, '2020-04-27 05:54:52', 1, 1, 'Bachelors in Education', 'University of Belize', 'Baptist High School', 'Teacher', NULL, NULL),
@@ -1059,7 +1073,7 @@ CREATE TABLE `barbering` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -1071,7 +1085,7 @@ CREATE TABLE `barbering` (
 -- Dumping data for table `barbering`
 --
 
-INSERT INTO `barbering` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+INSERT INTO `barbering` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
 (14, 0000587, 'Introduction to Barbering', 'Completed', 99.0, 2017, NULL, NULL, NULL, NULL, '0.0', 100.0, 100.0, 'She loved the course.', '0000-00-00', '2020-03-05 10:20:43', '', NULL, NULL),
 (15, 0000588, 'Introduction to Barbering', 'Completed', 98.9, 2017, NULL, NULL, NULL, NULL, '0.0', 91.0, 90.0, '', '0000-00-00', '2020-03-05 10:20:43', '', NULL, NULL),
 (16, 0000589, 'Introduction to Barbering', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', 85.0, 85.0, NULL, '0000-00-00', '2020-03-05 10:20:43', '', NULL, NULL),
@@ -1081,7 +1095,8 @@ INSERT INTO `barbering` (`id`, `client_id`, `programme`, `status`, `pre_test_avg
 (20, 0000593, 'Introduction to Barbering', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', 50.0, 50.0, NULL, '0000-00-00', '2020-03-05 10:20:43', '', NULL, NULL),
 (22, 0000896, 'Introduction to Barbering', 'Enrolled', 70.0, 2020, NULL, NULL, NULL, NULL, NULL, 0.0, 10.0, 'He did much better this year.', '0000-00-00', '2020-03-05 10:20:43', '', NULL, NULL),
 (23, 0000905, 'Introduction to Barbering', 'Completed', 100.0, 2020, NULL, NULL, NULL, NULL, '0.0', 70.0, 70.0, 'blah blah blah!', NULL, '2020-03-05 10:20:43', '', NULL, NULL),
-(24, 0000906, 'Introduction to Barbering', 'Completed', 70.0, 2020, 'quiz1,100', 'quiz2,100', 'quiz3,100', NULL, '0.0', 99.0, 100.0, '', NULL, '2020-03-05 10:20:43', '', NULL, NULL);
+(24, 0000906, 'Introduction to Barbering', 'Completed', 70.0, 2020, 'quiz1,100', 'quiz2,100', 'quiz3,100', NULL, '0.0', 99.0, 100.0, '', NULL, '2020-03-05 10:20:43', '', NULL, NULL),
+(25, 0000903, 'Introduction to Barbering', 'Rejected', 69.0, 2020, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2020-04-29 11:30:09', 'DCORREA', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1103,7 +1118,7 @@ CREATE TABLE `bartending` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -1115,7 +1130,7 @@ CREATE TABLE `bartending` (
 -- Dumping data for table `bartending`
 --
 
-INSERT INTO `bartending` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+INSERT INTO `bartending` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
 (1, 0000354, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
 (2, 0000355, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
 (3, 0000356, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
@@ -1208,28 +1223,76 @@ INSERT INTO `bartending` (`id`, `client_id`, `programme`, `status`, `pre_test_av
 (90, 0000317, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
 (91, 0000318, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
 (92, 0000319, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(93, 0000320, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(94, 0000321, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(95, 0000322, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(96, 0000323, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(97, 0000324, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(98, 0000325, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(99, 0000389, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(100, 0000390, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(101, 0000391, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(102, 0000392, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(103, 0000393, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(104, 0000394, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(105, 0000395, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(106, 0000396, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(107, 0000397, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(108, 0000398, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(109, 0000399, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(110, 0000400, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(111, 0000401, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
-(112, 0000402, 'Bartending', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(93, 0000320, 'Bartending', 'Participated', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(94, 0000321, 'Bartending', 'Participated', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(95, 0000322, 'Bartending', 'Participated', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(96, 0000323, 'Bartending', 'Participated', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(97, 0000324, 'Bartending', 'Participated', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(98, 0000325, 'Bartending', 'Participated', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(99, 0000389, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(100, 0000390, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(101, 0000391, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(102, 0000392, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(103, 0000393, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(104, 0000394, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(105, 0000395, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(106, 0000396, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(107, 0000397, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(108, 0000398, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(109, 0000399, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(110, 0000400, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(111, 0000401, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
+(112, 0000402, 'Bartending', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:44:47', '', NULL, NULL),
 (127, 0000923, 'Bartending', 'Enrolled', 70.0, 2020, 'quiz1,', 'quiz2,', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2020-04-27 07:48:45', 'DCORREA', NULL, NULL),
-(130, 0000906, 'Bartending', 'Enrolled', 70.0, 2020, 'quiz1,100', 'quiz2,', NULL, NULL, NULL, NULL, 50.0, '<ul><li style=\"text-align: center;\"><span style=\"background-color: rgb(255, 255, 0);\"><i>Did</i></span>&nbsp;<span style=\"font-weight: bolder;\">not</span>&nbsp;<u>study</u>&nbsp;<strike>for</strike>&nbsp;<sup style=\"font-size: 12px;\">his</sup>&nbsp;<sub style=\"font-size: 12px;\">final</sub>&nbsp;<span style=\"font-size: 24px;\">quiz</span></li></ul>', NULL, '2020-04-28 06:36:20', 'DCORREA', NULL, NULL);
+(130, 0000906, 'Bartending', 'Enrolled', 70.0, 2020, 'quiz1,100', 'quiz2,', NULL, NULL, NULL, NULL, 50.0, '<ul><li style=\"text-align: center;\"><span style=\"background-color: rgb(255, 255, 0);\"><i>Did</i></span>&nbsp;<span style=\"font-weight: bolder;\">not</span>&nbsp;<u>study</u>&nbsp;<strike>for</strike>&nbsp;<sup style=\"font-size: 12px;\">his</sup>&nbsp;<sub style=\"font-size: 12px;\">final</sub>&nbsp;<span style=\"font-size: 24px;\">quiz</span></li></ul>', NULL, '2020-04-28 06:36:20', 'DCORREA', NULL, NULL),
+(132, 0000903, 'Bartending', 'Completed', 70.0, 2020, 'quiz1,80', 'quiz2,80', NULL, NULL, NULL, NULL, 80.0, '<p>He did a good job</p>', '2020-04-29', '2020-04-29 11:27:03', 'DCORREA', '2020-04-29 11:28:26', 'DCORREA');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `basicreport`
+-- (See below for the actual view)
+--
+CREATE TABLE `basicreport` (
+`Name` varchar(61)
+,`Gender` varchar(1)
+,`SSN` int(9) unsigned zerofill
+,`Email` varchar(75)
+,`Phone Number` int(7)
+,`Final Average` float(4,1)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `basicreport2`
+-- (See below for the actual view)
+--
+CREATE TABLE `basicreport2` (
+`Name` varchar(61)
+,`Gender` varchar(1)
+,`SSN` int(9) unsigned zerofill
+,`Email` varchar(75)
+,`Phone Number` int(7)
+,`Ref. Name #1` varchar(75)
+,`Ref. Address #1` varchar(75)
+,`Ref. City #1` varchar(75)
+,`Ref. Phone #1` int(7)
+,`Ref. Name #2` varchar(75)
+,`Ref. Address #2` varchar(75)
+,`Ref. City #2` varchar(75)
+,`Ref. Phone #2` int(7)
+,`Ref. Name #3` varchar(75)
+,`Ref. Address #3` varchar(75)
+,`Ref. City #3` varchar(75)
+,`Ref. Phone #3` int(7)
+,`Educational Institution` varchar(150)
+,`Education Level` varchar(150)
+,`Employer` varchar(150)
+,`Job Title` varchar(150)
+,`Enrolled In` int(4)
+,`Final Average` float(4,1)
+);
 
 -- --------------------------------------------------------
 
@@ -1251,7 +1314,7 @@ CREATE TABLE `bpo` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -1263,7 +1326,7 @@ CREATE TABLE `bpo` (
 -- Dumping data for table `bpo`
 --
 
-INSERT INTO `bpo` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+INSERT INTO `bpo` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
 (1, 0000001, 'Business Process Outsourcing', NULL, 0.0, 2014, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (2, 0000002, 'Business Process Outsourcing', NULL, 0.0, 2014, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (3, 0000003, 'Business Process Outsourcing', NULL, 0.0, NULL, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
@@ -1323,7 +1386,7 @@ INSERT INTO `bpo` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `en
 (57, 0000059, 'Business Process Outsourcing', NULL, 0.0, 2014, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (58, 0000060, 'Business Process Outsourcing', NULL, 0.0, NULL, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (59, 0000061, 'Business Process Outsourcing', NULL, 0.0, NULL, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
-(60, 0000063, 'Business Process Outsourcing', 'Enrolled', 10.0, 2015, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
+(60, 0000063, 'Business Process Outsourcing', 'Enrolled', 10.0, 2015, 'test1,', 'test2,', 'tes3,', NULL, NULL, NULL, NULL, '', '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (61, 0000064, 'Business Process Outsourcing', NULL, 0.0, 2014, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (62, 0000065, 'Business Process Outsourcing', NULL, 0.0, NULL, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (63, 0000067, 'Business Process Outsourcing', NULL, 0.0, 2014, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
@@ -1446,7 +1509,7 @@ INSERT INTO `bpo` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `en
 (180, 0000234, 'Business Process Outsourcing', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (181, 0000235, 'Business Process Outsourcing', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (182, 0000236, 'Business Process Outsourcing', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
-(183, 0000237, 'Business Process Outsourcing', NULL, 0.0, 20152017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
+(183, 0000237, 'Business Process Outsourcing', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (184, 0000238, 'Business Process Outsourcing', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (185, 0000239, 'Business Process Outsourcing', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (186, 0000240, 'Business Process Outsourcing', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
@@ -1563,10 +1626,11 @@ INSERT INTO `bpo` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `en
 (298, 0000542, 'Business Process Outsourcing', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (299, 0000543, 'Business Process Outsourcing', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
 (300, 0000544, 'Business Process Outsourcing', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
-(301, 0000896, 'Business Process Outsourcing', 'Enrolled', 0.0, 2020, NULL, NULL, NULL, NULL, NULL, 80.0, 80.0, 'He did well and has good communication skills .', '0000-00-00', '2020-03-05 10:45:53', '', NULL, NULL),
-(307, 0000063, 'Business Process Outsourcing', 'Enrolled', 10.0, 2015, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, '2020-03-05 10:45:53', '', NULL, NULL);
-INSERT INTO `bpo` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+(307, 0000063, 'Business Process Outsourcing', 'Enrolled', 10.0, 2015, 'test1,', 'test2,', 'tes3,', NULL, NULL, NULL, NULL, '', NULL, '2020-03-05 10:45:53', '', NULL, NULL),
 (311, 0000588, 'Business Process Outsourcing', 'Completed', 10.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, '', NULL, '2020-03-05 10:45:53', '', NULL, NULL);
+INSERT INTO `bpo` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+(312, 0000903, 'Business Process Outsourcing', 'Participated', 80.0, 2020, 'test1,70', 'test2,50', 'tes3,98', NULL, NULL, NULL, 72.7, '<p>He did show up to class frequently</p>', '2020-04-29', '2020-04-29 11:31:42', 'DCORREA', '2020-04-29 11:34:15', 'DCORREA'),
+(313, 0000906, 'Business Process Outsourcing', 'Enrolled', 70.0, 2020, 'test1,', 'test2,', 'tes3,', NULL, NULL, NULL, NULL, NULL, NULL, '2020-04-29 15:42:27', 'DCORREA', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1588,7 +1652,7 @@ CREATE TABLE `child_care` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -1600,7 +1664,7 @@ CREATE TABLE `child_care` (
 -- Dumping data for table `child_care`
 --
 
-INSERT INTO `child_care` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+INSERT INTO `child_care` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
 (1, 0000887, 'Child Care Training', NULL, 0.0, 2018, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:17', '', NULL, NULL),
 (2, 0000888, 'Child Care Training', NULL, 0.0, 2018, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:17', '', NULL, NULL),
 (3, 0000889, 'Child Care Training', NULL, 0.0, 2018, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:17', '', NULL, NULL),
@@ -1611,6 +1675,36 @@ INSERT INTO `child_care` (`id`, `client_id`, `programme`, `status`, `pre_test_av
 (8, 0000894, 'Child Care Training', NULL, 0.0, 2018, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:17', '', NULL, NULL),
 (9, 0000587, 'Child Care Training', 'Enrolled', 70.0, 2020, 'quiz1,', 'test,', 'test2,', 'Quiz2,', NULL, 0.0, NULL, '', NULL, '2020-03-05 10:46:17', '', '2020-03-12 14:00:05', 'DCORREA'),
 (10, 0000907, 'Child Care Training', 'Enrolled', 70.0, 2020, 'quiz1,', 'test,', 'test2,', 'Quiz2,', NULL, NULL, 2.0, '<p><span style=\"background-color: rgb(255, 255, 0);\">&lt;br&gt;</span></p><p><span style=\"background-color: rgb(255, 255, 0);\">&lt;strong&gt;testing&lt;/strong&gt;</span></p><p><br></p>', NULL, '2020-03-13 12:25:40', '', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `comments`
+--
+
+CREATE TABLE `comments` (
+  `id` int(7) NOT NULL,
+  `client_id` int(7) NOT NULL,
+  `program_id` int(10) NOT NULL,
+  `program_name` varchar(150) NOT NULL,
+  `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` varchar(150) NOT NULL,
+  `comment` text NOT NULL,
+  `status` int(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `completionnumbersbyyear`
+-- (See below for the actual view)
+--
+CREATE TABLE `completionnumbersbyyear` (
+`program` varchar(255)
+,`status` varchar(12)
+,`year` int(11)
+,`count` bigint(21)
+);
 
 -- --------------------------------------------------------
 
@@ -1632,7 +1726,7 @@ CREATE TABLE `computer_basics` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -1644,7 +1738,7 @@ CREATE TABLE `computer_basics` (
 -- Dumping data for table `computer_basics`
 --
 
-INSERT INTO `computer_basics` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+INSERT INTO `computer_basics` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
 (1, 0000882, 'Computer\'s For Everyday Use', NULL, 0.0, 2018, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:29', '', NULL, NULL),
 (2, 0000883, 'Computer\'s For Everyday Use', NULL, 0.0, 2018, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:29', '', NULL, NULL),
 (3, 0000884, 'Computer\'s For Everyday Use', NULL, 0.0, 2018, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:29', '', NULL, NULL),
@@ -1687,12 +1781,22 @@ INSERT INTO `events` (`id`, `created_by`, `updated_by`, `title`, `description`, 
 (11, 31, 4, 'testing ', 'Its the 15th of april on a wednesday', '2020-04-15 00:00:00', '2020-04-16 00:00:00', 0),
 (14, 31, 31, 'testing 6', 'testing drag and drop test', '2020-04-15 00:00:00', '2020-04-16 00:00:00', 0),
 (15, 31, NULL, 'test full day', '', '2020-04-23 00:00:00', '2020-04-24 00:00:00', 1),
-(16, 31, NULL, 'testing 2 days', '', '2020-04-26 00:00:00', '2020-04-28 00:00:00', 1),
+(16, 31, 4, 'testing 2 days', 'sdfdsf', '2020-04-26 00:00:00', '2020-04-28 00:00:00', 1),
 (17, 31, NULL, 'testing with time ', '', '2020-04-28 08:00:00', '2020-04-28 12:30:00', 0),
 (18, 31, NULL, '2 day 9am to 12pm', '', '2020-04-28 09:00:00', '2020-04-29 12:30:00', 0),
 (19, 31, NULL, 'Adding event with time ', '', '2020-04-21 07:00:00', '2020-04-21 07:30:00', 1),
 (20, 4, 4, 'Staff Meeting', 'Discussion about.......', '2020-04-28 08:00:00', '2020-04-28 15:30:00', 1),
-(21, 4, NULL, 'Training', 'Training for.....', '2020-05-04 00:00:00', '2020-05-09 00:00:00', 1);
+(21, 4, NULL, 'Training', 'Training for.....', '2020-05-04 00:00:00', '2020-05-09 00:00:00', 1),
+(22, 4, 4, 'testing april 30', 'description...testig modification', '2020-04-30 07:00:00', '2020-04-30 12:00:00', 0),
+(23, 4, NULL, 'april 30th', 'somethinsdasdgd...', '2020-04-30 00:00:00', '2020-05-01 00:00:00', 0),
+(24, 4, NULL, 'training for football ', 'practicing to play football', '2020-03-30 00:00:00', '2020-04-04 00:00:00', 1),
+(25, 4, NULL, 'System Meeting', 'discussing the system ', '2020-04-29 10:00:00', '2020-04-29 12:00:00', 1),
+(26, 4, NULL, 'sdlkfasdf', 'gagasds gdsdsg', '2020-04-30 08:00:00', '2020-05-01 12:00:00', 0),
+(27, 4, NULL, 'etretre', 'tretret', '2020-04-21 00:00:00', '2020-04-22 00:00:00', 1),
+(28, 4, NULL, 'tertert', 'ertreter', '2020-04-21 00:00:00', '2020-04-22 00:00:00', 1),
+(29, 4, NULL, 'ertertre', 'ertret', '2020-04-14 00:00:00', '2020-04-15 00:00:00', 1),
+(30, 4, NULL, 'ertret', 'erterter', '2020-04-21 00:00:00', '2020-04-22 00:00:00', 1),
+(31, 4, NULL, 'ertretert', 'ertertert', '2020-04-21 00:00:00', '2020-04-22 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -1714,7 +1818,7 @@ CREATE TABLE `event_planning` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -1726,20 +1830,20 @@ CREATE TABLE `event_planning` (
 -- Dumping data for table `event_planning`
 --
 
-INSERT INTO `event_planning` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
-(1, 0000574, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(2, 0000575, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(3, 0000576, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(4, 0000577, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(5, 0000578, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(6, 0000579, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(7, 0000580, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(8, 0000581, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(9, 0000582, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(10, 0000583, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(11, 0000584, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(12, 0000585, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
-(13, 0000586, 'Event Planning', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL);
+INSERT INTO `event_planning` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+(1, 0000574, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(2, 0000575, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(3, 0000576, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(4, 0000577, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(5, 0000578, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(6, 0000579, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(7, 0000580, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(8, 0000581, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(9, 0000582, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(10, 0000583, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(11, 0000584, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(12, 0000585, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL),
+(13, 0000586, 'Event Planning', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:46:41', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1761,7 +1865,7 @@ CREATE TABLE `front_desk` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -1773,7 +1877,7 @@ CREATE TABLE `front_desk` (
 -- Dumping data for table `front_desk`
 --
 
-INSERT INTO `front_desk` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+INSERT INTO `front_desk` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
 (1, 0000099, 'Front Desk Training', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:47:08', '', NULL, NULL),
 (2, 0000100, 'Front Desk Training', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:47:08', '', NULL, NULL),
 (3, 0000101, 'Front Desk Training', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:47:08', '', NULL, NULL),
@@ -1927,7 +2031,7 @@ CREATE TABLE `home_health` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -1939,7 +2043,7 @@ CREATE TABLE `home_health` (
 -- Dumping data for table `home_health`
 --
 
-INSERT INTO `home_health` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+INSERT INTO `home_health` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
 (1, 0000272, 'Home Health Training', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:47:22', '', NULL, NULL),
 (2, 0000273, 'Home Health Training', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:47:22', '', NULL, NULL),
 (3, 0000274, 'Home Health Training', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:47:22', '', NULL, NULL),
@@ -2055,7 +2159,7 @@ CREATE TABLE `house_keeping` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -2067,7 +2171,7 @@ CREATE TABLE `house_keeping` (
 -- Dumping data for table `house_keeping`
 --
 
-INSERT INTO `house_keeping` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+INSERT INTO `house_keeping` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
 (258, 0000403, 'House Keeping', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:35', '', NULL, NULL),
 (259, 0000404, 'House Keeping', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:35', '', NULL, NULL),
 (260, 0000405, 'House Keeping', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:35', '', NULL, NULL),
@@ -2138,7 +2242,7 @@ CREATE TABLE `landscaping` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -2150,7 +2254,7 @@ CREATE TABLE `landscaping` (
 -- Dumping data for table `landscaping`
 --
 
-INSERT INTO `landscaping` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+INSERT INTO `landscaping` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
 (19, 0000382, 'Landscaping', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:47:44', '', NULL, NULL),
 (20, 0000383, 'Landscaping', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:47:44', '', NULL, NULL),
 (21, 0000384, 'Landscaping', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:47:44', '', NULL, NULL),
@@ -2179,7 +2283,7 @@ CREATE TABLE `life_guard` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -2191,21 +2295,21 @@ CREATE TABLE `life_guard` (
 -- Dumping data for table `life_guard`
 --
 
-INSERT INTO `life_guard` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
-(1, 0000604, 'Life Guard Training', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(2, 0000605, 'Life Guard Training', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(3, 0000606, 'Life Guard Training', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(4, 0000607, 'Life Guard Training', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(5, 0000608, 'Life Guard Training', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(8, 0000414, 'Life Guard Training', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(9, 0000415, 'Life Guard Training', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(10, 0000416, 'Life Guard Training', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(11, 0000417, 'Life Guard Training', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(12, 0000418, 'Life Guard Training', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(13, 0000419, 'Life Guard Training', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(14, 0000420, 'Life Guard Training', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(15, 0000421, 'Life Guard Training', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
-(16, 0000422, 'Life Guard Training', NULL, 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL);
+INSERT INTO `life_guard` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+(1, 0000604, 'Life Guard Training', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(2, 0000605, 'Life Guard Training', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(3, 0000606, 'Life Guard Training', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(4, 0000607, 'Life Guard Training', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(5, 0000608, 'Life Guard Training', 'Completed', 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(8, 0000414, 'Life Guard Training', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(9, 0000415, 'Life Guard Training', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(10, 0000416, 'Life Guard Training', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(11, 0000417, 'Life Guard Training', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(12, 0000418, 'Life Guard Training', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(13, 0000419, 'Life Guard Training', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(14, 0000420, 'Life Guard Training', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(15, 0000421, 'Life Guard Training', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL),
+(16, 0000422, 'Life Guard Training', 'Completed', 0.0, 2016, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, NULL, '2020-03-05 10:47:58', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2227,7 +2331,7 @@ CREATE TABLE `nail_tech` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -2239,7 +2343,7 @@ CREATE TABLE `nail_tech` (
 -- Dumping data for table `nail_tech`
 --
 
-INSERT INTO `nail_tech` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+INSERT INTO `nail_tech` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
 (1, 0000594, 'Nail Tech', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:48:08', '', NULL, NULL),
 (2, 0000595, 'Nail Tech', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:48:08', '', NULL, NULL),
 (3, 0000596, 'Nail Tech', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:48:08', '', NULL, NULL),
@@ -2251,6 +2355,19 @@ INSERT INTO `nail_tech` (`id`, `client_id`, `programme`, `status`, `pre_test_avg
 (9, 0000602, 'Nail Tech', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:48:08', '', NULL, NULL),
 (10, 0000603, 'Nail Tech', NULL, 0.0, 2017, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:48:08', '', NULL, NULL),
 (11, 0000906, 'Nail Tech', 'Rejected', 69.0, 2020, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2020-04-28 06:37:42', 'DCORREA', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `participationnumbersbyyear`
+-- (See below for the actual view)
+--
+CREATE TABLE `participationnumbersbyyear` (
+`program` varchar(255)
+,`status` varchar(12)
+,`year` int(11)
+,`count` bigint(21)
+);
 
 -- --------------------------------------------------------
 
@@ -2373,6 +2490,31 @@ INSERT INTO `profile_img` (`id`, `path`, `status`, `uploaded_on`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `reports`
+--
+
+CREATE TABLE `reports` (
+  `id` int(11) NOT NULL,
+  `view_name` varchar(150) DEFAULT NULL,
+  `display_name` varchar(150) DEFAULT NULL,
+  `created_on` datetime DEFAULT CURRENT_TIMESTAMP,
+  `created_by` varchar(150) DEFAULT NULL,
+  `status` int(1) DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `reports`
+--
+
+INSERT INTO `reports` (`id`, `view_name`, `display_name`, `created_on`, `created_by`, `status`) VALUES
+(1, 'completionnumbersbyyear', 'Number of Completion by Year', '2020-04-28 11:59:52', 'INTERN', 1),
+(2, 'participationnumbersbyyear', 'Numbers of Participation by Year', '2020-04-28 15:26:47', 'INTERN', 1),
+(3, 'basicreport', 'Basic Report ', '2020-04-29 08:15:39', 'DCORREA', 1),
+(4, 'basicreport2', 'basic report 2', '2020-04-29 12:20:05', 'DCORREA', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `specialized_trainings`
 --
 
@@ -2483,10 +2625,11 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `fname`, `lname`, `email`, `phone`, `username`, `password`, `created_by`, `created_on`, `profile_img_id`, `updated_by`, `updated_on`, `status`) VALUES
 (1, 'Ulrick', 'Gaynair', 'ulrick_gaynair@hotmail.com', '1234567', 'admin', 'd41e98d1eafa6d6011d3a70f1a5b92f0', '', '2019-03-22 11:16:09', 1, NULL, NULL, 0),
 (2, 'test', 'person', 'green@gmail.com', '', 'testperson', '5994471abb01112afcc18159f6cc74b4f511b99806da59b3caf5a9c173cacfc5', '', '2019-03-22 11:19:44', 83, 'DCORREA', '2020-04-26 17:27:37', 1),
-(3, 'Shadae', 'Humes', 'intern@belizeinvest.org.bz', '6584534', 'shumes', '97084517109e89053481617a482792fe7590ee62783e69ed2e540cde68d568a4', '', '2019-12-02 11:32:03', 1, 'DCORREA', '2020-03-23 18:00:00', 1),
-(4, 'Danielson', 'Correa', '7son7of7god@gmail.com', '1234567', 'Daniels', 'e57007236e63ebe48029c2da400698d4', '', '2020-02-12 11:34:41', 80, 'DCORREA', '2020-04-23 20:53:30', 1),
+(3, 'Shadae', 'Humes', 'intern@belizeinvest.org.bz', '6584534', '', '97084517109e89053481617a482792fe7590ee62783e69ed2e540cde68d568a4', '', '2019-12-02 11:32:03', 1, 'DCORREA', '2020-04-29 17:54:44', 1),
+(4, 'Danielson', 'Correa', '7son7of7god@gmail.com', '1234567', '', 'e57007236e63ebe48029c2da400698d4', '', '2020-02-12 11:34:41', 80, 'DCORREA', '2020-04-29 21:40:09', 1),
 (18, 'Linito', 'correa', 'linito@gmail.com', '1234567', 'Pudge', '6780e5361b503b2d9c51fa4423954ea7', '', '2020-02-27 13:21:54', 14, NULL, NULL, 1),
-(31, 'Danielson', 'chi', 'danielsoncorrea@gmail.com', '6584534', 'pudge', 'd41e98d1eafa6d6011d3a70f1a5b92f0', 'DCORREA', '2020-03-12 16:53:28', 1, 'DCORREA', '2020-03-13 16:18:25', 1);
+(31, 'Danielson', 'chi', 'danielsoncorrea@gmail.com', '6584534', 'pudge', 'd41e98d1eafa6d6011d3a70f1a5b92f0', 'DCORREA', '2020-03-12 16:53:28', 1, 'DCORREA', '2020-03-13 16:18:25', 1),
+(32, 'Danielson', 'testaaaa', 'green.test@gmail.com', '6584534', '', 'd41e98d1eafa6d6011d3a70f1a5b92f0', 'DCORREA', '2020-04-29 01:12:02', 1, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -2508,7 +2651,7 @@ CREATE TABLE `wait_staff` (
   `Assesment5` varchar(150) DEFAULT NULL,
   `final_Assesment` float(4,1) DEFAULT NULL,
   `final_grade` float(4,1) DEFAULT NULL,
-  `comments` text,
+  `notes` text,
   `graduated_on` date DEFAULT NULL,
   `created_on` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(150) NOT NULL,
@@ -2520,7 +2663,7 @@ CREATE TABLE `wait_staff` (
 -- Dumping data for table `wait_staff`
 --
 
-INSERT INTO `wait_staff` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `comments`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
+INSERT INTO `wait_staff` (`id`, `client_id`, `programme`, `status`, `pre_test_avg`, `enrolled_in`, `Assesment1`, `Assesment2`, `Assesment3`, `Assesment4`, `Assesment5`, `final_Assesment`, `final_grade`, `notes`, `graduated_on`, `created_on`, `created_by`, `updated_on`, `updated_by`) VALUES
 (1, 0000149, 'Wait Staff Training', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:48:22', '', NULL, NULL),
 (2, 0000265, 'Wait Staff Training', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:48:22', '', NULL, NULL),
 (3, 0000266, 'Wait Staff Training', NULL, 0.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:48:22', '', NULL, NULL),
@@ -2633,6 +2776,42 @@ INSERT INTO `wait_staff` (`id`, `client_id`, `programme`, `status`, `pre_test_av
 (240, 0000863, 'Wait Staff Training', NULL, 0.0, 2018, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, NULL, '0000-00-00', '2020-03-05 10:48:22', '', NULL, NULL),
 (246, 0000063, 'Wait Staff Training', 'Enrolled', 10.0, 2015, NULL, NULL, NULL, NULL, '0.0', NULL, NULL, '', NULL, '2020-03-05 10:48:22', '', NULL, NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Structure for view `basicreport`
+--
+DROP TABLE IF EXISTS `basicreport`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `basicreport`  AS  select concat(`a`.`first_name`,' ',`a`.`last_name`) AS `Name`,`a`.`gender` AS `Gender`,`a`.`ssn` AS `SSN`,`a`.`email` AS `Email`,`a`.`mobile_phone` AS `Phone Number`,`p`.`final_grade` AS `Final Average` from (`applicants` `a` join `barbering` `p`) where ((`a`.`id` = `p`.`client_id`) and (`p`.`status` = 'Completed')) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `basicreport2`
+--
+DROP TABLE IF EXISTS `basicreport2`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `basicreport2`  AS  select concat(`a`.`first_name`,' ',`a`.`last_name`) AS `Name`,`a`.`gender` AS `Gender`,`a`.`ssn` AS `SSN`,`a`.`email` AS `Email`,`a`.`mobile_phone` AS `Phone Number`,`a`.`ref_name1` AS `Ref. Name #1`,`a`.`ref_address1` AS `Ref. Address #1`,`a`.`ref_city1` AS `Ref. City #1`,`a`.`ref_phone1` AS `Ref. Phone #1`,`a`.`ref_name2` AS `Ref. Name #2`,`a`.`ref_address2` AS `Ref. Address #2`,`a`.`ref_city2` AS `Ref. City #2`,`a`.`ref_phone2` AS `Ref. Phone #2`,`a`.`ref_name3` AS `Ref. Name #3`,`a`.`ref_address3` AS `Ref. Address #3`,`a`.`ref_city3` AS `Ref. City #3`,`a`.`ref_phone3` AS `Ref. Phone #3`,`a`.`ed_name` AS `Educational Institution`,`a`.`ed_degree` AS `Education Level`,`a`.`employed_at` AS `Employer`,`a`.`em_position` AS `Job Title`,`p`.`enrolled_in` AS `Enrolled In`,`p`.`final_grade` AS `Final Average` from (`applicants` `a` join `bpo` `p`) where ((`a`.`id` = `p`.`client_id`) and (`p`.`status` = 'Completed')) ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `completionnumbersbyyear`
+--
+DROP TABLE IF EXISTS `completionnumbersbyyear`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `completionnumbersbyyear`  AS  select `barbering`.`programme` AS `program`,`barbering`.`status` AS `status`,`barbering`.`enrolled_in` AS `year`,count(`barbering`.`enrolled_in`) AS `count` from `barbering` where (`barbering`.`status` = 'completed') group by `barbering`.`enrolled_in` union all select `bartending`.`programme` AS `program`,`bartending`.`status` AS `status`,`bartending`.`enrolled_in` AS `year`,count(`bartending`.`enrolled_in`) AS `count` from `bartending` where (`bartending`.`status` = 'completed') group by `bartending`.`enrolled_in` union all select `bpo`.`programme` AS `program`,`bpo`.`status` AS `status`,`bpo`.`enrolled_in` AS `year`,count(`bpo`.`enrolled_in`) AS `count` from `bpo` where (`bpo`.`status` = 'completed') group by `bpo`.`enrolled_in` union all select `child_care`.`programme` AS `program`,`child_care`.`status` AS `status`,`child_care`.`enrolled_in` AS `year`,count(`child_care`.`enrolled_in`) AS `count` from `child_care` where (`child_care`.`status` = 'completed') group by `child_care`.`enrolled_in` union all select `computer_basics`.`programme` AS `program`,`computer_basics`.`status` AS `status`,`computer_basics`.`enrolled_in` AS `year`,count(`computer_basics`.`enrolled_in`) AS `count` from `computer_basics` where (`computer_basics`.`status` = 'completed') group by `computer_basics`.`enrolled_in` union all select `event_planning`.`programme` AS `program`,`event_planning`.`status` AS `status`,`event_planning`.`enrolled_in` AS `year`,count(`event_planning`.`enrolled_in`) AS `count` from `event_planning` where (`event_planning`.`status` = 'completed') group by `event_planning`.`enrolled_in` union all select `front_desk`.`programme` AS `program`,`front_desk`.`status` AS `status`,`front_desk`.`enrolled_in` AS `year`,count(`front_desk`.`enrolled_in`) AS `count` from `front_desk` where (`front_desk`.`status` = 'completed') group by `front_desk`.`enrolled_in` union all select `home_health`.`programme` AS `program`,`home_health`.`status` AS `status`,`home_health`.`enrolled_in` AS `year`,count(`home_health`.`enrolled_in`) AS `count` from `home_health` where (`home_health`.`status` = 'completed') group by `home_health`.`enrolled_in` union all select `house_keeping`.`programme` AS `program`,`house_keeping`.`status` AS `status`,`house_keeping`.`enrolled_in` AS `year`,count(`house_keeping`.`enrolled_in`) AS `count` from `house_keeping` where (`house_keeping`.`status` = 'completed') group by `house_keeping`.`enrolled_in` union all select `landscaping`.`programme` AS `program`,`landscaping`.`status` AS `status`,`landscaping`.`enrolled_in` AS `year`,count(`landscaping`.`enrolled_in`) AS `count` from `landscaping` where (`landscaping`.`status` = 'completed') group by `landscaping`.`enrolled_in` union all select `life_guard`.`programme` AS `program`,`life_guard`.`status` AS `status`,`life_guard`.`enrolled_in` AS `year`,count(`life_guard`.`enrolled_in`) AS `count` from `life_guard` where (`life_guard`.`status` = 'completed') group by `life_guard`.`enrolled_in` union all select `nail_tech`.`programme` AS `program`,`nail_tech`.`status` AS `status`,`nail_tech`.`enrolled_in` AS `year`,count(`nail_tech`.`enrolled_in`) AS `count` from `nail_tech` where (`nail_tech`.`status` = 'completed') group by `nail_tech`.`enrolled_in` union all select `wait_staff`.`programme` AS `program`,`wait_staff`.`status` AS `status`,`wait_staff`.`enrolled_in` AS `year`,count(`wait_staff`.`enrolled_in`) AS `count` from `wait_staff` where (`wait_staff`.`status` = 'completed') group by `wait_staff`.`enrolled_in` order by `count` desc ;
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `participationnumbersbyyear`
+--
+DROP TABLE IF EXISTS `participationnumbersbyyear`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `participationnumbersbyyear`  AS  select `barbering`.`programme` AS `program`,`barbering`.`status` AS `status`,`barbering`.`enrolled_in` AS `year`,count(`barbering`.`enrolled_in`) AS `count` from `barbering` where (`barbering`.`status` = 'Participated') group by `barbering`.`enrolled_in` union all select `bartending`.`programme` AS `program`,`bartending`.`status` AS `status`,`bartending`.`enrolled_in` AS `year`,count(`bartending`.`enrolled_in`) AS `count` from `bartending` where (`bartending`.`status` = 'Participated') group by `bartending`.`enrolled_in` union all select `bpo`.`programme` AS `program`,`bpo`.`status` AS `status`,`bpo`.`enrolled_in` AS `year`,count(`bpo`.`enrolled_in`) AS `count` from `bpo` where (`bpo`.`status` = 'Participated') group by `bpo`.`enrolled_in` union all select `child_care`.`programme` AS `program`,`child_care`.`status` AS `status`,`child_care`.`enrolled_in` AS `year`,count(`child_care`.`enrolled_in`) AS `count` from `child_care` where (`child_care`.`status` = 'Participated') group by `child_care`.`enrolled_in` union all select `computer_basics`.`programme` AS `program`,`computer_basics`.`status` AS `status`,`computer_basics`.`enrolled_in` AS `year`,count(`computer_basics`.`enrolled_in`) AS `count` from `computer_basics` where (`computer_basics`.`status` = 'Participated') group by `computer_basics`.`enrolled_in` union all select `event_planning`.`programme` AS `program`,`event_planning`.`status` AS `status`,`event_planning`.`enrolled_in` AS `year`,count(`event_planning`.`enrolled_in`) AS `count` from `event_planning` where (`event_planning`.`status` = 'Participated') group by `event_planning`.`enrolled_in` union all select `front_desk`.`programme` AS `program`,`front_desk`.`status` AS `status`,`front_desk`.`enrolled_in` AS `year`,count(`front_desk`.`enrolled_in`) AS `count` from `front_desk` where (`front_desk`.`status` = 'Participated') group by `front_desk`.`enrolled_in` union all select `home_health`.`programme` AS `program`,`home_health`.`status` AS `status`,`home_health`.`enrolled_in` AS `year`,count(`home_health`.`enrolled_in`) AS `count` from `home_health` where (`home_health`.`status` = 'Participated') group by `home_health`.`enrolled_in` union all select `house_keeping`.`programme` AS `program`,`house_keeping`.`status` AS `status`,`house_keeping`.`enrolled_in` AS `year`,count(`house_keeping`.`enrolled_in`) AS `count` from `house_keeping` where (`house_keeping`.`status` = 'Participated') group by `house_keeping`.`enrolled_in` union all select `landscaping`.`programme` AS `program`,`landscaping`.`status` AS `status`,`landscaping`.`enrolled_in` AS `year`,count(`landscaping`.`enrolled_in`) AS `count` from `landscaping` where (`landscaping`.`status` = 'Participated') group by `landscaping`.`enrolled_in` union all select `life_guard`.`programme` AS `program`,`life_guard`.`status` AS `status`,`life_guard`.`enrolled_in` AS `year`,count(`life_guard`.`enrolled_in`) AS `count` from `life_guard` where (`life_guard`.`status` = 'Participated') group by `life_guard`.`enrolled_in` union all select `nail_tech`.`programme` AS `program`,`nail_tech`.`status` AS `status`,`nail_tech`.`enrolled_in` AS `year`,count(`nail_tech`.`enrolled_in`) AS `count` from `nail_tech` where (`nail_tech`.`status` = 'Participated') group by `nail_tech`.`enrolled_in` union all select `wait_staff`.`programme` AS `program`,`wait_staff`.`status` AS `status`,`wait_staff`.`enrolled_in` AS `year`,count(`wait_staff`.`enrolled_in`) AS `count` from `wait_staff` where (`wait_staff`.`status` = 'Participated') group by `wait_staff`.`enrolled_in` order by `count` desc ;
+
 --
 -- Indexes for dumped tables
 --
@@ -2679,6 +2858,12 @@ ALTER TABLE `bpo`
 ALTER TABLE `child_care`
   ADD PRIMARY KEY (`id`),
   ADD KEY `client_id` (`client_id`);
+
+--
+-- Indexes for table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `computer_basics`
@@ -2757,6 +2942,12 @@ ALTER TABLE `profile_img`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `reports`
+--
+ALTER TABLE `reports`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `specialized_trainings`
 --
 ALTER TABLE `specialized_trainings`
@@ -2785,7 +2976,7 @@ ALTER TABLE `wait_staff`
 -- AUTO_INCREMENT for table `action`
 --
 ALTER TABLE `action`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `applicants`
@@ -2797,25 +2988,31 @@ ALTER TABLE `applicants`
 -- AUTO_INCREMENT for table `barbering`
 --
 ALTER TABLE `barbering`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `bartending`
 --
 ALTER TABLE `bartending`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
 -- AUTO_INCREMENT for table `bpo`
 --
 ALTER TABLE `bpo`
-  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=313;
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=314;
 
 --
 -- AUTO_INCREMENT for table `child_care`
 --
 ALTER TABLE `child_care`
   MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `comments`
+--
+ALTER TABLE `comments`
+  MODIFY `id` int(7) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `computer_basics`
@@ -2827,7 +3024,7 @@ ALTER TABLE `computer_basics`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `event_planning`
@@ -2874,7 +3071,7 @@ ALTER TABLE `nail_tech`
 --
 -- AUTO_INCREMENT for table `privileges`
 --
-ALTER TABLE `privileges`
+ALTER TABLE `privilegese
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
@@ -2882,6 +3079,12 @@ ALTER TABLE `privileges`
 --
 ALTER TABLE `profile_img`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+
+--
+-- AUTO_INCREMENT for table `reports`
+--
+ALTER TABLE `reports`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `specialized_trainings`
@@ -2893,7 +3096,7 @@ ALTER TABLE `specialized_trainings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `wait_staff`

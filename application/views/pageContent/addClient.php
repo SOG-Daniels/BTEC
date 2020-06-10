@@ -1,5 +1,15 @@
 <?php 
- //echo validation_errors(); 
+ echo validation_errors();
+ 
+    // echo '
+    // <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    // <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    //     <span aria-hidden="true">&times;</span>
+    // </button>
+    // <h5><strong><i class="fa fa-2x fa-frown"></i> </strong>
+    //     '.validation_errors().'
+    // </div>
+    // ';
  //  echo (isset($addClientMessage))? $addClientMessage : ' ';
 //  echo '<pre>';
 //  !empty($result)? print_r($result) : '';
@@ -16,10 +26,14 @@
         echo form_open_multipart('register-applicant');
     ?>    
     <input type="hidden" name="action" value="addClient">
-    <span class="float-right ">
-        <button  id="addClient" class="btn btn-sm btn-primary " type="submit"><i class=" fa fa-user-plus"></i> Add Applicant</button>
-    </span>
-    <h1 class="h4 mb-2 text-gray-800">Application Form</h1>
+    <div class="row">
+        <div class="col-12 col-md-8">
+            <h1 class="h4 mb-2 text-gray-800">Application Form</h1>
+        </div>
+        <div class="col-12 col-md-4 d-flex justify-content-end">
+            <button  id="addClient" class="btn btn-sm btn-primary " type="submit"><i class=" fa fa-user-plus"></i> Add Applicant</button>
+        </div>
+    </div>
     </div>
     <div class="card-body">
         <div class="row">
@@ -213,9 +227,12 @@
                     <h6>
                         <small class="font-weight-bold text-primary">
                         PERSONAL REFERENCES
+                        <button id="remove-ref" class="btn btn-link btn-sm text-danger"><i class="fa fa-minus"></i></button>
+                        <button id="add-more-ref" class="btn btn-link btn-sm text-primary"><i class="fa fa-plus"></i></button>
                         <hr>
                         </small> 
                     </h6>
+                    <span id="personalRef">
                     <div class="row">
                         <div class="col-12 col-md-6 form-group">
                             <label for="first_name" class="font-weight-bold">Name <small class="font-weight-bold">Ref#1:</small></label>
@@ -234,6 +251,8 @@
                             <input type="number" class="form-control" name="refPhone1" id="" placeholder="6687434..."  required>
                         </div>
                     </div>
+                    </span>
+                    <span id="ref2" style="display: none;">
                     <hr>
                     <div class="row">
                         <div class="col-12 col-md-6 form-group">
@@ -253,6 +272,8 @@
                             <input type="number" class="form-control" name="refPhone2" id="" placeholder="" >
                         </div>
                     </div>
+                    </span>
+                    <span id="ref3" style="display: none;">
                     <hr>
                     <div class="row">
                         <div class="col-12 col-md-6 form-group">
@@ -272,6 +293,7 @@
                             <input type="number" class="form-control" name="refPhone3" id="" placeholder="" >
                         </div>
                     </div>
+                    </span>
                     <br>
                     <h6>
                         <small class="font-weight-bold text-primary">

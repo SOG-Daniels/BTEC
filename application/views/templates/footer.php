@@ -82,7 +82,53 @@
                 <label>Select All</label>
               </div>
               <div class="form-group" id="privileges">
-                <div class="row offset-1">
+              <?php 
+
+                $allPrivi = $this->session->userdata('allPrivi');
+                $html = '';
+                $count = 1;
+                                        
+                foreach($allPrivi as $priviData){
+                    
+                    if ($count & 1){
+                        //count is odd
+                        $html.= '
+                        <div class="row offset-1">
+                            <div class="col-12 col-md-5 form-check">
+                                <input class="form-check-input action" type="checkbox" name="privileges[]" value="'.$priviData['id'].'" id="privi'.$priviData['id'].'" >
+                                <label class="form-check-label" for="'.$priviData['name'].'">
+                                    '.$priviData['name'].'
+                                </label>
+                            </div>
+                        ';
+
+                    }else{
+                        //count is even
+                        $html .='
+                                <div class="col-12 col-md-5 form-check">
+                                <input class="form-check-input action" type="checkbox" name="privileges[]" value="'.$priviData['id'].'" id="privi'.$priviData['id'].'" >
+                                <label class="form-check-label" for="'.$priviData['name'].'">
+                                    '.$priviData['name'].'
+                                </label>
+                            </div>
+                        </div>
+                        ';
+
+                    }
+                    $count++;
+                }
+                if ($count & 1){
+                    $html .='
+                        </div>
+                    ';
+                }
+                $html .=' 
+                    </div>
+                ';
+                echo $html;
+
+              ?>
+                <!-- <div class="row offset-1">
                     <div class="col-12 col-md-5 form-check">
                         <input class="form-check-input" id="privi2" type="checkbox" value="2" name="privileges[]" id="" checked >
                         <label class="form-check-label" for="viewClients">
@@ -152,7 +198,7 @@
                             Create Reports
                         </label>
                     </div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -359,7 +405,41 @@
           <br>
 
           <label for="endDate" class="font-weight-bold">End Date: </label>
-          <span id="info-endDate" class="text-primary"> </span> 
+          <span id="info-endDate" class="text-primary"> </span>
+
+          <label for="endDate" class="font-weight-bold d-block">Event Type: </label>
+          <div class="form-group">
+            <div class="form-check-inline">
+              <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="color" value="#ff8000" checked>
+                    <span style="color: #ff8000">Default Event</span>
+              </label>
+            </div>
+          <?php 
+
+            if (!empty($eventLabels)){
+
+              foreach ($eventLabels as $key => $array){
+                echo '
+                  <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" name="color" value="'.$array['color'].'">
+                      <span style="color: '.$array['color'].'">'.$array['label'].'</span>
+                    </label>
+                  </div>
+                
+                ';
+                
+              }
+
+            }
+          ?>
+            <!-- <div class="form-check-inline disabled">
+              <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="optradio">Option 3
+              </label>
+            </div>  -->
+          </div>
           <br>
             <label class="font-weight-bold" for="eTitle">Event Title:</label>
             <input class="form-control" type="text" id="eTitle" name="title" placeholder="Enter the an event name..." required>
@@ -404,7 +484,22 @@
   <!-- Data Tables plugins -->
   <script src="<?php echo base_url()?>assets/vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="<?php echo base_url()?>assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-  
+
+  <script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.bootstrap4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+
+  <!-- scripts are for datatables to export as PDF -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> -->
+
+  <!-- script is for the datatables to export as Excel -->
+  <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
+  <!-- <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script> -->
+
+  <!-- Script for column visibility option and copy on datatables -->
+  <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
+
   <!-- data picker custom javascript -->
   <!-- <script src="<?php //echo base_url()?>assets/js/bootstrap-datepicker.js"></script> -->
   
@@ -438,7 +533,6 @@
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> -->
   <!-- <script src="https://apis.google.com/js/client.js"></script> -->
 
-
   <!-- FUllCalendar with google calendar custom script -->
   <script src="<?php echo base_url()?>assets/js/gCalendar.js"></script>
 
@@ -446,6 +540,8 @@
       //declaring global variable
       var base_url = "<?php echo base_url(); ?>";
       
+      var PRIVI_SIZE = <?php echo count($this->session->userdata('allPrivi'));?>;
+
 
       //setting up autocomplete by stating the controller that will perform the search
       //the autocomplete plugin will always submit it as a GET method reason being for having the '?' after the 'search'

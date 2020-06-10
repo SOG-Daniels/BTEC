@@ -5,32 +5,14 @@
 // echo "</pre>";
  echo (!empty($this->session->flashdata('message'))? $this->session->flashdata('message') : '');
 ?>
-<h1 class="h3 mb-2 text-gray-800">Grades</h1>
-        <form id="removeEnrolledClientForm" method="POST" action="<?php echo base_url()?>unenroll-client">
-          <input type="hidden" name="action" value="unEnrollClient">
-          <input type="hidden" name="userId" value="<?php echo $programInfo[0]['client_id'];?>">
-          <input type="hidden" name="program" value="<?php echo trim($programInfo[0]['programme']);?>">
-          <input type="hidden" name="programId" value="<?php echo $programInfo[0]['id'];?>">
-        </form>
+
+<a href="<?php echo base_url().'client-info/'.$programInfo[0]['client_id']; ?>" class="btn btn-link "><i class="fa fa-arrow-left"></i> Go back to View Client Profile</a>
           <!-- DataTales Example -->
           <div class="card shadow-lg mb-4">
             <div class="card-header py-3">
               <div class="row">
                 <div class=" col-12 col-md-9">
                   <h5 class="m-0 font-weight-bold text-primary"><?php echo $programInfo[0]['programme'] ?></h5>
-                </div>
-                <div class="col-12 col-md-3 d-flex justify-content-end">
-                <a href="#" id="removeClientFromProgram" class="btn btn-danger btn-sm " data-toggle="modal" data-target="#unenrollClientModal">
-                  <i class="fas fa-fw fa-trash"></i>
-                  <span>Unenroll Client</span>
-                </a>
-                &nbsp;
-                &nbsp;
-                <button id="saveGradeChanges" class="btn btn-success btn-sm ">
-                  <i class="fas fa-fw fa-save"></i>
-                  <span>Save</span>
-                </button>
-                <input type="hidden" class="btn btn-link btn-primary" id="triggerConfirmModal" data-toggle="modal" data-target="#modalProgramConfirm">
                 </div>
               </div>
             </div>
@@ -119,14 +101,9 @@
                         <hr>    
                         </small>        
                     </h6>
-                <div  class="rounded" style="background-color: #F5F5F5 ;">
+                
 
-                <form id="gradeForm" action="<?php echo base_url() ;?>update-grades/" method="POST">
-                  <input type="hidden" name="action" value="updateGrades">
-                  <input type="hidden" name="program" value="<?php echo (isset($programInfo[0]['program'])? $programInfo[0]['program'] : '');?>">
-                  <input type="hidden" name="clientId" value="<?php echo (isset($programInfo[0]['clientId'])? $programInfo[0]['clientId'] : '');?>">
-                  <input type="hidden" name="slug" value="<?php echo (isset($programInfo[0]['slug'])? $programInfo[0]['slug'] : '');?>">
-                    <div id="assesments">
+                    <div id="assesments"  class="rounded" style="background-color: #F5F5F5 ;">
                       <div class="row pl-3 pr-3 pt-3">
                     <?php 
                     if (!empty($programInfo[0]['Assesment1'])){
@@ -134,6 +111,7 @@
 
                         if (isset($programInfo[0]['Assesment'.$i])){
 
+                          //spliting assesment data 
                           $assesment = explode(',', $programInfo[0]['Assesment'.$i]);
 
                           echo '
@@ -142,7 +120,7 @@
                             <div id="asses-input'.$i.'"> 
                                 <label class="font-weight-bold">'.$assesment[0].':</label>
                                   <input type="hidden" name="assesName[]" value = "'.$assesment[0].'">
-                                  <input type="number" class="form-control" name="assesGrade[]" id="assesment1" placeholder="Enter a Grade...." value="'.(isset($assesment[1])? $assesment[1]: '' ).'" >
+                                  <span> '.(isset($assesment[1])? $assesment[1]: '' ).'<span>
                             </div>
                           </div>
                             
@@ -158,8 +136,7 @@
                       echo '
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
                         <h5>
-                        <strong><i class="fa fa-2x fa-exclamation-mark"></i>Notice: </strong> Grade names must be created first in order to be able to enter grades.
-                        '.(in_array(9, $this->session->userdata('action'))? '<a href="'.base_url().'program-setup"> click here </a>to do so.' : 'Ask IT personnel to add the grade names.').'
+                        <strong><i class="fa fa-2x fa-exclamation-mark"></i>Notice: </strong> No grades available!.
                         <h5>
                         </div>
                       
@@ -170,42 +147,53 @@
                     ?>
                       </div> 
                     </div>
-                  
                     <br>
-                    <div class="row pl-3 pr-3">
-                    <div class="form-group col-12 col-md-6 ">
-                      <label class="font-weight-bold">Course Status:</label>
-                      <select class="custom-select" name="status" id="courseStatus" onfocus='this.size=4;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
-                        <option selected value="1">Enrolled</option>
-                        <option value="Completed">Completed</option>
-                        <option value="Dropped">Dropped</option>
-                        <option value="Participated">Participated</option>
-                      </select>
-                    </div>
-                    <div class="form-group col-12 col-md-6">
-                      <label class="font-weight-bold">Graduated On:</label>
-                     <input id="graduatedOn" class="form-control" type="date" name="graduated_on" value="<?php echo date('Y-m-d');?>" > 
-                    </div>
+                    <h6>
+                        <small class="font-weight-bold text-primary">
+                        ADDITIONAL INFO 
+                        <hr>    
+                        </small>        
+                    </h6>
+                    <div  class="rounded" style="background-color: #F5F5F5 ;">
+                        <div class="row pl-3 pr-3 pt-3">
+                            <div class="form-group col-12 col-md-6 ">
+                            <label class="font-weight-bold d-block">Pre-Test AVG:</label>
+                            <span><?php echo $programInfo[0]['pre_test_avg'];?></span>
+                            </div>
+                            <div class="form-group col-12 col-md-6 ">
+                            <label class="font-weight-bold d-block">Final Average:</label>
+                            <span><?php echo $programInfo[0]['final_grade'];?></span>
+                            </div>
+                            <div class="form-group col-12 col-md-6 ">
+                            <label class="font-weight-bold d-block">Course Status:</label>
+                            <span><?php echo $programInfo[0]['status'];?></span>
+                            </div>
+                            <div class="form-group col-12 col-md-6">
+                            <label class="font-weight-bold">Graduated On:</label>
+                            <span><?php echo $programInfo[0]['graduated_on'];?></span>
+                            </div>
 
+                        </div>
+                        <div class="form-group col-12">                   
+                        <label for="my-textarea" class="font-weight-bold d-block">notes:</label>
+                    
+                        <textarea id="viewNotes" class="form-control" ></textarea>
+                        <br>
+                        </div>
                     </div>
-                    <div class="form-group col-12">                   
-                      <label for="my-textarea" class="font-weight-bold">Comment:</label>
-                      <textarea id="programComment" name="comment" ></textarea>
-                      <br>
-                    </div>
-                  </form>
                   </div>
                   </div>
-                </div>
+                
+
             </div>
           </div>
           <script type="text/javascript">
 
-            var comment = document.getElementById('programComment');
-            comment.innerText = '<?php echo isset($programInfo[0]['comments'])? str_replace('\'', '\\\'',$programInfo[0]['comments']): '';?>';
-                    
+            var notes = document.getElementById('viewNotes');
+            notes.innerText = '<?php echo isset($programInfo[0]['notes'])? str_replace('\'', '\\\'',$programInfo[0]['notes']): '';?>';
 
             
             
           </script>
           
+

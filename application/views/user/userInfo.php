@@ -1,7 +1,8 @@
 <?php
     // echo "<pre>";
-    // print_r($userData);
+    // print_r($userData   );
     // echo "</pre>";
+
 ?>
 
 <div class="card shadow-lg mb-3">
@@ -80,8 +81,54 @@
                                                 array_push($action, $data);
                                             }
                                         }
+                                        
+                                        //displaying privilege checkboxes
+                                        $html = '
+                                        <div class="form-group" >
+                                            <label class="" for="last_name">Priviledge:</label>
+                                        ';
+                                        $count = 1;
+                                        
+                                        foreach($allPrivi as $priviData){
+                                            
+                                            if ($count & 1){
+                                                //count is odd
+                                                $html.= '
+                                                <div class="row offset-1">
+                                                    <div class="col-12 col-md-5 form-check">
+                                                        <input class="form-check-input action" type="checkbox" name="privilege[]" value="'.$priviData['id'].'" id="privil'.$priviData['id'].'" '.( (isset($action) && in_array($priviData['id'], $action) )? 'checked' : '').' disabled>
+                                                        <label class="form-check-label" for="'.$priviData['name'].'">
+                                                            '.$priviData['name'].'
+                                                        </label>
+                                                    </div>
+                                                ';
+
+                                            }else{
+                                                //count is even
+                                                $html .='
+                                                        <div class="col-12 col-md-5 form-check">
+                                                        <input class="form-check-input action" type="checkbox" name="privilege[]" value="'.$priviData['id'].'" id="privil'.$priviData['id'].'"'.( (isset($action) && in_array($priviData['id'], $action))? 'checked' : '').' disabled>
+                                                        <label class="form-check-label" for="'.$priviData['name'].'">
+                                                            '.$priviData['name'].'
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                ';
+
+                                            }
+                                            $count++;
+                                        }
+                                        if ($count & 1){
+                                            $html .='
+                                                </div>
+                                            ';
+                                        }
+                                        $html .=' 
+                                            </div>
+                                        ';
+                                        echo $html;
                                     ?>
-                                    
+<!--                                     
                                     <div class="form-group" >
                                         <label class="" for="last_name">Priviledge:</label>
                                         <div class="row offset-1">
@@ -156,7 +203,7 @@
                                                 </label>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 
                             </div>
                         </div>
