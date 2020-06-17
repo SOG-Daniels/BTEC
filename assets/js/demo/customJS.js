@@ -25,6 +25,45 @@ function setInputCount(value){
     console.log('inputCount = '+inputCount);
 }
 // function for validation if passwords match before submission and checks if requirements for 
+
+
+//used for changing a password outside of the system
+function checkChangePassMatch() {
+    console.log('test');
+    //$('#submit-button').prop('disabled', true);
+    var decimal =  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;//rules that govern what is required of a password
+    var password = $("#newPassword").val();
+    var confirmPassword = $("#confirmPassword").val();
+
+    if (password != confirmPassword && confirmPassword != ''){
+     
+        $('#change-pass-btn').prop('disabled', true);
+        $("#divCheckPasswordMatch").html("<span class='text-danger ml-4'>Passwords do not match!</span>");
+    
+    }else if(password == '' || confirmPassword == ''){
+
+        $("#divCheckPasswordMatch").html(" ");
+        $("#passRequirement").html(" ");
+        $('#change-pass-btn').prop('disabled', true);
+    
+    }else{
+        
+        $("#divCheckPasswordMatch").html("<span class='text-success ml-4'> Passwords match.</span>");
+        
+        if (password.match(decimal)){
+
+            $("#passRequirement").html(" ");
+            $('#change-pass-btn').prop('disabled', false);
+
+        }else{
+
+            $("#passRequirement").html("<span class='text-danger ml-4'>Please meet the requirement stated above!</span>");
+
+        }
+    }
+}
+
+
 // new password are met
 function checkPasswordMatch() {
     
@@ -690,6 +729,9 @@ $(document).ready(function() {
     //Used for changing a password in the user profile page.
     //it calls to the checkPasswordMatch() function to validate passwords
     $("#newPass, #confirmPass").keyup(checkPasswordMatch);
+    
+    //used for the changing of password outside of system
+    $("#newPassword, #confirmPassword").keyup(checkChangePassMatch);
 
     // $("#clientInfoForm :input").attr("readOnly", true);//not used
     
@@ -1026,10 +1068,10 @@ $(document).ready(function() {
         $html +='<div class="input-group mb-3">';
         $html +='<div class="input-group-prepend">';
         $html +='<span class="input-group-text">';
-        $html +='<input class="from-control" type="color" id="favcolor" name="color[]" value="">';
+        $html +='<input class="from-control" type="color" id="favcolor" name="labels[label'+labelNum+'][color]" value="">';
         $html += '</span>';
         $html += '</div>';
-        $html +='<input type="text" class="form-control" aria-label="Event Label" name="eventLabel[]" value="" required>';
+        $html +='<input type="text" class="form-control" aria-label="Event Label" name="labels[label'+labelNum+'][name]" value="" required>';
         $html +='<div class="input-group-append">';
         $html +='<span class="input-group-text bg-danger remove-event-label"><i class="fa fa-minus text-white"></i></span>';
         $html += '</div>';
@@ -1038,7 +1080,7 @@ $(document).ready(function() {
         $html += '</div>';
 
         $('#eventLabels').append($html);
-
+        labelNum++;
         
 
     });
@@ -1047,6 +1089,7 @@ $(document).ready(function() {
         e.preventDefault();
 
         $(this).parent().parent().parent().parent().remove();
+        labelNum--;
         // inputCount--;
 
     });

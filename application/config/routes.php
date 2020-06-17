@@ -126,6 +126,9 @@ $route['autocomplete'] = 'main/auto_complete';
 //autocomplete route
 $route['search'] = 'main/autocomplete_search';
 
+//advance search route
+$route['advance-search'] = 'main/advance_search';
+
 
 ////////////////////// Main controller routes end///////////////////////
 
@@ -138,12 +141,13 @@ $route['save-program-setup'] = 'main/save_program_settings';
 //routes for login UI
 $route['login'] = 'verification/login';
 $route['logout'] = 'verification/logout';
-$route['change-password/(:any)'] = 'verification/change_password/$1';
+$route['reset-password'] = 'verification/reset_password';
+$route['change-password/(:num)/(:any)'] = 'verification/change_password/$1/$2';
 
 //verification routes end//
 
 //email controller routes
-$route['forgot-password'] = 'email/request_email';
-$route['reset-request'] = 'email/send_reset_request';
+$route['forgot-password'] = 'verification/request_email';
+$route['reset-request'] = 'verification/send_reset_request';
 
 

@@ -1,4 +1,5 @@
 <?php
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 // defined('BASEPATH') OR exit('No direct script access allowed');
 // Main Controller manages all the users functionality 
 // meaning, all the users are able to do in the system
@@ -23,11 +24,15 @@ class Main extends CI_Controller{
         //is created in the child class i.e. the User class
         parent::__construct();
 
-        // loading session library and 2 models defined in the model folder
+        //loading library
         $this->load->library('session');
+        $this->load->library('custom_email');
+
+        //loading models
         $this->load->model('user_model'); 
         $this->load->model('client_model'); 
         $this->load->model('report_model'); 
+        $this->load->model('validation_model'); 
 
         // initializing datamembers with session data 
         $this->userId = $this->session->userdata('userid');
@@ -35,7 +40,7 @@ class Main extends CI_Controller{
         $this->user_actions = $this->session->userdata('action');
         $this->userIdent = $this->session->userdata('userIdentity');// signature i.e. first letter name and lastname of current user
 
-        // array that keeps track of the slug name as the key and table name as the value
+        // keeps track of programs as slugs and as table name 
         $this->programTables = array(
             'Introduction-to-Barbering' => 'barbering',
             'Bartending' => 'bartending',
@@ -64,12 +69,9 @@ class Main extends CI_Controller{
      * @return    NONE 
      */ 
     public function get_dashboard(){
-
-        
-    // setting session so only logged in users have access
+  
         if( $this->is_session_set()){
-
-
+            
             $this->data['title'] = 'Dashboard';// title of page
             $this->data['active'] = 'dashboard';// setting the dashboard as current option on sidebar
             $this->data['name'] = $this->session->userdata('name');// name of the users that logged 
@@ -83,8 +85,7 @@ class Main extends CI_Controller{
             $this->load->view('templates/footer', $this->data);
 
         }else{
-            
-            //if there is no session direct them back to the login 
+           //sesion is not set 
             redirect('login');
         }
 
@@ -92,7 +93,6 @@ class Main extends CI_Controller{
         
     }
      /**
-     * 
      * profile() displays all info the system has on the user on a view 
      * 
      * @access    public
@@ -707,10 +707,13 @@ class Main extends CI_Controller{
             // setting title to the view
             $this->data['title'] = 'Add User';
             
-            if ($post !== NULL ){
-                //passing post data to the model 
-                $result = $this->user_model->enter_user($post);
+            if (!empty($post) && $post !== NULL ){
+                
+                $oneTimePass = $this->generate_random_pass();
+                $post['password'] = $oneTimePass;
 
+                $result = $this->user_model->enter_user($post);
+                
                 if($result === FALSE){
                     $this->message = '
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -724,67 +727,70 @@ class Main extends CI_Controller{
                     ';
                     
                 }elseif ($result === TRUE){
-
-                    $oneTimePass = $this->generate_random_pass();
-                    $sub = 'Welcome '.$post['fname'].' '.$post['lname'].' to the BTEC Family!';
-                    $mess = 'To access the BTEC system you can click <a href="'.base_url().'">here </a><br>
-                    To change your password you can:<br>
-                    Sign in with this password <strong>'.$oneTimePass.'</strong> with your email. <br>
-                    Then navigate to your profile to find the change password option. 
-
-                    Thank you have a nice day. 
-                    - Intern Daniels
                     
-                    ';
-                    $emailTo = $post['email'];
-                    $config['email'] = Array( 
-                        'protocol'  => 'smtp', 
-                        'smtp_host' => 'smtp.mailtrap.io', 
-                        'smtp_port' =>  2525, 
-                        'smtp_user' => '0077e845401d5e', 
-                        'smtp_pass' => '736b4e111764b4', 
-                        'crlf'      => "\r\n", 
-                        'newline'   => "\r\n"
-                        );
-                    $this->email->initialize($config);
+                    //creating a token
+                    $token = random_string('alnum', 10);
 
-                    $this->email->from('danielsoncorrea@gmail.com', 'Daniels');
-                    $this->email->to($emailTo);
-                    $this->email->subject($sub);
-                    $this->email->message($mess);
+                    //30 min in seconds
+                    $expires = date('U') + 1800;
 
-                    if ($this->email->send()){
-                        
-                        $this->message = '
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h5><strong><i class="fa fa-2x fa-smile"></i> Success!</strong>  The user was added to the System and has been notified via email!<h5>
-                        </div>
+                    $result = $this->validation_model->set_pass_reset($post['email'], $token, $expires);
+
+                    if ($result != FALSE){
+                        //preparing email
+                        $sub = 'Welcome '.$post['fname'].' '.$post['lname'].' to the BTEC Family!';
+                        $mess = 'To access the BTEC System you can <a href="'.base_url().'change-password/'.$result.'/'.$token.'">click here</a> to enter a new password OR<br>
+                        <a href="'.base_url().'login'.'">Sign in</a> with this password: <strong>'.$oneTimePass.'</strong><br>
+
+                        Thank you have a nice day. 
                         ';
+                        $this->custom_email->set_subject($sub);
+                        $result = $this->custom_email->send_email($post['email'], $mess);
+
+                        if($result){
+
+                            $this->message = '
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h5><strong><i class="fa fa-2x fa-smile"></i> Success!</strong>  The user was added to the System and has been notified via email!<h5>
+                            </div>
+                            ';
+
+                        }else{
+
+                            $this->message = '   
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h5>
+                            <strong><i class="fa fa-2x fa-exclamation-triangle"></i> Whoops!</strong> The user was added to the system but not notified via Email! <br>
+                            User Default Password is <strong>'.$oneTimePass.'</strong>
+                            <h5>
+                            </div>
+                            ';
+                        }
 
 
                     }else{
-                        $mess ='';
-                        
-                        if ($this->user_model->set_user_default_pass($result) === TRUE){
-                            $mess = 'User default password is: <strong>Passw0rd</strong>';
-                        }
+                        //token was not set
                         $this->message = '   
                         <div class="alert alert-warning alert-dismissible fade show" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h5>
-                        <strong><i class="fa fa-2x fa-exclamation-triangle"></i> Whoops!</strong> The user was added to the system but not notified via Email! '.$mess.'
+                        <strong><i class="fa fa-2x fa-exclamation-triangle"></i> Whoops!</strong> The user was added to the system but not notified via Email! <br>
+                        User Default Password is <strong>'.$oneTimePass.'</strong>
                         <h5>
                         </div>
                         ';
-                    }            
 
+                    }
                 }else{
-
+                    //user Exists
                     $this->message = '
                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -793,23 +799,13 @@ class Main extends CI_Controller{
                     <h5><strong><i class="fa fa-2x fa-exclamation-triangle"></i> Notice!</strong> The user is already in the system please <a href="'.base_url().'user-info/'.$result.'">check here</a> to view their profile.<h5>
                     </div>
                     ';
-                    // <a class="btn btn-link nav-link" data-target="#addUserModal" data-toggle="modal" data-backdrop="static" data-keyboard="false" >
-                    // <i class="fas fa-fw fa-user-plus "></i>
-                    // <span> Try again?</span>
-                    // </a>
-
                     
                 }
                 $this->session->set_flashdata('message', $this->message);
-                
-                // returning back to home  page
                 redirect('dashboard');
-
-                // $this->load->view('templates/header', $this->data);
-                // $this->load->view('templates/sidebar', $this->data);
-                // $this->load->view('templates/topbar', $this->data);
-                // $this->load->view('pageContent/home', $this->data);
-                // $this->load->view('templates/footer', $this->data);
+            }else{
+                //post is not set
+                redirect('dashboard');
             }
 
             
@@ -822,7 +818,6 @@ class Main extends CI_Controller{
     // This function will display all the users in the system in a table
     public function view_users(){
 
-        
         if($this->is_session_set() && in_array(4, $this->user_actions)){
             // session is set allow access to view users 
 
@@ -846,11 +841,8 @@ class Main extends CI_Controller{
                 ';
 
             }else{
-            
                 $this->data['userList'] = $result;
-
             }
-            
         
             $this->load->view('templates/header', $this->data);
             $this->load->view('templates/sidebar', $this->data);
@@ -1517,9 +1509,7 @@ class Main extends CI_Controller{
                     $this->input->post('status', TRUE),
                     $this->input->post('year', TRUE)
                 );
-                // echo '<pre>';
-                // print_r($result);
-                // echo '</pre>';
+
                 if ($result == -1){
                     // no such user was found
                     $this->message = '
@@ -1562,7 +1552,10 @@ class Main extends CI_Controller{
                 }
             
             }else{
-                // program doesnt exist
+
+                if (!empty($this->input->post())){
+
+                    // post was sent but program doesnt exist
                     $this->message = '
                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -1571,20 +1564,15 @@ class Main extends CI_Controller{
                     <h5><strong><i class="fa fa-2x fa-exclamation-triangle"></i> Notice!</strong> Program name, "'.$program.'" does not exsit.<h5>
                     </div>
                     ';
-                    
 
-                    $this->session->set_flashdata('message', $this->message);
-                    redirect('enrolled-list'); 
+                }
 
+                $this->session->set_flashdata('message', $this->message);
+                redirect('enrolled-list'); 
             }
-
         }else{
-
             redirect('login');
         }
-
-
-
     }
     /**
      * Will allow user to view clients grade and modify them
@@ -1839,7 +1827,7 @@ class Main extends CI_Controller{
                 // echo "</pre>";
 
                 
-                $result = $this->client_model->update_client_grade($this->input->post(NULL, TRUE), $notes);
+                $result = $this->client_model->update_client_grade($this->input->post(NULL, TRUE), trim($notes));
 
                 //Below are messages that will be flashed to the view once
                 if ($result === FALSE){
@@ -1883,7 +1871,7 @@ class Main extends CI_Controller{
                 
                 }else{
                 // the user is still enrolled so we will reload the same page
-                    redirect('view-client-grade/'.$this->input->post('slug'));
+                    redirect('manage-client-grade/'.$this->input->post('slug'));
 
                 }
 
@@ -1934,6 +1922,7 @@ class Main extends CI_Controller{
         if( $this->is_session_set() ){
 
             if (isset($_GET['term'])){
+                //used for the ajax that does the autocomplete
                 
                 $result = $this->user_model->get_autocomplete($_GET['term']);
 
@@ -2062,7 +2051,9 @@ class Main extends CI_Controller{
             if(!empty($this->input->post()) && !empty($this->input->post('program'))){
 
 
-                
+                echo "<pre>";
+                print_r($this->input->post());
+                echo "</pre>";
                 $hasEnrolled = $this->client_model->get_enrolled_list($this->input->post('program'), NULL);
 
                 $this->data['message'] = '';
@@ -2119,18 +2110,9 @@ class Main extends CI_Controller{
                 }
                 $input = array();
 
-                //preparing data for insert
-                if (!empty($this->input->post('eventLabel'))){
-                    $color = $this->input->post('color');
-                    foreach ($this->input->post('eventLabel',TRUE) as $key => $val){
-                        $input[$key] =  array(
-                            'label' => trim($val),
-                            'color' => $color[$key],
-                            'created_by' => $this->session->userdata('userIdentity')
-
-                        );
-                    }
-
+                // //preparing data for insert
+                if (!empty($this->input->post('labels'))){
+                    $input = $this->input->post('labels');
 
                 }else{
                     //no labels entered
@@ -2141,18 +2123,18 @@ class Main extends CI_Controller{
                 if (!$this->user_model->set_event_labels($input)){
                     //error message
                     $this->data['message'] .= '
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h5>
-                    <strong><i class="fa fa-2x fa-exclamation-mark"></i> Notice: </strong> The Calendar Event Labels were not saved.
-                    <h5>
-                    </div>
-                    ';
+                    // <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    // <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    //     <span aria-hidden="true">&times;</span>
+                    // </button>
+                    // <h5>
+                    // <strong><i class="fa fa-2x fa-exclamation-mark"></i> Notice: </strong> The Calendar Event Labels were not saved.
+                    // <h5>
+                    // </div>
+                    // ';
                     log_message('debug', 'set_event_labels returned false when used in save_program_settings() main controller');       
                 }else{
-                    //success message
+                    // success message
                     $this->data['message'] .= '
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -2166,7 +2148,6 @@ class Main extends CI_Controller{
 
 
                 }
-
 
                 // setting message viewable only once, disapears upon page reload
                 $this->session->set_flashdata('message', $this->data['message']);
@@ -2601,8 +2582,7 @@ class Main extends CI_Controller{
                         
                         
                     }
-                    //setting the color of the event (orange);
-                    //$arr['color'] = '#ff8000';
+                    $arr['labelId'] = (isset($arr['color'])? str_replace('#', '', $arr['color']) : '');
                     $eventList[$key] = $arr;
                 }
 
@@ -2774,6 +2754,62 @@ class Main extends CI_Controller{
 
         }else{
             echo 'logged out';
+        }
+    }
+    /* searches  based on option picked 
+     *
+     * @access    public
+     * @param     NONE 
+     *
+     * @return    NONE
+     */    
+    public function advance_search(){
+    
+        //checking if session is set
+        if ($this->is_session_set()){
+
+            if (!empty($this->input->post()) && !empty($this->input->post('searchVal', TRUE)) ){
+            //post was recieved
+            
+            $search = trim(str_replace(' ', '', $this->input->post('searchVal', TRUE)));
+            $filterBy = trim(str_replace(' ', '', $this->input->post('searchBy', TRUE)));
+
+            //where condition for query based on searchBy 
+            $searchBy = '';
+            switch ($filterBy) {
+                case 3:
+                    $searchBy = 'a.email LIKE "%'.htmlspecialchars($search).'%"';
+                    break;
+                case 2:
+                     $searchBy = 'a.mobile_number LIKE "%'.htmlspecialchars($search).'%"';
+                    break;
+                case 1:
+                    $searchBy = 'a.ssn LIKE "%'.htmlspecialchars($search).'%"';
+                    break;
+                default:
+                    $searchBy = 'CONCAT(first_name, last_name) LIKE "%'.htmlspecialchars($search).'%"';
+              }
+
+            //filter by district
+            $searchBy .= ($this->input->post('district') == 'all')? '' : 'and a.country ='.'"'.$this->input->post('district').'"';
+
+            $this->data['clientInfo'] = $this->user_model->advance_search($searchBy);
+            $this->data['searchValue'] = $search;
+            $this->data['title'] = 'Search Result';
+
+            $this->load->view('templates/header', $this->data);
+            $this->load->view('templates/sidebar', $this->data);
+            $this->load->view('templates/topbar', $this->data);
+            $this->load->view('pageContent/search', $this->data);
+            $this->load->view('templates/footer', $this->data);
+                
+
+            }else{
+                redirect('dashboard');
+            }
+
+        }else{
+            redirect('login');
         }
     }
     

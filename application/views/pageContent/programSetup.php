@@ -133,20 +133,20 @@
                       </h6>
                       <span id="eventLabels">
                       <?php 
+                          $num = 1;
                           if (!empty($eventLabels)){
-
                             foreach ($eventLabels as $val){
-                              
                                 echo '
                                 <div class="row">
                                   <div class="col-12 col-md-12">
                                     <div class="input-group mb-3">
                                       <div class="input-group-prepend">
                                         <span class="input-group-text">
-                                        <input class="from-control" type="color" id="favcolor" name="color[]" value="'.$val['color'].'">
+                                        <input type="hidden" name="labels[label'.$num.'][id]" value="'.$val['id'].'">
+                                        <input class="from-control" type="color" id="" name="labels[label'.$num.'][color]" value="'.$val['color'].'">
                                         </span>
                                       </div>
-                                      <input type="text" class="form-control" aria-label="Event Label" name="eventLabel[]" value="'.$val['label'].'" required>
+                                      <input type="text" class="form-control" aria-label="Event Label" name="labels[label'.$num.'][name]" value="'.$val['label'].'" required>
                                       <div class="input-group-append">
                                             <span class="input-group-text bg-danger remove-event-label"><i class="fa fa-minus text-white"></i></span>
                                       </div>
@@ -154,6 +154,7 @@
                                   </div>
                                 </div>
                                 ';
+                                $num++;
                             }
 
                           }else{
@@ -164,10 +165,10 @@
                                   <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                       <span class="input-group-text">
-                                      <input class="from-control" type="color" id="favcolor" name="color[]" value="">
+                                      <input class="from-control" type="color" id="" name="labels[label'.$num.'][color]" value="">
                                       </span>
                                     </div>
-                                    <input type="text" class="form-control" aria-label="Event Label" name="eventLabel[]" value="" required>
+                                    <input type="text" class="form-control" aria-label="Event Label" name="labels[label'.$num.'][name]" value="" required>
                                     <div class="input-group-append">
                                           <span class="input-group-text bg-danger remove-event-label"><i class="fa fa-minus text-white"></i></span>
                                     </div>
@@ -193,6 +194,8 @@
 
             //Global Variable used in customJS
             var assesNameForm; 
+
+            var labelNum = <?php echo $num; ?>;
 
             $(document).ready(function(){
 

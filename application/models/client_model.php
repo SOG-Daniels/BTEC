@@ -1178,22 +1178,32 @@ class Client_model extends CI_Model{
      */    
     public function get_client($name = NULL) {
    
-        $this->db->trans_start();
+        $name = (isset($name)? trim($name) : '');
         
-        $sql = $this->db->query('
-            SELECT a.id, a.first_name, a.middle_name, a.last_name, a.gender, email, mobile_phone,
-            CONCAT(a.street,", ",a.ctv, ", ",a.district) as address, a.ec_name, a.ec_number, a.ec_relation,  
-            (SELECT p.path FROM profile_img p WHERE p.id = a.profile_img_id) as img_path
-            FROM applicants a
-            WHERE CONCAT(first_name, " ", last_name) LIKE "%'.trim($name).'%"
-        ');
-        $this->db->trans_complete();
+        if ($name != ''){
+           
+            //running query
+            $this->db->trans_start();
+            $sql = $this->db->query('
+                SELECT a.id, a.first_name, a.middle_name, a.last_name, a.gender, email, mobile_phone,
+                CONCAT(a.street,", ",a.ctv, ", ",a.district) as address, a.ec_name, a.ec_number, a.ec_relation,  
+                (SELECT p.path FROM profile_img p WHERE p.id = a.profile_img_id) as img_path
+                FROM applicants a
+                WHERE CONCAT(first_name, " ", last_name) LIKE "%'.$name.'%"
+            ');
+            $this->db->trans_complete();
 
-        if ($this->db->trans_status() === FALSE){
-            return FALSE;
+            if ($this->db->trans_status() === FALSE){
+                return FALSE;
+            }
+            
+            return $sql->result_array();
+
+
+        }else{
+            //returning empty array
+            return array();
         }
-        
-        return $sql->result_array();
     
     }
     /**
@@ -1242,7 +1252,9 @@ class Client_model extends CI_Model{
         $set = array(
             'notes' => trim($data['notes']),
             'certificate' => $data['certificateFile'],
-            'is_employable' => $data['isEmployable']
+            'is_employable' => $data['isEmployable'],
+            'update_by' => $this->session->userdata('userIdentity'),
+            'updated_on' => date("Y-m-d H:i:s")
         );
         $this->db->update($data['table'], $set, array('id' => $data['programId']));
        

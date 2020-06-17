@@ -58,7 +58,7 @@
 
               <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" name="email" id="email" placeholder="johndoe@..." required>
+                <input type="email" class="form-control" name="email" id="email" placeholder="johndoe@gmail.com..." required>
               </div>
               
               <div class="form-group">
@@ -341,7 +341,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header ">
-        <h5 class="modal-title text-primary" id="d-modalTitle">Event Info </h5>
+        <h5 class="modal-title text-primary" id="d-modalTitle">Event </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -356,7 +356,36 @@
 
         <label for="Description" class="font-weight-bold">End Date: </label>
         <span id="d-endDate" class="text-primary"> </span> 
-        <br>
+          <label for="endDate" class="font-weight-bold d-block">Event Type: </label>
+          <div class="form-group">
+            <div class="form-check-inline">
+              <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="color" value="#ff8000" id="ff8000">
+                    <span style="color: #ff8000">Default Event</span>
+              </label>
+            </div>
+          <?php 
+
+            if (!empty($eventLabels)){
+              
+              foreach ($eventLabels as $key => $array){
+                $id = str_replace('#', '', $array['color']);
+                echo '
+                  <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" id="'.$id.'" class="form-check-input" name="color" value="'.$array['color'].'" >
+                      <span style="color: '.$array['color'].'">'.$array['label'].'</span>
+                    </label>
+                  </div>
+                
+                ';
+                
+              }
+
+            }
+          ?>
+           
+          </div>
 
         <label for="Title" class="font-weight-bold">Title: </label>
         <input type="text" id="d-title" name="title" value="" class="form-control">
@@ -412,7 +441,7 @@
             <div class="form-check-inline">
               <label class="form-check-label">
                 <input type="radio" class="form-check-input" name="color" value="#ff8000" checked>
-                    <span style="color: #ff8000">Default Event</span>
+                    <span style="color: #ff8000;">Event</span>
               </label>
             </div>
           <?php 
@@ -423,8 +452,8 @@
                 echo '
                   <div class="form-check-inline">
                     <label class="form-check-label">
-                      <input type="radio" class="form-check-input" name="color" value="'.$array['color'].'">
-                      <span style="color: '.$array['color'].'">'.$array['label'].'</span>
+                      <input type="radio" class="form-check-input" name="color" value="'.$array['color'].'" >
+                      <span style="color: '.$array['color'].';">'.$array['label'].'</span>
                     </label>
                   </div>
                 
@@ -434,13 +463,8 @@
 
             }
           ?>
-            <!-- <div class="form-check-inline disabled">
-              <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="optradio">Option 3
-              </label>
-            </div>  -->
+           
           </div>
-          <br>
             <label class="font-weight-bold" for="eTitle">Event Title:</label>
             <input class="form-control" type="text" id="eTitle" name="title" placeholder="Enter the an event name..." required>
             <br>
@@ -540,7 +564,7 @@
       //declaring global variable
       var base_url = "<?php echo base_url(); ?>";
       
-      var PRIVI_SIZE = <?php echo count($this->session->userdata('allPrivi'));?>;
+      var PRIVI_SIZE = <?php echo (!empty($this->session->userdata('allPrivi'))? count($this->session->userdata('allPrivi')) : 0);?>;
 
 
       //setting up autocomplete by stating the controller that will perform the search

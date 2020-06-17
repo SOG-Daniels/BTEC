@@ -275,7 +275,7 @@ class User_model extends CI_Model{
             $email = (isset($data['email'])? trim($data['email']) : '');
             $phone = (isset($data['phone'])? trim($data['phone']) : '');
             
-            $priviledges = (!empty($data['privileges']))? $data['privileges'] : NULL;
+            $privileges = (!empty($data['privileges']))? $data['privileges'] : NULL;
             
             //Checking to see if user exist in the database by email
             $this->db->select('id', 'status');
@@ -293,7 +293,7 @@ class User_model extends CI_Model{
                     'lname'  => $lname,
                     // 'username'  => $uname,
                     'email'  => $email,
-                    'password'  => md5("Passw0rd"),
+                    'password'  => md5($data['password']),
                     'phone'  => $phone,
                     'profile_img_id' => 1,
                     'created_by' => $this->session->userdata('userIdentity')
@@ -305,10 +305,14 @@ class User_model extends CI_Model{
                 $actionData['user_id'] = $this->db->insert_id();
                 $actionData['status'] = 1;
 
-                foreach ($data['privileges'] as $val){
+                if ($privileges != NULL){
 
-                    $actionData['privilege_id'] = $val;
-                    $this->db->insert('action', $actionData);
+                    foreach ($data['privileges'] as $val){
+                        //inserting user privileges
+                        $actionData['privilege_id'] = $val;
+                        $this->db->insert('action', $actionData);
+
+                    }
 
                 }
                 $this->db->trans_complete();//ending transaction
@@ -506,9 +510,6 @@ class User_model extends CI_Model{
     public function get_autocomplete($search = NULL, $searchBy = NULL) {
       
         $this->db->trans_start();
-        
-
-
 
            $sql = $this->db->query('
         
@@ -627,16 +628,18 @@ class User_model extends CI_Model{
         
     }
     /**
-     * updates and event 
+     * updates an event 
      *
      * @access    public
      * @param     eventData post data, concerning the modifications made
      * 
      * @return    boolean 
      */    
-    public function update_cal_event($eventData) {
+    public function update_cal_event($eventData = NULL) {
 
         $set = array();
+
+
 
         // will be triggered if a drag and drop occurs
         if (isset($eventData['startDate']) && isset($eventData['endDate'])){
@@ -646,13 +649,16 @@ class User_model extends CI_Model{
 
 
         }
+        if(isset($eventData['color'])){
+            $set['color'] = $eventData['color'];
+        }
 
         //merging both arrays 
         $set = array_merge( $set ,  array(
             'updated_by' => $this->session->userdata('userid'),
             'title ' => $eventData['title'],
             'description' => $eventData['description']
-            //'status' => 1
+            
         ));
         
       
@@ -683,7 +689,7 @@ class User_model extends CI_Model{
 
         $this->db->trans_start();
 
-        $this->db->select('label, color');
+        $this->db->select('id, label, color');
         $this->db->where(array('status' => 1));
         $query = $this->db->get('event_labels');
 
@@ -699,20 +705,44 @@ class User_model extends CI_Model{
      * sets all labels with the respective color provied  
      *
      * @access    public
-     * @param     input array containg all records to be inserted  
+     * @param     data array containg all records to be inserted  
      *
      * @return    Array that contains a list of all the data the user has in the system 
      */    
-    public function set_event_labels($input = NULL){
+    public function set_event_labels($data = NULL){
 
         $this->db->trans_start();
         
         $this->db->update('event_labels', array('status' => 0), array('status' => 1));
 
-        if ($input != NULL){
-            $this->db->insert_batch('event_labels', $input);
-        }
+        if (!empty($data)){
 
+            foreach ($data as $key => $input){
+
+                if (isset($input['id'])){
+                    //updating existing record
+                    $this->db->update('event_labels', array(
+                        'color' => $input['color'],
+                        'label' => $input['name'],
+                        'updated_by' => $this->session->userdata('userIdentity'),
+                        'updated_on' => date("Y-m-d H:i:s"),
+                        'status' => 1
+                    ), array('id' => $input['id']));
+
+                }else{
+                    //new record 
+                    $this->db->insert('event_labels', array(
+                        'label' => $input['name'],
+                        'color' => $input['color'],
+                        'created_by' => $this->session->userdata('userIdentity') 
+                    ));
+
+                }
+
+            }
+
+
+        }
         $this->db->trans_complete();
 
         if ($this->db->trans_status() === FALSE){
@@ -721,7 +751,42 @@ class User_model extends CI_Model{
 
         return TRUE;
     }
+    /**
+     * Querys the database based for a particular client based on the searchby value provided
+     *
+     * @access    public
+     * @param     searchBy part of the where clause in the query 
+     * 
+     * @return    Array containing all the data that matched the word
+     */    
+    public function advance_search($searchBy = NULL) {
+      
+        $this->db->trans_start();
+
+           $sql = $this->db->query('
+           SELECT 
+               a.*, p.path as img_path
+           FROM applicants a, profile_img p
+           WHERE 
+               a.is_client = 1 and   
+            '.$searchBy.' and 
+               a.profile_img_id = p.id
+
+            LIMIT 15
+               
+           ');
+
+        $this->db->trans_complete();
+
+        if ($this->db->trans_status() === FALSE){
+            
+            log_message('debug', 'get_autocomplete user model function returned false');
+            return FALSE;
+        }
+
+        return $sql->result_array();
+
+    
+    }
 
 }
-
-?>

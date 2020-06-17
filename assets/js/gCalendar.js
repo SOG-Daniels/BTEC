@@ -221,13 +221,22 @@ function createFullCalendar(){
                 return false;
 
             }else{
-                
                 let createdBy = (info.event.extendedProps.created_by != '')? info.event.extendedProps.created_by : 'N/A';
                 let updatedBy = (info.event.extendedProps.updated_by != '' && info.event.extendedProps.updated_by != null)? info.event.extendedProps.updated_by : 'Not Updated';
                 let des = info.event.extendedProps.description;
-
+                let colorRadioId = info.event.extendedProps.labelId;
                 
-
+                if (document.getElementById(colorRadioId) != null){
+                    //selecting the event label
+                    document.getElementById(colorRadioId).checked = true;
+                }else{
+                    //unselecting selected radio
+                    var ele = document.getElementsByName("color");
+                    for(var i=0; i<ele.length ;i++){
+                       ele[i].checked = false;
+                    }
+                }
+                
                 $('#eventId').val(info.event.id);
                 $('#d-title').val(info.event.title);
                 // $('#d-description').text('');

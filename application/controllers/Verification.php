@@ -1,4 +1,5 @@
 <?php 
+
 class Verification extends CI_Controller{
 
     // data members
@@ -9,12 +10,11 @@ class Verification extends CI_Controller{
     function __contruct(){
 
         parent::__construct();//calling parent contructor
-        // These only work when loaded in the autoload.php file
-        // $this->load->library('session');        //starting the session 
-        // $this->load->helper('url');
-        // $this->load->model('user_model'); 
-        $this->load->model('user_model'); 
         
+        $this->load->model('user_model'); 
+        // $this->load->library('email');
+
+
         
     }
     // validiation if the user will be able to login or not 
@@ -103,64 +103,208 @@ class Verification extends CI_Controller{
         if($this->session->userdata('userid')){
            
             //destroying session 
-            $this->session->unset_userdata($this->session->all_userdata());
+            // $this->session->unset_userdata($this->session->all_userdata());
             $this->session->sess_destroy();
 
         }
+        $data['title'] = 'Login';
+        $data['isLogin'] = 1;
 
-        // loading the login view
-        redirect('login');
+        $this->load->view('templates/header', $data);
+        $this->load->view('pageContent/login', $data);
+        $this->load->view('templates/footer',$data);
+
+        
     }
-    // Will send an email to change change password once user email is in th system
-    public function change_password($token = NULL){
-        
-        $data['title'] = 'Change Password';
-        
-        if($this->input->post('action') === 'changePass' && isset($this->userEmail)){  
+    //resets the current password with the new password provided
+    public function reset_password(){
 
-            $newPass = $this->input->post('newPass');
-            $confirmPass = $this->input->post('confirmPass');
+        if(!empty($this->input->post()) && !empty($this->input->post('action'))){  
+
+            $newPass = trim($this->input->post('newPass'));
+            $confirmPass = trim($this->input->post('confirmPass'));
+            $data['message'] = '';
 
             if($newPass === $confirmPass){
                 
-                $data['message'] = '<div class="alert alert-success" role="alert">
-                Please login with your new password
-                </div>';
-            
-                $this->load->view('templates/header', $data);
-                $this->load->view('pageContent/login', $data);
-                $this->load->view('templates/footer');
+                $result = $this->validation_model->get_token_info($this->input->post('resetId'), $this->input->post('token'));
+                
+                //getting user id 
+                $user = $this->validation_model->get_user_by_email($result->email);
 
-                return;
+                if ($user == FALSE){
+
+                    log_message('debug', 'get_user_by_email() returned false in the verifaction controller change_password()');
+                    echo 'error: check log folder';
+
+                }else{
+                    
+                    $oldToken = (isset($result->token))? $result->token : md5($this->input->post('token'));
+
+                    //setting new password
+                    $passwordChangeResult = $this->validation_model->set_new_pass($user->id, $confirmPass);
+
+                    if ($passwordChangeResult == FALSE){
+                        //error occured 
+                        log_message('debug', 'set_new_pass returned false in change_password() verification controller');
+                        $data['message'] .= '<div class="alert alert-danger" role="alert">
+                        Password was not changed
+                        </div>';
+                        
+                    }else{
+                        $data['message'] .= '<div class="alert alert-success" role="alert">
+                        Please login with your new password
+                        </div>';
+                        
+                        $result = $this->validation_model->disable_token($this->input->post('resetId'), $oldToken);
+
+                        if ($result === FALSE){
+                            log_message('debug', 'Unable to disable_token in change_password() verification controller');
+                        }
+
+                    }
+                    $this->session->set_flashdata('message', $data['message']);
+                    redirect('login');
+                    
+                }
             }
-            
-            $data['message'] = '<div class="alert alert-danger" role="alert">
-            Passwords do not match!
-            </div>';
+        }else{
 
+            redirect('login');
+            
         }
 
-        //will execute once when the link is clicked and token has not expired
-        if(!isset($this->userEmail)){
-            
-            $result = $this->validation_model->check_valid_token($token);
-            $this->userEmail = $result['email'];
+    }
+    // Will send an email to change change password once user email is in th system
+    public function change_password($resetPassID = NULL, $token = NULL){
+        
+        $data['title'] = 'Change Password';
 
-            if(empty($result)){
+        $timeInSeconds = date('U');
+
+        $result = $this->validation_model->get_token_info($resetPassID, $token);
+
+        // will execute once when the link is clicked and token has not expired
+        if(isset($resetPassID) && isset($token) && !empty($result)){
+        
+            if ($timeInSeconds <= $result->expiring_date){
+                //token still active
+
+                $data['resetId'] = $resetPassID;
+                $data ['token'] = $token;
+
+                $this->load->view('templates/header', $data);
+                $this->load->view('pageContent/changePass', $data);
+                $this->load->view('templates/footer');
+
+            }else{
+
+                $data['title'] = 'Expired Token';
                 
+                $result = $this->validation_model->disable_token($resetPassID, $result->token);
+
                 $this->load->view('templates/header', $data);
                 $this->load->view('pageContent/expiredToken', $data);
                 $this->load->view('templates/footer');
-
-                return 0;
             }
-            
+        }else{
+            redirect('login');
         }
 
-        $this->load->view('templates/header', $data);
-        $this->load->view('pageContent/changePass', $data);
-        $this->load->view('templates/footer');
 
+
+    }
+    // will send an email to the users email address with a password reset link 
+    public function send_reset_request(){
+
+        $email = (!empty($this->input->post('email'))? trim($this->input->post('email')) : '');
+        $userFound = $this->validation_model->get_user_by_email($email);
+        $data['message'] = '';
+         
+        if($userFound != FALSE && isset($email)){
+            //email exist
+
+            $hasExistingToken = $this->validation_model->find_token_by_email($email);
+
+            $currentTimeInSec = date('U');
+
+            if (!empty($hasExistingToken) && $currentTimeInSec <= $hasExistingToken->expiring_date){
+                //has an active token already
+                $data['message'] = '<div class="alert alert-warning" role="alert">
+                You already recieved a token. Please check your email follow the instructions.
+                </div>';
+
+            }else{
+                // print_r($hasExistingToken);
+                if (isset($hasExistingToken->id) && $currentTimeInSec > $hasExistingToken->expiring_date){
+                    //remove expired link
+                    $result = $this->validation_model->disable_token($hasExistingToken->id, $hasExistingToken->token);
+                    
+                    if ($result == FALSE){
+                        log_message('debug', 'Token was not disabled. Error: disable_token() inside email controller.');
+                    }
+                }
+
+                //no existing token available
+                
+                //alpahnumeric random string is returned
+                $token = random_string('alnum', 10);
+
+                // date('U') give the date in seconds and we add 30 min in seconds to it 
+                $expires = date('U') + 1800;
+
+                $result = $this->validation_model->set_pass_reset($email, $token, $expires);
+                
+                if ($result !== FALSE){
+                    
+                    $this->custom_email->set_subject('Reset Password');
+                    $mess = 'To reset your password <a href="'.base_url().'change-password/'.$result.'/'.$token.'">Click Here</a><br>
+                            The link will expire in 30 minutes';
+
+                    $emailResult = $this->custom_email->send_email($email, $mess);
+
+                    if ($emailResult){
+                        
+                        $data['message'] = '<div class="alert alert-success" role="alert">
+                        Please check your email for further instructions. The reset link will expire in 30 minutes.
+                        </div>';
+                    
+                    }else{
+
+                        $data['message'] = '<div class="alert alert-danger" role="alert">
+                        Sorry, we could not send the email please try again later.
+                        </div>';
+                    }
+
+                }else{
+                    log_message('debug', 'Error when tring to set_pass_reset() in Email controller, returns: '.$result);
+                }
+
+            }
+
+        }else{
+
+            $data['message'] = '<div class="alert alert-danger" role="alert">
+            Email Address is not in the system!
+            </div>';
+
+        }
+        
+        // calling the request email form 
+        $this->request_email($data);   
+
+    }
+    // Function will display a form that ask for email so that they can change password
+    public function request_email($data = NULL){
+
+        $data['title'] = 'Forgot Password';
+
+        $this->form_validation->set_rules('email', 'trim|required|max_length[150]');
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('pageContent/forgotPass', $data);
+        $this->load->view('templates/footer');
+        
     }
 
   

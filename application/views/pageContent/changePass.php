@@ -9,14 +9,21 @@
                 <h4 class="card-title text-center mb-4 mt-1">Enter your email</h4>
                 <hr>
 				<?php echo (isset($message))? $message: ''; ?>
-                <form role="form" method="POST" action="<?php echo base_url().'reset-request' ?>">
+                <form role="form" method="POST" action="<?php echo base_url().'reset-password';?>">
                 <input type="hidden" name="action" value="changePass">
+                <input type="hidden" name="resetId" value="<?php echo (isset($resetId)? $resetId : '')?>">
+                <input type="hidden" name="token" value="<?php echo (isset($token)? $token : '')?>">
+                <div class="alert alert-secondary" role="alert">
+                    <i class="fa fa-exclamation"></i>
+                    New password length must be 8 characters including a upper, lower case letter and a number.
+                    
+                </div>
                 <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                     </div>
-                    <input name="newPass" class="form-control" placeholder="password" type="password" required>
+                    <input name="newPass" id="newPassword" class="form-control" placeholder="password" type="password" required>
                 </div> <!-- input-group.// -->
                 </div> <!-- form-group// -->
                 <div class="form-group">
@@ -24,12 +31,14 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                     </div>
-                    <input name="confirmPass" class="form-control" placeholder="password" type="password" required>
+                    <input name="confirmPass" id="confirmPassword" class="form-control" placeholder="password" type="password" required>
                 </div> <!-- input-group.// -->
                 </div> <!-- form-group// -->
                 <div class="form-group">
-                <input type="hidden" name="action" value="login">
-                <button type="submit" class="btn btn-primary btn-block">Send Reset Request</button>
+                <div class="registrationFormAlert row col col-md-12 ml-md-5 pb-2" id="divCheckPasswordMatch">
+
+                </div>
+                <button id="change-pass-btn" type="submit" class="btn btn-primary btn-block">Change Password</button>
                 </div> <!-- form-group// -->
                 </form>
 				<div class="text-center">

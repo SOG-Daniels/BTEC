@@ -31,54 +31,39 @@ class Validation_model extends CI_Model{
     }
     public function get_user_by_email($email = NULL){
 
-        $sql = $this->db->query('SELECT id FROM users u WHERE u.email = "'.$email.'"');
+        $sql = $this->db->query('SELECT id FROM users u WHERE u.email = "'.$email.'" and status = 1');
         $row = $sql->num_rows();
         
         if ($row > 0){
-            return TRUE;
+            return $sql->row();
         }
-    
+        
         return FALSE;
 
         
     }
+    //sets password reset token and returns the last inserted ID if succesfull
     public function set_pass_reset($email = NULL, $token = NULL, $expires = NULL ){
 
-        if(isset($email) && isset($token) && isset($expires)){
+        $data = array(
+            'email' => $email,
+            'token' => md5($token),
+            'expiring_date'=> $expires
+        ); 
 
-            $sql = $this->db->query('SELECT id, email FROM users u WHERE u.email = "'.$email.'"');
-            $result = $sql->row();
-            $rowCount = $sql->num_rows();
+        //updating the token and expires column in the passreset table
+        $this->db->trans_start();
 
-            if ($rowCount > 0){
+        $this->db->insert('reset_password', $data);
+        $id = $this->db->insert_id();
 
-                $data = array(
-                    'token' => $token,
-                    'expires' => $expires
-                );
+        $this->db->trans_complete();
 
-                //updating the token and expires column in the passreset table
-                $this->db->trans_start();
-                $this->db->where('id', $result->user_id);
-                $this->db->update('passreset', $data);
-                $this->db->trans_complete();// just keeps track if there was any errors during transaction
-
-                return ($this->db->trans_status() === FALSE )? FALSE : TRUE;
-
-            }
-            //inserting into the passreset table
-            $data = array(
-                'email' => $email,
-                'token' => md5($token),
-                'expiringDate' => $expires
-
-            ); 
-            
-            return ($this->db->insert('passreset', $data))? TRUE : FALSE;
-            
-        }else{
-            echo 'Parameters are needed to be set';
+        if ($this->db->trans_status() == FALSE){
+            return FALSE;
         }
+
+        return $id ;
 
     }
     
@@ -99,35 +84,70 @@ class Validation_model extends CI_Model{
         }
 
     }
-    public function check_valid_token($token = NULL){
-        
-        $timeInSeconds = date('U');
+    public function get_token_info($passResetId = NULL, $token = NULL){
         
         if (isset($token)){
             
-            $this->db->where('token', md5($token));
-            $this->db->select('email', 'expires');
-            $sql = $this->db->get('passreset');
-    
-            $result = $sql->row();
-            $rowCount = $sql->num_rows();
-    
-            if ($rowCount > 0 && $result->expires <= $timeInSeconds){
-    
-                return $result;
-    
+            $this->db->where(array(
+                'token' => md5($token),
+                'id' => $passResetId,
+                'status' => 1
+                )
+
+            );
+            $this->db->select('id, token, expiring_date, email');
+            $sql = $this->db->get('reset_password');
+
+            if($this->db->trans_status() == FALSE){
+                return FALSE;
             }
+    
+            return $sql->row();
+    
 
         }
-
         return FALSE;
-
         
 
     }
-    
+    // sets token status to 1, meaning it is no longer valid
+    public function disable_token($passResetId = NULL, $token = NULL){
+        
+        $this->db->trans_start();
+
+            
+        $this->db->update('reset_password', array('status' => 0), array('id' => $passResetId, 'token' => $token));
+
+        $this->db->trans_complete();
+        if($this->db->trans_status() == FALSE){
+            return FALSE;
+        }
+
+        return TRUE;
+
+    }
+    // finds a token for an email
+    public function find_token_by_email($email = NULL){
+
+        $this->db->trans_start();
+
+        $this->db->where(array(
+            'status' => 1,
+            'email' => $email
+        ));
+        $this->db->select('id, token, expiring_date, email');
+        $sql = $this->db->get('reset_password');
+
+        $this->db->trans_complete();
+        if($this->db->trans_status() == FALSE){
+            return FALSE;
+        }
+
+        return $sql->row();
 
 
+
+    }
 }
 
 

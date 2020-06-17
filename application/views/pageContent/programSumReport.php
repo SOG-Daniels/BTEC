@@ -2,16 +2,15 @@
     // echo "<pre>";
     // print_r($reportData);
     // echo "</pre>";
-
 ?>
 <div class="card">
     <div class="card-header">
         <div class="row">
-            <div class="col-12 col-md-4">
+            <div class="col-12 col-md-8">
             <h5 class="m-0 font-weight-bold text-primary"><?php echo (isset($reportInfo['display_name']) )? $reportInfo['display_name'] : 'Report Result';?></h5>
             
             </div>
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-4">
                 <span class="d-flex justify-content-end">
                     <?php 
                         echo (isset($saveBtn) && !empty($reportData))? $saveBtn : '';

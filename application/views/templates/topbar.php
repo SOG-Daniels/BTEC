@@ -145,8 +145,14 @@
             </li> -->
             <li class="">
             <form class="form-group " method="POST" action="<?php echo base_url();?>search">
-               <input type="hidden" name="action" value="search">
-               <input type="text" class="form-control"  name="name" id="applicant" placeholder="Search for a Client..." style="width:100%;">
+                    <input type="hidden" name="action" value="search">
+                <div class="input-group mt-3">
+                    <input type="text" class="form-control"  name="name" id="applicant" placeholder="Search for a Client..." required>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+               
           <!-- style="border-radius: 50px;"  -->
             </form>
             </li>

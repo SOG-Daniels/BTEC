@@ -1,15 +1,15 @@
 <div class="card shadow-lg">
         <div class="card-header">
-        <h5 class="card-title h4 mb-2 text-gray-800">Search Result</h5>
+        <h5 class="card-title h4 mb-2 text-gray-800">Search Result for "<em class="text-primary"><?php echo $searchValue?></em>"</h5>
         </div>
     <div class="card-body">
 <?php 
-      
-    if (!empty($clientInfo)){
-
         // echo "<pre>";
         // print_r($clientInfo);
         // echo "</pre>";
+      
+    if (!empty($clientInfo) && $clientInfo != FALSE){
+
         
         // getting each idividual array inside of $clientInfo
         foreach($clientInfo as $array){
@@ -33,7 +33,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 col-md-4 d-flex justify-content-center pb-2">
-                                <img class="rounded" src="'.$array['img_path'].'" alt="Profile Picture" width="60%" hight="60%">
+                                <img class="rounded" src="'.$array['img_path'].'" alt="Profile Picture" width="70%" hight="55%">
                             </div>
                             <div class="col-12 col-md-8">
                                 <div class="row">

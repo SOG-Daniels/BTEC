@@ -1,15 +1,18 @@
-<?php 
- echo validation_errors();
+<?php
+
+    $erros = validation_errors();
+    if(isset($errors)){
+        echo '
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h5><strong><i class="fa fa-2x fa-frown"></i> </strong>
+            '.$errors.'
+        </div>
+        ';
+    }
  
-    // echo '
-    // <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    // <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    //     <span aria-hidden="true">&times;</span>
-    // </button>
-    // <h5><strong><i class="fa fa-2x fa-frown"></i> </strong>
-    //     '.validation_errors().'
-    // </div>
-    // ';
  //  echo (isset($addClientMessage))? $addClientMessage : ' ';
 //  echo '<pre>';
 //  !empty($result)? print_r($result) : '';

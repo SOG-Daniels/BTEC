@@ -10,6 +10,62 @@
 <h1 class="h3 mb-2 text-gray-800">Generate a Report</h1>
 <div class="card">
     <div class="card-header">
+        <h6 class=" font-weight-bold text-primary">Advance Search</h6>
+    </div>
+    <form action="<?php echo base_url();?>advance-search" method="POST">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12 col-md-6 offset-md-3">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" name="searchVal" aria-label="search box" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>   
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6 offset-md-3">
+                <label class="font-weight-bold d-block" for="searchbyoption">Search By:</label>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchBy" id="" value="0" checked>
+                    <label class="form-check-label" for="">First or Last Name</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchBy" id="" value="1">
+                    <label class="form-check-label" for="">Social Security Number</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchBy" id="" value="2">
+                    <label class="form-check-label" for="">Phone Number</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="searchBy" id="" value="3">
+                    <label class="form-check-label" for="">Email</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-6 offset-md-3">
+                <label for="District" class="font-weight-bold d-block">Filter By:</label>
+                <label for="District">District:</label>
+                <select class="form-control" name="district"  onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();' >
+                    <option>all</option>
+                    <option>Corozal</option>
+                    <option>Orange Walk</option>
+                    <option>Cayo</option>
+                    <option>Belize</option>
+                    <option>Stann Creek</option>
+                    <option>Toledo</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+<br>
+<div class="card">
+    <div class="card-header">
         <h6 class=" font-weight-bold text-primary">Report Options</h6>
        
     </div>
